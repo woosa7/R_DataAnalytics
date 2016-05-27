@@ -2,11 +2,13 @@
 # Capital Bike Share
 #-------------------------------------------------------------------------
 
+setwd("c:/R_Study/Capital_Bike_Share")
+
 #-------------------------------------------------------------------------
 # 1. csv 파일 목록
 
 dummy <- dir()
-dummyCsv <- which(substr(dummy, nchar(dummy)-2, nchar(dummy)) == "csv")   # csv 파일 체크
+dummyCsv <- which(substr(dummy, nchar(dummy)-2, nchar(dummy)) == "csv")
 loadlist <- dummy[dummyCsv]
 loadlist
 
@@ -31,7 +33,7 @@ for (i in 2:length(loadlist)) {
     }
 }
 
-# bikedata_1 컬러명 : Duration / Start.date / End.date / Start.station / End.station / Bike. / Member.Type
+# bikedata_1 colnames : Duration / Start.date / End.date / Start.station / End.station / Bike / Member.Type
 
 totalCount <- 0
 for (i in 1:length(loadlist)) {
@@ -91,6 +93,7 @@ colnames(bikedata_22) <- commonColnames
 tail(bikedata_19)
 tail(bikedata_22)
 
+
 #-------------------------------------------------------------------------
 # 6. 날짜 포맷 변경 후 Duration 계산
 
@@ -135,6 +138,7 @@ tail(bikedata_22)
 #-------------------------------------------------------------------------
 # 7. 년도_분기 컬럼 만들기
 
+# 파일 하나가 한 분기이므로 첫 row만 체크
 funcExtractQuarter <- function(x) {
     yearStr <- as.character( as.numeric(format(x[1,]$Start.date, '%Y')))
     
@@ -220,12 +224,13 @@ windows(800, 600, pointsize = 12)   # 별도의 윈도우 열기
 
 # 10-1. 분기별 사용시간 (Line Chart)
 
-data1 <- aggregate(Duration ~ Quarter, data = bike_df, FUN = sum)
-labels <- data1$Quarter
-x <- data1$Duration/60
-max(x)
+Quarter_data <- aggregate(Duration ~ Quarter, data = bike_df, FUN = sum)
+labels <- Quarter_data$Quarter
+xvalues <- Quarter_data$Duration/60
+max(xvalues)
 
-plot(x, xlab="", ylab="", ylim=c(0,350000), axes=FALSE, type="o", col="red", main="Usage per Quarter (hour)")
+plot(xvalues, xlab="", ylab="", ylim=c(0,350000), axes=FALSE, type="o", col="red", 
+     main="Usage per Quarter (hour)")
 axis(1, at=1:length(labels), lab=labels, las=2) # x
 axis(2, las=1)                                  # y
 
@@ -248,7 +253,8 @@ max(x_C)
 
 labels <- data_R$Quarter
 
-plot(x_R, xlab="", ylab="", ylim=c(0,200000), axes=FALSE, type="o", col="red", main="Usage per Quarter by MemberType (hour)")
+plot(x_R, xlab="", ylab="", ylim=c(0,200000), axes=FALSE, type="o", col="red", 
+     main="Usage per Quarter by MemberType (hour)")
 axis(1, at=1:length(labels), lab=labels, las=2) # x
 axis(2, las=1)                                  # y
 
@@ -268,7 +274,8 @@ f_members <- c("Registered","Casual")
 f_ratio <- round(data03/sum(data03)*100, 1)
 f_labels <- paste(f_members, "\n", f_ratio, "%")
 
-pie(data03, init.angle = 90, col=c("red","green"), radius = 1, labels = f_labels, main = "Usage (In = Count / Out = Hour )")
+pie(data03, init.angle = 90, col=c("red","green"), radius = 1, labels = f_labels, 
+    main = "Usage (In = Count / Out = Hour )")
 
 
 # 이용횟수
@@ -282,3 +289,4 @@ f_ratio <- round(data04/sum(data04)*100, 1)
 f_labels <- paste(f_members, "\n", f_ratio, "%")
 
 pie(data04, init.angle = 90, col=c("pink","yellow"), radius = 0.5, labels = f_labels)
+
