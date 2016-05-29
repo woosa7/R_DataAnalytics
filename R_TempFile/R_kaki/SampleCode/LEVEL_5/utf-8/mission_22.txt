@@ -1,0 +1,18 @@
+﻿#실전 미션 22답)
+
+setwd("g:/temp/r_temp")
+
+library(ggplot2)
+library(ggmap)
+
+loc <- read.csv("서울지하철2호선위경도정보.csv",header=T)
+loc
+
+# 아래 get_map함수에서 Center 부분의 지명을 "Yongsan" 으로 지정했습니다
+# Center 의 의미는 지도의 중앙에 위치시킬 지명을 입력하면 됩니다. 
+
+kor <- get_map("Yongsan", zoom=11, maptype = "roadmap")
+kor.map <- ggmap(kor)+geom_point(data=loc,size=power, aes(x=LON, y=LAT),size=5,alpha=0.7)
+kor.map + geom_text(data=loc, aes(x = LON, y = LAT+0.005, label=역명),size=3)
+ggsave("g:/temp/r_temp/line2.png",dpi=500)
+

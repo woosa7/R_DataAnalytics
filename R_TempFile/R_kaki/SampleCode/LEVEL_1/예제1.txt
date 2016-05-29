@@ -1,0 +1,204 @@
+# step 1 . 작업용 디렉터리를 먼저 지정합니다.
+# 이 디렉터리에 분석할 데이터를 가져다 놓고 결과물을 생성합니다.
+# 여기서 지정되는 디렉터리에 원본 데이터도 저장되고 작업 결과물도 저장이 되는 곳입니다.
+# 아래 내용 중 '>' 는 R 의 명령 프롬프트이니 입력하지 마세요.
+
+setwd("g:/temp/r_temp")  # <-- 작업 디렉토리는 임의로 지정하세요 
+
+# step 2. 필요한 패키지를 설치 한 후 R 에 loading 합니다
+# 패키지 설치 할 때 CRAN 위치를 지정하라고 나오면 편한 곳을 선택하세요.
+# 어디든 상관없긴 하지만 가급적 korea(seoul) 이 좋겠지요?
+
+install.packages("KoNLP") # 한국어 관련 작업을 할 때 꼭 필요한 기능을 가진 패키지 입니다
+install.packages("wordcloud") # Word Cloud 작업을 해 주는 패키지 입니다
+
+library(KoNLP)  # 설치된 패키지를 Loading 합니다.
+library(wordcloud)
+
+useSejongDic() ## 한글이 저장되어 있는 세종사전을 사용함을 알려줍니다
+#사전을 지정하는 이유는 원본 데이터에 한글이 있어서 R 이 한글을 분석할 때 참고해야 하기 
+# 때문입니다.한글을 상대로 word cloud 를 생성할 경우는 사용해야 합니다.
+
+# 위 사전에 제주도 관광지명이 정확하게 안들어 있기 때문에 아래와 같이 수동으로 추가합니다.
+
+mergeUserDic(data.frame("주상절리", "ncn"))
+mergeUserDic(data.frame("협재해변", "ncn"))
+mergeUserDic(data.frame("성산일출봉", "ncn"))
+mergeUserDic(data.frame("섭지코지", "ncn"))
+mergeUserDic(data.frame("천지연폭포", "ncn"))
+mergeUserDic(data.frame("우도", "ncn"))
+mergeUserDic(data.frame("산방산", "ncn"))
+mergeUserDic(data.frame("중문관광단지", "ncn"))
+mergeUserDic(data.frame("잠수함", "ncn"))
+mergeUserDic(data.frame("러브랜드", "ncn"))
+mergeUserDic(data.frame("용두암", "ncn"))
+mergeUserDic(data.frame("신비의도로", "ncn"))
+mergeUserDic(data.frame("한라산", "ncn"))
+mergeUserDic(data.frame("오설록", "ncn"))
+mergeUserDic(data.frame("유리의성", "ncn"))
+mergeUserDic(data.frame("한림공원", "ncn"))
+mergeUserDic(data.frame("용머리해안", "ncn"))
+mergeUserDic(data.frame("해수욕장", "ncn"))
+mergeUserDic(data.frame("중문", "ncn"))
+mergeUserDic(data.frame("제주민속촌", "ncn"))
+mergeUserDic(data.frame("외돌개", "ncn"))
+mergeUserDic(data.frame("에코랜드", "ncn"))
+
+# Step 3. 분석용 데이터를 변수로 읽어 들입니다.
+# txt 라는 변수에 한 줄 씩 읽어 들입니다.
+
+txt <- readLines("jeju.txt") 
+
+# 이 상태로 바로 word cloud 를 생성하면 원하지 않는 단어나 내용들이 많이 출력됩니다.
+
+# step 4. 데이터 중에서 명사만 골라낸 후 nouns 변수에 할당합니다.
+# 아래의 extractNoun 은 KoNLP 패키지에 포함된 함수인데 주어진 데이터에서 한글 명사만 
+# 골라 주는 역할을 합니다.
+# txt 파일에서 공백을 기준으로 조사해서 명사만 찾아서 place 라는 변수에 다시 저장합니다.
+
+place <- sapply(txt,extractNoun,USE.NAMES=F)
+place # list 형태로 출력됨을 확인됩니다
+#(출력 결과 생략)
+
+# step 5. 추출된 명사를 30 개만 출력해서 확인합니다.
+
+head(unlist(place), 30)
+#( 출력 결과 생략 )
+
+c <- unlist(place) # 필터링을 위해 unlist 작업을 해서 저장합니다.
+place <- Filter(function(x) {nchar(x) >= 2} ,c) # 두 글자 이상 되는 것만 필터링하기
+
+#==========================================================
+## 두 글자 이상 되는 것만 필터링하기 예 ##
+##> txt
+##[1] "홍길동" "김구"   "잉"     "anold"  "a"      "aa"    
+##> txt <- Filter(function(x) {nchar(x) >= 2} ,txt)
+##> txt
+##[1] "홍길동"  "김구"   "anold"  "aa"
+## 3글자인 것만 찾기
+## > txt <- Filter(function(x) {nchar(x)== 3} ,txt)
+##> txt
+##[1] "홍길동"
+#===========================================================
+
+# Step 6. 위 출력 결과에서 원하지 않는 내용 걸러 내기
+# 아래와 같이 gsub 함수를 이용하여 원하지 않는 내용은 걸러 냅니다.
+# gsub 함수 문법 : gsub("변경전 글자","변경후 글자","원본데이터") 입니다
+
+place <- gsub("제주","", place) 
+place <- gsub("통운","", place)  
+place <- gsub("전국","", place)  
+place <- gsub("체인","", place) 
+place <- gsub("업체","", place)  
+place <- gsub("질문","", place)
+place <- gsub("가격","", place)  
+place <- gsub("무난","", place)   
+place <- gsub("여행","", place)
+place <- gsub("검색","", place)
+place <- gsub("코스","", place)
+place <- gsub("숙소","", place)
+place <- gsub("준비","", place)
+place <- gsub("다운로드","", place)
+place <- gsub("조회수","", place)
+place <- gsub("추천수","", place)
+place <- gsub("추천","", place)
+place <- gsub("답변수","", place)
+place <- gsub("첫째날","", place)
+place <- gsub("첫쨋날","", place) 
+place <- gsub("좋구요","", place)
+place <- gsub("이런거","", place)
+place <- gsub("둘째날","", place)
+place <- gsub("셋째날","", place)
+place <- gsub("세쨋날","", place)
+place <- gsub("토요일","", place)
+place <- gsub("일요일","", place)
+place <- gsub("시간","", place)
+place <- gsub("항공","", place)
+place <- gsub("관광지","", place)
+place <- gsub("입장료","", place)
+place <- gsub("저가","", place)
+place <- gsub("항공사","", place)
+place <- gsub("도움","", place)
+place <- gsub("대략","", place)
+place <- gsub("요금","", place)
+place <- gsub("\\-","", place)
+place <- gsub("이용","", place)
+place <- gsub("공항","", place)
+place <- gsub("해안","", place)
+place <- gsub("드라이브","", place)
+place <- gsub("경유","", place)
+place <- gsub("바다","", place)
+place <- gsub("전망","", place)
+place <- gsub("하루","", place)
+place <- gsub("렌트카","", place)
+place <- gsub("하시","", place)
+place <- gsub("예약","", place)
+place <- gsub("사진","", place)
+place <- gsub("위치","", place)
+place <- gsub("필요","", place)
+place <- gsub("할인","", place)
+place <- gsub("출발","", place)
+place <- gsub("가능","", place)
+place <- gsub("소요","", place)
+place <- gsub("일정","", place)
+place <- gsub("하게","", place)
+place <- gsub("근처","", place)
+place <- gsub("중간","", place)
+place <- gsub("다양","", place)
+place <- gsub("첫날","", place)
+place <- gsub("도착","", place)
+place <- gsub("용머","", place)
+place <- gsub("리","", place)
+place <- gsub("바위","", place)
+place <- gsub("유명","", place)
+place <- gsub("정도","", place)
+place <- gsub("이동","", place)
+place <- gsub("무료","", place)
+place <- gsub("용머","", place)
+place <- gsub("체험","", place)
+place <- gsub("둘째","", place)
+place <- gsub(" ","", place)
+place <- gsub("\\d+","", place) ##  <--- 모든 숫자 없애기
+ 
+place
+#( 출력 결과 생략 )
+                                                                                
+
+#step 7. 파일로 저장 한 후 테이블 형태로 변환하여 불러 들입니다.. 
+
+write(unlist(place),"jeju_2.txt") 
+
+#Step 8. 수정 완료된 파일을 table 형식으로 변환 후 다시 변수에 불러들입니다.
+
+rev <- read.table("jeju_2.txt")
+
+#Step 9. 화면에 그래픽으로 출력하기 전에 text 형태로 결과를 확인해 봅니다
+
+nrow(rev) # rev 변수에 데이터가 몇 건이 있는 지 조회 해 봅니다
+
+# rev 변수의 값을 table 형태로 변환해서 wordcount 라는 변수에 할당
+
+wordcount <- table(rev) 
+
+#가장 언급 빈도수가 많은 순으로 정렬을 해서 상위 30개를 조회합니다.
+
+head(sort(wordcount, decreasing=T),30)
+#( 출력 결과 생략 )
+
+# Step 10. Word Cloud 형태로 그래픽으로 출력합니다
+# 화면에 출력할 컬러를 사용할 라이브러리를 Loading 합니다.
+
+library(RColorBrewer) 
+
+# 글자 색깔을 지정합니다.
+
+palete <- brewer.pal(9,"Set1") 
+
+# 아래 wordcloud 에서 min.freq 에 있는 항목이 언급된 횟수로 최소 1회 이상 언급된 단어만 
+# 출력하라는 예 입니다. 다른 옵션도 변경하면서 테스트 해 보세요.
+wordcloud(names(wordcount),freq=wordcount,scale=c(5,1),rot.per=0.25,min.freq=1,
+random.order=F,random.color=T,colors=palete)
+
+#Step 11. 결과물을 그림으로 저장합니다.
+
+savePlot("jeju.png",type="png")

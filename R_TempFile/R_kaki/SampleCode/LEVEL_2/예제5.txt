@@ -1,0 +1,110 @@
+# Step 1. 작업용 디렉토리를 지정하고 필요한 패키지를 설치하고 로딩합니다.
+
+setwd("g:/temp/r_temp")  
+install.packages("KoNLP") 
+library(KoNLP)  
+
+# Step 2. 소스 파일을 R 로 로딩합니다.
+
+txt <- readLines("comp.txt") 
+
+# Step 3. 필요없는 단어를 제거합니다.
+
+comp <- sapply(txt,extractNoun,USE.NAMES=F)
+comp  # 내용 일부를 확인합니다
+c <- unlist(comp) 
+comp <- Filter(function(x) {nchar(x) >= 2} ,c) 
+ 
+comp <- gsub("l부산l레익","",comp)  
+comp <- gsub("l경기l","",comp) 
+comp <- gsub("l서울l","",comp)
+comp <- gsub("l김포l","",comp)
+comp <- gsub("l부산l","",comp)
+comp <- gsub("l수원l","",comp)
+comp <- gsub("l마","",comp)
+comp <- gsub("l인천l","",comp)
+comp <- gsub("이거","",comp)
+comp <- gsub("교체","",comp)
+comp <- gsub("문제","",comp)
+comp <- gsub("결함","",comp)
+comp <- gsub("l인천l소서파","",comp) 
+comp <- gsub("다운로드","",comp)
+comp <- gsub("조회수","",comp)
+comp <- gsub("추천수","",comp)
+comp <- gsub("답변수","",comp)
+comp <- gsub("\\n","",comp) 
+comp <- gsub("\\d+","",comp) 
+comp <- gsub("ㅠㅠ","",comp) 
+comp <- gsub("ㅠ","",comp)
+comp <- gsub("ㅜㅜ","",comp)
+comp <- gsub("\\.","",comp)   
+comp <- gsub("스나콘/아이디","",comp) 
+comp <- gsub("I경기I로멕","",comp) 
+comp <- gsub("I서울I보노보노","",comp) 
+comp <- gsub("퍼","",comp) 
+comp <- gsub("영역","",comp) 
+comp <- gsub("MYRAY","",comp)
+
+head(unlist(comp), 20)
+
+# Step 4. 파일에 저장 후 table 형태로 다시 로딩 합니다.
+ 
+write(unlist(comp),"comp_2.txt") 
+rev <- read.table("comp_2.txt")
+ 
+nrow(rev) 
+
+wordcount <- table(rev)
+head(sort(wordcount, decreasing=T),20)
+
+# Step 5. 상위 10 개의 항목으로 Bar Chart 를 그립니다.
+# 이때 불만 건수가 10 건 이상인 경우 빨간색으로 표시합니다
+
+a <- head(sort(wordcount, decreasing=T),10)
+colors <- c()
+for ( i in 1:length(a)) {
+  if (a[i] >= 10 ) {
+     colors <- c(colors,"red") }
+  else {
+     colors <- c(colors,"gray") }
+}
+
+b <- barplot(a,main="고객불만 상위 Top 10", ylab="불만건수" ,
+names.arg=names(a),col=colors,las=2)
+text(x = b, y = a*0.95, labels = paste(a,"건"), col = "black", cex = 0.7)
+pct <- round(a/sum(a) * 100 ,1)
+text(x = b, y = a*0.85, labels = paste("(",pct,"%",")"), col = "black", cex = 0.6)
+abline(h=10,col="red",lty=2,lwd=1)
+savePlot("comp_2.png",type="png")
+
+# 파이차트로 색깔을 구분하겠습니다.
+a <- head(sort(wordcount, decreasing=T),10)
+lab <- paste(names(a),"\n",a,"건")
+ colors <- c()
+ for ( i in 1:length(a)) {
+   if (a[i] >= 10 ) {
+      colors <- c(colors,"red") }
+   else {
+      colors <- c(colors,"gray") }
+ }
+pie(a,main="고객 불만 상위 Top 10",col=colors,
+     cex=0.8,labels = lab)
+savePlot("comp_3.png",type="png")
+
+
+# 파이챠트에서 10건 이상은 빨강, 6-9 건은 하늘색 , 그 이하는 노랑색으로 표현합니다.
+a <- head(sort(wordcount, decreasing=T),10)
+lab <- paste(names(a),"\n",a,"건")
+colors <- c()
+ for ( i in 1:length(a)) {
+   if (a[i] >= 10 ) {
+      colors <- c(colors,"red") }
+   else if  (a[i] >= 6 ) {
+      colors <- c(colors,"cyan") }
+   else {
+      colors <- c(colors,"yellow") }
+}
+pie(a,main="고객 불만 상위 Top 10",col=colors,
+    cex=0.8,labels = lab)
+ 
+savePlot("comp_4.png",type="png")

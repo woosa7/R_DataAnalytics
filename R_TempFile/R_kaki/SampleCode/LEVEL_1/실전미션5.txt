@@ -1,0 +1,52 @@
+# Step 1. 작업 디렉토리를 지정합니다.
+
+setwd("g:/temp/r_temp")  
+
+# Step 2. 필요한 패키지를 설치하고 로딩합니다.
+
+install.packages("KoNLP") 
+install.packages("wordcloud") 
+
+library(KoNLP)  
+library(wordcloud)
+
+# Step 3. 원본 데이터를 R 로 로딩합니다.
+
+txt <- readLines("alert_log.txt") 
+
+# Step 4 . 필터링합니다.
+
+nouns <- gsub(" ","_",txt) 
+head(unlist(nouns), 20)
+
+c <- unlist(nouns) # 필터링을 위해 unlist 작업을 해서 저장합니다.
+nouns <- Filter(function(x) {nchar(x) >= 10} ,c) # 10 글자 이상 되는 것만 필터링하기
+
+# 여기서부터 중요합니다. grep 을 사용하여 첫 시작이 ORA- 인 데이터값을 찾아서 nouns 에 
+# 저장하도록 지정합니다. 
+# 정규식에 대한 자세한 설명은 이 책의 문자열과 정규식 부분을 참고하세요
+
+nouns <- grep("^ORA-+",nouns,value=T)
+head(unlist(nouns), 20)
+
+# Step 5. 저장 후 워드 클라우드로 처리하기 위해 table 형식으로 변환하여 로딩합니다.
+
+write(unlist(nouns),"alert_2.txt") 
+rev <- read.table("alert_2.txt")
+nrow(rev) 
+wordcount <- table(rev)
+head(sort(wordcount, decreasing=T),20)
+
+# Step 6. 글자 색상을 지정합니다.
+
+library(RColorBrewer) 
+palete <- brewer.pal(9,"Set1") 
+ 
+# Step 7. 워드 클라우드로 출력합니다.
+
+wordcloud(names(wordcount),freq=wordcount,scale=c(5,0.5),rot.per=0.25,min.freq=1,
+random.order=F,random.color=T,colors=palete)
+
+# Step 8. 결과를 저장합니다.
+
+savePlot("alert_log2.png",type="png")

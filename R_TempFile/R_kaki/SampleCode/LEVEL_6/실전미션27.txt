@@ -1,0 +1,16 @@
+#실전 미션 27 
+
+#Step 1. 주어진 자료아래와 같이 2호선 강남역 부분만 빼서 별도의 자료로 생성합니다
+#여기서는 "2호선_강남역_시간대별_승하차현황_세로.csv" 로 생성했습니다.
+setwd("g:/temp/r_temp")
+library(googleVis)
+
+#Step 2. R 로 불러 들입니다.
+
+line_2 <- read.csv("2호선_강남역_시간대별_승하차현황_세로.csv",header=T,sep=",")
+
+#Step 3. Motion Chart 로 만듭니다.
+
+t1 <- gvisMotionChart(line_2, idvar="line_no", timevar="time",
+        options=list(width=1000,height=500))
+plot(t1)

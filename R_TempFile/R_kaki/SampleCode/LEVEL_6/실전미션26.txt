@@ -1,0 +1,14 @@
+# ½ÇÀü ¹Ì¼Ç 26
+setwd("g:/temp/r_temp")
+install.packages("googleVis")
+library(googleVis)
+
+line <- read.csv("1-4È£¼±½ÂÇÏÂ÷½Â°´¼ö.csv",header=T,sep=",")
+line
+
+
+t1 <- gvisMotionChart(line, idvar="line_no", timevar="time", 
+       options=list(width=1000,height=500))
+plot(t1)
+
+

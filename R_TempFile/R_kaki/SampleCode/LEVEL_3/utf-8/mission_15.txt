@@ -1,0 +1,13 @@
+﻿# 실전 미션 15 답:
+
+setwd("g:/temp/r_temp")
+line2 <- read.csv("l2_g.csv")
+barplot(as.matrix(line2)/100,main="서울 2호선 강남역 시간대별 승하차 현황(자료제공:서울메트로)",
+        ylab="인원수(단위:백명)",beside=TRUE,las=2,ylim=c(0,5000))
+
+abline(h=seq(3,4000,100),col="white",lwd=2)
+abline(h=c(500,1000,1500,2000,2500,3000,3500,4000,4500),lty=2)
+
+col=c("black","white")
+legend("topright",c("승차","하차"),cex=0.8,fill=col)
+

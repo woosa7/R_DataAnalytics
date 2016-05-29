@@ -1,0 +1,73 @@
+# Step 1. 작업 디렉토리를 지정하고 필요한 패키지를 설치 후 로딩합니다.
+
+setwd("g:/temp/r_temp")  
+
+install.packages("KoNLP") 
+install.packages("wordcloud") 
+
+library(KoNLP)  
+library(wordcloud)
+
+# Step 2. 소스 파일을 R 로 로딩합니다.
+
+txt <- readLines("comp.txt") 
+
+# Step 3. 필요없는 단어를 제거합니다.
+
+comp <- sapply(txt,extractNoun,USE.NAMES=F)
+comp 
+
+c <- unlist(comp) 
+comp <- Filter(function(x) {nchar(x) >= 2} ,c) 
+
+comp <- gsub("l부산l레익","",comp)  
+comp <- gsub("l경기l","",comp) 
+comp <- gsub("l서울l","",comp)
+comp <- gsub("l김포l","",comp)
+comp <- gsub("l부산l","",comp)
+comp <- gsub("l수원l","",comp)
+comp <- gsub("l마","",comp)
+comp <- gsub("l인천l","",comp)
+comp <- gsub("이거","",comp)
+comp <- gsub("교체","",comp)
+comp <- gsub("문제","",comp)
+comp <- gsub("결함","",comp)
+comp <- gsub("l인천l소서파","",comp) 
+comp <- gsub("다운로드","",comp)
+comp <- gsub("조회수","",comp)
+comp <- gsub("추천수","",comp)
+comp <- gsub("답변수","",comp)
+comp <- gsub("\\n","",comp) 
+comp <- gsub("\\d+","",comp) 
+comp <- gsub("ㅠㅠ","",comp) 
+comp <- gsub("ㅠ","",comp)
+comp <- gsub("ㅜㅜ","",comp)
+comp <- gsub("\\.","",comp)   
+comp <- gsub("스나콘/아이디","",comp) 
+comp <- gsub("I경기I로멕","",comp) 
+comp <- gsub("I서울I보노보노","",comp) 
+comp <- gsub("퍼","",comp) 
+comp <- gsub("영역","",comp) 
+comp <- gsub("MYRAY","",comp)
+head(unlist(comp), 20)
+
+# Step 4. 파일에 저장 후 table 형태로 다시 로딩 합니다.
+
+write(unlist(comp),"comp_2.txt") 
+rev <- read.table("comp_2.txt")
+
+nrow(rev) 
+wordcount <- table(rev)
+head(sort(wordcount, decreasing=T),20)
+
+# Step 5. 글자색을 설정한 후 워드 클라우드를 생성합니다.
+
+library(RColorBrewer) 
+palete <- brewer.pal(9,"Set1") 
+
+wordcloud(names(wordcount),freq=wordcount,scale=c(5,0.5),rot.per=0.25,min.freq=2,
+random.comp=F,random.color=T,colors=palete)
+
+# Step 6. 결과 화면을 저장합니다.
+
+savePlot("comp.png",type="png")

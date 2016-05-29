@@ -1,0 +1,126 @@
+﻿# Step 1 . 작업용 디렉토리를 지정한 후 필요한 패키지를 설치하고 로딩합니다.
+# 주요 패키지와 단계별 설명은 위의 예제 2에서 했으므로 생략하겠습니다.
+
+setwd("g:/temp/r_temp")  
+install.packages("KoNLP") 
+library(KoNLP)  
+
+# Step 2. 분석할 소스 파일을 R 로 로딩합니다.
+
+txt <- readLines("propose.txt") 
+pro <- sapply(txt,extractNoun,USE.NAMES=F)
+pro # list 형태로 출력됨을 확인됩니다
+
+# Step 3. 필요없는 단어들을 제거합니다.
+
+c <- unlist(pro) # 필터링을 위해 unlist 작업을 해서 저장합니다.
+pro <- Filter(function(x) {nchar(x) >= 2} ,c) # 두 글자 이상 되는 것만 필터링하기
+
+pro <- gsub("프로포즈","",pro)  
+pro <- gsub("propose","",pro) 
+pro <- gsub("선물","",pro) 
+pro <- gsub("조회수","",pro)
+pro <- gsub("조회","",pro)
+pro <- gsub("\\.","",pro)
+pro <- gsub("사회","",pro)
+pro <- gsub("사람","",pro)
+pro <- gsub("생각","",pro)
+pro <- gsub("준비","",pro)
+pro <- gsub("연애","",pro)
+pro <- gsub("패션","",pro)
+pro <- gsub("방법","",pro)
+pro <- gsub("추천수","",pro)
+pro <- gsub("\\n","",pro) 
+pro <- gsub("\\d+","",pro) 
+pro <- gsub("남자","",pro) 
+pro <- gsub("가족","",pro) 
+pro <- gsub("친구","",pro) 
+pro <- gsub("답변","",pro) 
+pro <- gsub("추천","",pro) 
+pro <- gsub("특별","",pro) 
+pro <- gsub("생활","",pro)
+pro <- gsub("결혼","",pro)
+pro <- gsub("의미","",pro)
+pro <- gsub("하시","",pro)
+pro <- gsub("조언","",pro)
+pro <- gsub("그룹","",pro)
+pro <- gsub("하게","",pro)
+pro <- gsub("여자","",pro)
+pro <- gsub("장소","",pro)
+pro <- gsub("감동","",pro)
+pro <- gsub("커플","",pro)
+pro <- gsub("행사","",pro)
+pro <- gsub("성공","",pro)
+pro <- gsub("시간","",pro)
+pro <- gsub("감사","",pro)
+pro <- gsub("기억","",pro)
+pro <- gsub("누나","",pro)
+pro <- gsub("문화","",pro)
+pro <- gsub("정치","",pro)
+pro <- gsub("질문","",pro)
+head(unlist(pro), 20)
+
+# Step 4. 정제 된 내용을 파일로 저장한 후 table 형식으로 다시 로딩합니다.
+
+write(unlist(pro),"pro_3.txt") 
+rev <- read.table("pro_3.txt")
+nrow(rev) 
+wordcount <- table(rev)
+head(sort(wordcount, decreasing=T),20)
+
+# Step 5. 가장 추천수가 많은 10 개를 Bar Chart 로 나타냅니다.
+
+a <- head(sort(wordcount, decreasing=T),10)
+a
+barplot(a,main=" 프로포즈 선물 TOP 10 ",col=rainbow(10),
+space=0.8,ylim=c(0,60),cex.name=0.7,las=2)
+
+savePlot("pro_1.png",type="png")
+
+# Step 6. 위에서 만든 그래프에 수치를 함께 나타내겠습니다.
+
+bp <- barplot(a,  main = "프로포즈 선물 TOP 10 ", col = rainbow(10), cex.names=0.7, 
+las = 2,ylim=c(0,60))
+pct <- round(a/sum(a) * 100 ,1)
+text(x = bp, y = a*1.05, labels = paste(a,"건"), col = "black", cex = 0.7)
+text(x = bp, y = a*0.85, labels = paste("(",pct,"%",")"), col = "black", cex = 0.7)
+
+savePlot("pro_2.png",type="png")
+
+
+# Step 7. 위 그래프를 가로로 눕혀서 출력합니다.
+
+bp <- barplot(a,main="프로포즈 선물 Top 10",col=rainbow(10),
+xlim=c(0,70),cex.name=0.7,las=1,horiz=T)
+
+text(y = bp, x = pct*1.4, labels = paste(a,"건"), col = "black", cex = 0.7)
+text(y = bp, x = pct*1.4, labels = paste("\n","\n","(",pct,"%",")"), col = "black", cex = 0.7)
+savePlot("pro_3.png",type="png")
+
+# Step 8. 위 데이터를 Line 형 그래프로 출력하겠습니다.
+
+line <- head(sort(wordcount, decreasing=T),10)
+line
+plot(line,xlab="",ylab="",ylim=c(0,60),axes=FALSE,type="o",col="red",
+main="프로포즈 선물 TOP 10",lwd=2)
+axis(1,at=1:10,lab=names(line),las=2)
+axis(2,las=1)
+abline(h=seq(0,60,5),v=seq(1,10,1),col="gray",lty=2)
+savePlot("pro_4.png",type="png")
+
+# Step 9. 위 데이터를 3D Pie Chart 로 표현합니다.
+# 3D Pie Chart 를 사용하려면 plotrix 라는 패키지가 추가로 필요합니다.
+# 패키지를 설치하는 부분의 이 책의 패키지 관리하기 부분을 참고하세요.
+
+three <- head(sort(wordcount, decreasing=T),10)
+three
+install.packages("plotrix")
+
+library(plotrix)
+
+th_pct <- round(three/sum(three) * 100,1)
+th_names <- names(three)
+th_labels <- paste(th_names,"\n","(",th_pct,")")
+pie3D(three,main="프로포즈 선물 Top 10",col=rainbow(10),
+cex=0.7,labels=th_labels,explode=0.05)
+savePlot("three.png",type="png")

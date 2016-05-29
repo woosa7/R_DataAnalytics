@@ -1,0 +1,61 @@
+﻿# 실전 미션 19 답 :
+
+setwd("g:/temp/r_temp")
+library(ggplot2)
+
+#작업의 편의를 위해 "월별사원별실적현황_1월.csv" 파일을 생성합니다.
+a <- read.csv("월별사원별실적현황_1월.csv",header=T,stringsAsFactors=FALSE,sep=",")
+
+dash_t <- function(x,q.1,q.3,title) {
+          i <- matrix(c(-1,0,0,1,1,0),3,2,byrow=T)
+          plot(i,xlab="",ylab="",axes=F,type="n")
+          x.cir <- cos(seq(0,180,1)*pi/180)
+          y.cir <- sin(seq(0,180,1)*pi/180)
+ 
+          #첫번째 polygon
+          cir <- rbind(cbind(x.cir[(181-q.1):181],y.cir[(181-q.1):181]) ,
+                 cbind(0.8*x.cir[181:(181-q.1)],0.8*y.cir[181:(181-q.1)]),
+                 col="blue")
+          polygon(cir,col="green",border="white")
+ 
+          #두번째 polygon
+          cir <- rbind(cbind(x.cir[(q.3+1):(181-q.1)],y.cir[(q.3+1):(181-q.1)]) ,
+                 cbind(0.8*x.cir[(181-q.1):(q.3+1)],0.8*y.cir[(181-q.1):(q.3+1)]),
+                 col="blue")
+          polygon(cir,col="blue",border="white")
+ 
+         #세번째 polygon
+          cir <- rbind(cbind(x.cir[1:(q.3+1)],y.cir[1:(q.3+1)]) ,
+                 cbind(0.8*x.cir[(q.3+1):1],0.8*y.cir[(q.3+1):1]),
+                 col="red")
+          polygon(cir,col="red",border="white")   
+       
+          for (i in 0:36) segments(0,0,cos(i*pi/36),sin(i*pi/36),col="white")
+          arrows(0,0.1,0.75*cos(pi-x*pi),0.75*sin(pi-x*pi),lwd=3,length=0.2)
+          text(0,0.1,"o",cex=3)
+          title(title)
+ } 
+windows(height=4,width=6)
+par(mfrow=c(3,3), oma=c(3,3,3,3),mar=c(1,1,1,2))
+# 위 oma 값은 각 좌,우,상,하 의 간격입니다.
+
+dash_t(a[1,5],60,30,"홍길동의 성취도")
+text(0,0.5,paste(a[1,5]*100,"%"),cex=1.5)
+
+dash_t(a[2,5],60,30,"일지매의 성취도")
+text(0,0.5,paste(a[2,5]*100,"%"),cex=1.5)
+
+dash_t(a[3,5],60,30,"유관순의 성취도")
+text(0,0.5,paste(a[3,5]*100,"%"),cex=1.5)
+
+dash_t(a[4,5],60,30,"강감찬의 성취도")
+text(0,0.5,paste(a[4,5]*100,"%"),cex=1.5)
+
+dash_t(a[5,5],60,30,"설중매의 성취도")
+text(0,0.5,paste(a[5,5]*100,"%"),cex=1.5)
+
+dash_t(a[6,5],60,30,"전우치의 성취도")
+text(0,0.5,paste(a[6,5]*100,"%"),cex=1.5)
+
+dash_t(a[7,5],60,30,"도루묵의 성취도")
+text(0,0.5,paste(a[7,5]*100,"%"),cex=1.5)

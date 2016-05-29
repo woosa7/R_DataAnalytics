@@ -1,0 +1,5 @@
+no name lowprice highprice qty
+1 1 apple 500 700 5
+2 2 orange 300 550 3
+3 3 peach 200 400 7
+4 4 berry 100 180 10

@@ -1,0 +1,10 @@
+# 실전 미션 21 답)
+
+setwd("g:/temp/r_temp")
+loc <- read.csv("서울시구청위치정보.csv",header=T)
+loc
+
+kor <- get_map("seoul", zoom=11, maptype = "roadmap")
+kor.map <- ggmap(kor)+geom_point(data=loc, aes(x=LON, y=LAT),size=3,alpha=1)
+kor.map + geom_text(data=loc, aes(x = LON, y = LAT+0.01, label=구청명),size=3)
+ggsave("g:/temp/r_temp/gu.png",dpi=500)
