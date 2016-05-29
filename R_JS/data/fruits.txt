@@ -1,0 +1,5 @@
+no	name	price	qty
+1	apple	500	5
+2	orange	300	3
+3	peach	200	7
+4	berry	100	10
