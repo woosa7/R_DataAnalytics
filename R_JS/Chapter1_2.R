@@ -380,7 +380,7 @@ ggplot(data[,1:2], aes(x=Korean, y=reorder(name,Korean))) +
 
 library(plyr)
 
-data <- read.csv("data/student_subject _score_3.csv")
+data <- read.csv("data/student_subject_score_3.csv")
 data2 <- arrange(data, 이름, 과목)   # plyr : sort
 data2
 
