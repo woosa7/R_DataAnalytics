@@ -261,6 +261,8 @@ pie3D(a, main="제주도 관광지", col=rainbow(10), cex=0.7, labels=clabels, explode
 # chr (문장) --> 단어 list --> chr (단어) --> txt --> table list --> wordcount (numeric)
 
 txt <- readLines("data/propose.txt")
+txt
+
 txt <- txt[txt != '']
 txt <- txt[txt != ' ']
 txt <- txt[txt != '  ']
