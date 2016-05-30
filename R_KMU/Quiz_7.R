@@ -24,4 +24,3 @@ myMatrixMat <- myMatrix[,3,drop=F]
 myMatrixMat
 
 
-
