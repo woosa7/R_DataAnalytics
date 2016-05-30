@@ -2,7 +2,8 @@
 # 기초 문법
 #-----------------------------------------------------------
 
-setwd("c:/R_Study/R_JS")
+#setwd("c:/R_Study/R_JS")
+#setwd("/Volumes/MacHDD/workspace/R_Study/R_JS")
 
 #-----------------------------------------------------------
 # NA
@@ -365,8 +366,4 @@ grep("ORACLE", d, value = T)     # 값 출력
 grep("^Setting", d)              # ^ : 첫글자
 grep("ing$", d)                  # $ : 마지막 글자
 grep("[7-9]", d)
-
-
-
-
 

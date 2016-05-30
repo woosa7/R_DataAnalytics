@@ -49,7 +49,7 @@
 #   lines                             : 그래프 위에 새로운 그래프 그리기
 #   
 #   legend                            : 범례
-
+#---------------------------------------------------------------
 
 apple <- c(260, 400, 250, 200, 310)
 peach <- c(180, 200, 210, 190, 170)
@@ -57,6 +57,7 @@ orange <- c(210, 250, 260, 330, 300)
 
 windows(800, 600, pointsize = 10)   # 별도의 윈도우 열기
 dev.off()                           # 윈도우 닫기
+
 
 #---------------------------------------------------------------
 # plot
@@ -73,7 +74,6 @@ plot(x, y, xlim=c(0,20), ylim=c(0,25), main="sample", type="o", lty=2, col=2)
 
 # 1.
 plot(apple, type="o", col="red", ylim=c(0,400))
-
 
 # 2.
 plot(apple, type="o", col="red", ylim=c(0,400), axes = F, ann=F)
@@ -237,8 +237,6 @@ boxplot(apple, peach, orange,
 
 library(treemap)
 
-setwd("c:/R_Study/R_JS")
-
 data <- read.csv("data/all_student_score.csv")
 data
 
@@ -320,16 +318,15 @@ data
 
 # geom_point()
 
-ggplot(data, aes(x=이름, y=점수)) + geom_point()
+ggplot(data, aes(x=name, y=score)) + geom_point()
 
 
 # geom_bar()
 # -- stat : 주어진 데이터에서 geom에 필요한 데이터를 생성.
 
-ggplot(data, aes(x=이름, y=점수)) + geom_bar(stat = "identity")
+ggplot(data, aes(x=name, y=score)) + geom_bar(stat = "identity")
 
-gpbar <- ggplot(data, aes(x=이름, y=점수)) + geom_bar(stat = "identity", fill="cyan", colour="red")
-
+gpbar <- ggplot(data, aes(x=name, y=score)) + geom_bar(stat = "identity", fill="cyan", colour="red")
 gpbar + theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1, color="blue", size=10))
 
 
@@ -340,14 +337,14 @@ library(plyr)  # split-apply-combine paradigm !!!
 data <- read.csv("data/student_score_3.csv", header=T, sep=",")
 data
 
-transData <- arrange(data, 이름, 과목)   # plyr : sort
-transData <- ddply(transData, "이름", transform, 합계=cumsum(점수)) # plyr : 누적합계
-transData <- ddply(transData, "이름", transform, label=cumsum(점수)-점수*0.5) # 라벨 위치
+transData <- arrange(data, name, subject)   # plyr : sort
+transData <- ddply(transData, "name", transform, total=cumsum(score)) # plyr : 누적합계
+transData <- ddply(transData, "name", transform, label=cumsum(score)-score*0.5) # 라벨 위치
 transData
 
-ggplot(transData, aes(x=이름, y=점수, fill=과목)) + 
+ggplot(transData, aes(x=name, y=score, fill=subject)) + 
     geom_bar(stat="identity") + 
-    geom_text(aes(y=label, label=paste(점수,"점")), color="black", size=4) + 
+    geom_text(aes(y=label, label=paste(score,"p")), color="black", size=4) + 
     theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1, color="blue", size=10))
 
 
@@ -378,16 +375,12 @@ ggplot(data[,1:2], aes(x=Korean, y=reorder(name,Korean))) +
 
 # geom_line
 
-library(plyr)
-
 data <- read.csv("data/student_subject_score_3.csv")
-data2 <- arrange(data, 이름, 과목)   # plyr : sort
+data2 <- arrange(data, name, subject)   # plyr : sort
 data2
 
-ggplot(data2, aes(x=과목, y=점수, color=이름, group=이름)) + geom_line() 
+ggplot(data2, aes(x=subject, y=score, color=name, group=name)) + geom_line() 
 
-ggplot(data2, aes(x=과목, y=점수, color=이름, group=이름, fill=이름)) + geom_line() + 
+ggplot(data2, aes(x=subject, y=score, color=name, group=name, fill=name)) + geom_line() + 
   geom_point(size=3, shape=22)
-
-
 
