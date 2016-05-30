@@ -2,6 +2,7 @@
 # 비정형 데이터 분석 | Drawing Charts
 #-------------------------------------------------------------------------------------
 
+#setwd("/Volumes/MacHDD/workspace/R_Study/R_JS")
 
 #-------------------------------------------------------------------------------------
 # 제주도 여행코스
@@ -37,10 +38,10 @@ mergeUserDic(data.frame("제주민속촌", "ncn"))
 mergeUserDic(data.frame("외돌개", "ncn"))
 mergeUserDic(data.frame("에코랜드", "ncn"))
 
-txt <- readLines("data/jeju.txt")   # data를 변수로 읽어오기
-mode(txt)                           # 변수의 데이터형식 표시
+txt <- readLines("data/jeju.txt")       # data를 변수로 읽어오기
+mode(txt)                               # 변수의 데이터형식 표시
 
-txt <- txt[txt != '']               # 불필요한 값들 제거
+txt <- txt[txt != '']                   # 불필요한 값들 제거
 txt <- txt[txt != ' ']
 txt <- txt[txt != '  ']
 txt <- txt[txt != '   ']
@@ -50,6 +51,8 @@ txt <- gsub("=>"," ", txt)
 txt <- gsub("→"," ", txt)
 txt <- gsub("\\("," ", txt)
 txt <- gsub("\\)"," ", txt)
+txt <- gsub("/"," ", txt)
+txt <- gsub(","," ", txt)
 
 
 # 2.
@@ -59,11 +62,9 @@ txt <- gsub("\\)"," ", txt)
 nounList <- sapply(txt, extractNoun, USE.NAMES = F)
 
 # unlist : filtering 위해 일반 텍스트로 저장
-tempText <- unlist(nounList)                        
-tempText
-
+place <- unlist(nounList)                        
 # 두글자 이상 되는 것만 필터링. nchar() = character length
-place <- Filter(function(x) {nchar(x) >= 2}, tempText) 
+place <- Filter(function(x) {nchar(x) >= 2}, place) 
 place
 
 # 원하지 않는 내용 걸러내기.
@@ -131,13 +132,11 @@ place <- gsub("다양","", place)
 place <- gsub("첫날","", place)
 place <- gsub("도착","", place)
 place <- gsub("용머","", place)
-place <- gsub("리","", place)
 place <- gsub("바위","", place)
 place <- gsub("유명","", place)
 place <- gsub("정도","", place)
 place <- gsub("이동","", place)
 place <- gsub("무료","", place)
-place <- gsub("용머","", place)
 place <- gsub("체험","", place)
 place <- gsub("둘째","", place)
 place <- gsub(" ","", place)
@@ -155,16 +154,15 @@ write(unlist(place), "jeju_step2.txt")
 place2 <- read.table("jeju_step2.txt")
 wordcount <- table(place2)
 
-head(place2, 10)
 head(wordcount, 10)
-
 head(sort(wordcount, decreasing=T), 50)   # 빈도수가 많은 순으로 정렬해서 상위 30개 조회
 
 
 # 3.
 
-windows(800, 600, pointsize = 10)   # 별도의 윈도우 열기
+#windows(800, 600, pointsize = 10)   # 별도의 윈도우 열기
 
+# -------------------------------------------
 # (1) Wordcloud
 
 # min.freq : 최소 빈도 이상 언급된 단어만 출력
@@ -175,6 +173,7 @@ palete <- brewer.pal(9,"Set1") # 글자 색깔 지정
 wordcloud(names(wordcount), freq=wordcount, scale=c(5, 0.5), min.freq=5, random.order=F, random.color=T, colors=palete)
 
 
+# -------------------------------------------
 # (2) Pie Chart
 
 a <- head(sort(wordcount, decreasing=T), 10)
@@ -184,37 +183,40 @@ pie(a, col = rainbow(10), radius = 1)
 percnt <- round(a/sum(a)*100, 1)      
 names(a)
 labelname <- paste(names(a), percnt, "%")   # % 값 넣기
-pie(a, main = "제주도 관광지", col = rainbow(10), cex = 0.8, labels = labelname) # cex : size of label
+pie(a, main = "Jeju Tour Point", col = rainbow(10), cex = 0.8, labels = labelname) # cex : size of label
 
 
-
+# -------------------------------------------
 # (3) Donut Chart - 위에 흰색 원을 덮음.
 
 par(new = T)
 pie(a, radius = 0.5, col = "white", labels = NA, border = NA)
 
 
+# -------------------------------------------
 # (4) Bar Chart
 
 # space : bar 사이의 간격
 # ylim : y 축 값범위
 # cex : size of label
 
-bp <- barplot(a, main="제주도 관광지", col=rainbow(10), space=0.2, ylim=c(0,35), cex.names=1.0, las=2)
+bp <- barplot(a, main="Jeju Tour Point", col=rainbow(10), space=0.2, ylim=c(0,35), cex.names=1.0, las=2)
 percnt <- round(a/sum(a)*100, 1)
 text(x=bp, y=a*1.1, labels=paste(percnt,"%"), col="black", cex = 0.7)
 text(x=bp, y=a*0.9, labels=paste(a), col="black", cex = 0.7)
 
 
+# -------------------------------------------
 # (5) Horizontal Bar Chart
 
 # xlim : x 축 값범위
 
-bp <- barplot(a, main="제주도 관광지", col=rainbow(10), xlim=c(0,35), cex.names=0.7, las=1, horiz=T)
+bp <- barplot(a, main="Jeju Tour Point", col=rainbow(10), xlim=c(0,35), cex.names=0.7, las=1, horiz=T)
 text(y=bp, x=a*1.15, labels=paste(percnt,"%"), col="black", cex = 0.7)
 text(y=bp, x=a*0.9, labels=paste(a), col="black", cex = 0.7)
 
 
+# -------------------------------------------
 # (6) Line Chart
 
 # xlab : x 축 labels
@@ -224,12 +226,13 @@ text(y=bp, x=a*0.9, labels=paste(a), col="black", cex = 0.7)
 # h : y-value(s) for horizontal line(s).
 # v : x-value(s) for vertical line(s).
 
-plot(a, main="제주도 관광지", xlab="", ylab="", ylim=c(0,35), axes=FALSE, type="s", col="red", lwd=5)
+plot(a, main="Jeju Tour Point", xlab="", ylab="", ylim=c(0,35), axes=FALSE, type="s", col="red", lwd=5)
 axis(1, at=1:10, labels=names(a), las=2)   # x 축
 axis(2, las=1)                             # y 축
 abline(h=seq(0,35,5), v=seq(1,10,1), col="gray", lty=2)
 
 
+# -------------------------------------------
 # (7) 3D Pie Chart
 
 # explode : 각 조각의 간격
@@ -244,10 +247,10 @@ pie3D(a, main="제주도 관광지", col=rainbow(10), cex=0.7, labels=clabels, explode
 
 # Plot 이미지로 저장하기
 
-windows(800, 600, pointsize = 12)   # 별도의 윈도우 열기
-pie(a)                              # 차트 그리기
-savePlot("jeju.png", type="png")    # 결과물을 그림으로 저장
-dev.off()                           # 윈도우 닫기
+# windows(800, 600, pointsize = 12)   # 별도의 윈도우 열기
+# pie(a)                              # 차트 그리기
+# savePlot("jeju.png", type="png")    # 결과물을 그림으로 저장
+# dev.off()                           # 윈도우 닫기
 
 
 
@@ -271,8 +274,11 @@ tempText <- gsub("추천","", tempText)
 tempText <- gsub("답변","", tempText)
 tempText <- gsub("조회","", tempText)
 tempText <- gsub("생각","", tempText)
+tempText <- gsub("생활","", tempText)
+tempText <- gsub("이벤트","", tempText)
+tempText <- gsub("준비","", tempText)
+tempText <- gsub("\\d+","", tempText)    #  모든 숫자 없애기
 tempText <- Filter(function(x) {nchar(x) >= 2}, tempText)
-
 
 
 write(unlist(tempText), "propose2.txt")
