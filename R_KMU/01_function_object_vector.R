@@ -219,6 +219,11 @@ letterTarget <- sample(1:100000, 10000, replace = F)
 letterTarget
 
 
+paste(c("X","Y"), 1:10, sep="")
+
+c("x","y")[rep(c(1,2,2,1), times=4)]
+
+
 # Vectorization
 
 X <- 1:16
