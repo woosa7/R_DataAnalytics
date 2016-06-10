@@ -10,8 +10,10 @@ library(reshape2)
 
 ### data loading -----
 cust <- read.csv("data/customerDb.csv", stringsAsFactors=F)
+str(cust)
 head(cust)
-dim(cust)
+
+basket <- read.csv("data/basketData.csv", stringsAsFactors=F)
 str(basket)
 head(basket);tail(basket)
 
@@ -25,6 +27,7 @@ custAge <- cust %>%
     group_by(sex, ageGroup) %>%
     summarise(N=n(), avg_age=mean(age))
 
+custAge
 
 dcast(custAge, sex ~ ageGroup, value.var = "N", fun.aggregate = sum)
 
