@@ -1,9 +1,15 @@
+###########################
+# KMU : Lecture
+###########################
+
+setwd("C:/R_Study/R_KMU")
+
 library(dplyr)
 library(reshape2)
 
 ### data loading -----
-cust <- read.csv("customerDb.csv", stringsAsFactors=F)
-basket <- read.csv("basketData.csv", stringsAsFactors=F)
+cust <- read.csv("data/customerDb.csv", stringsAsFactors=F)
+basket <- read.csv("data/basketData.csv", stringsAsFactors=F)
 
 
 ## RFM Analysis---------------
@@ -16,14 +22,12 @@ date_dum <- as.Date(basket$date_num, origin="1970-01-01")
 head(date_dum)
 
 
-library(dplyr)
-
 ## double group_by for frequency counting.
 userF <- basket %>%
   group_by(custId, date) %>%
   summarize(N=n()) %>%
-  group_by(custId) %>%
-  summarize(freq=n())
+    group_by(custId) %>%
+    summarize(freq=n())
 userF
 
 
@@ -33,7 +37,6 @@ userRFM <- basket %>%
             recency=max(date),
             monetary=sum(amount),
             period=as.numeric(max(date)-min(date)))
-
 
 head(userRFM)
 
@@ -168,13 +171,18 @@ count5 <- function(x) {
   }
   return(count)
 }
+
 apply(datamat, 1, count5)
+
 apply(datamat, 1, 
       function(x) if (count5(x) >= 3) {
         "quite many" 
       } else {
         "not quite" 
       })
+
+
+
 
 ## Environment and scoping--------------
 
