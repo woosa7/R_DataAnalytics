@@ -2,10 +2,7 @@
 # 구간 (범위) 데이터 분석 - boxplot
 #----------------------------------------------------------------------------
 
-setwd("/Volumes/MacHDD/workspace/R_Study/R_JS")
-
 #----------------------------------------------------------------------------
-# 1.
 
 library(ggplot2)
 
@@ -15,25 +12,32 @@ head(tempratureData)
 
 # ggplot > boxplot
 # aes(x축, y축)
+
 ggplot(tempratureData, aes(factor(Month), MeanTemp)) + geom_boxplot()
+savePlot("20_temperature_boxplot.png", type="png")
+
 ggplot(tempratureData, aes(factor(Month), MeanTemp)) + geom_point()
+savePlot("20_temperature_ggplot_point.png", type="png")
+
 
 
 #----------------------------------------------------------------------------
 
 sales <- read.csv("data/emp_monthly_score.csv", header=T)
-sales
+head(sales)
 
-# 1.
+# 1. box만
 ggplot(sales,aes(factor(name),score))+geom_boxplot()
+savePlot("21_boxplot.png", type="png")
 
-# 2.
+# 2. 분포위치
 ggplot(sales,aes(factor(name),score))+geom_boxplot() + geom_jitter()
+savePlot("21_boxplot_point.png", type="png")
 
-# 3.
+# 3. 색상넣기
 ggplot(sales,aes(factor(name),score))+geom_boxplot(aes(fill=(name)))
+savePlot("21_boxplot_color.png", type="png")
 
-savePlot("sales.png",type="png")
 
 
 #----------------------------------------------------------------------------
@@ -46,6 +50,8 @@ ggplot(total,aes(factor(team),score))+geom_boxplot(aes(fill=(team)))
 ggplot(total,aes(factor(team),score))+geom_boxplot(aes(fill=(team)))+geom_jitter()
 
 
+#----------------------------------------------------------------------------
+# dash board
 #----------------------------------------------------------------------------
 
 sales <- read.csv("data/emp_monthly_score_1.csv", header=T, stringsAsFactors=FALSE, sep=",")

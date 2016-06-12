@@ -55,9 +55,6 @@ apple <- c(260, 400, 250, 200, 310)
 peach <- c(180, 200, 210, 190, 170)
 orange <- c(210, 250, 260, 330, 300)
 
-windows(800, 600, pointsize = 10)   # 별도의 윈도우 열기
-dev.off()                           # 윈도우 닫기
-
 
 #---------------------------------------------------------------
 # plot
@@ -70,12 +67,8 @@ y <- sample(1:20)
 plot(x, y, xlim=c(0,20), ylim=c(0,25), main="sample", type="o", lty=2, col=2)
 
 
-# 사용자지정 x, y 축
+# 사용자지정 x, y 축 --- 01_fruits_line.png
 
-# 1.
-plot(apple, type="o", col="red", ylim=c(0,400))
-
-# 2.
 plot(apple, type="o", col="red", ylim=c(0,400), axes = F, ann=F)
 axis(1, at=1:5, labels = c("Mon","Tue","Wed","Thu","Fri"))
 axis(2, ylim=c(0,400))
@@ -83,15 +76,15 @@ title(main="Fruits", col.main="red", font.main=4)
 title(xlab="Day", col.lab="black")
 title(ylab="Qty", col.lab="blue")
 
-# 3. from # 2.
 par(new=T)
 lines(peach, type="o", pch=21, col="green", lty=2)
 lines(orange, type="o", pch=22, col="blue", lty=2)
 
-legend(4, 130, c("apple","peach","orange"), col=c("red","green","blue"), cex=0.8, pch=21, lty=1:3)
+legend(4, 130, c("apple","peach","orange"), col=c("red","green","blue"), 
+       cex=0.8, pch=21, lty=1:3)
 
 
-# 4.
+
 # multi graph on 1 window
 par(mfrow = c(1,3))
 plot(apple, type="o", col="red", ylim=c(0,400))
@@ -114,13 +107,17 @@ plot(orange, type="o", col="red", ylim=c(0,400))
 
 # 요일별 apple 판매량
 
-# density
+# density --- 02_apple_bar_density
+
 barplot(apple, main="Apple", xlab="Day", ylab="Qty", border="blue",
         names.arg = c("Mon","Tue","Wed","Thu","Fri"),
         density = c(10,30,50,70,90))
 
 
+
 # condition color 특정 조건을 만족하는 경우에 색깔 표시
+# --- 03_apple_bar_conditionColor
+
 colors <- c()
 for (i in 1:length(apple)) {
   if (apple[i] >= 300) {
@@ -135,7 +132,8 @@ barplot(apple, main="Apple", xlab="Day", ylab="Qty", border="blue", col=colors,
         names.arg = c("Mon","Tue","Wed","Thu","Fri"))
 
 
-# 과일별/요일별 판매랑
+
+# 과일별/요일별 판매랑 --- 04_fruits_bar_multi
 
 fruits10 <- cbind(apple, peach, orange)
 fruits10
@@ -146,8 +144,7 @@ legend(10, 450, c("Mon","Tue","Wed","Thu","Fri"), cex=0.8, fill=rainbow(5))
 
 
 
-# 요일별/과일별 판매량
-# multi-section / 1 bar
+# 요일별/과일별 판매량 --- 05_fruits_bar_multisection
 
 fruits11 <- t(fruits10)
 colnames(fruits11) <- c(1,2,3,4,5)
@@ -177,7 +174,9 @@ pie(apple)
 pie(apple, init.angle = 90, col=rainbow(length(apple)), radius = 1,
     labels = c("Mon","Tue","Wed","Thu","Fri"))
 
-# 2. 비율
+
+# 2. 비율 --- 06_apple_pie
+
 f_ratio <- round(apple/sum(apple)*100, 1)
 f_labels <- paste(f_ratio, "%", sep = "")
 
@@ -185,7 +184,10 @@ pie(apple, main="Apple", init.angle = 90, col=rainbow(length(apple)), radius = 0
     cex=0.8, labels=f_labels)
 legend(1,1, c("Mon","Tue","Wed","Thu","Fri"), cex=0.8, fill=rainbow(length(apple)))
 
-# 3.
+
+
+# 3. --- 06_apple_pie_label
+
 f_ratio <- round(apple/sum(apple)*100, 1)
 f_days <- c("Mon","Tue","Wed","Thu","Fri")
 f_labels <- paste(f_days, "\n", f_ratio, "%")
@@ -198,15 +200,16 @@ pie(apple, main="Apple", init.angle = 90, col=rainbow(length(apple)), radius = 1
 # 3D Pie Chart
 #---------------------------------------------------------------
 
-# explode : 각 조각의 간격
+# explode : 각 조각의 간격 --- 07_apple_3Dpie
 
-library("plotrix")
+library(plotrix)
 
 f_ratio <- round(apple/sum(apple)*100, 1)
 f_days <- c("Mon","Tue","Wed","Thu","Fri")
 f_labels <- paste(f_days, "\n", f_ratio, "%")
 
-pie3D(apple, main="Apple", col=rainbow(length(apple)), cex=0.8, labels=f_labels, explode=0.05)
+pie3D(apple, main="Apple", col=rainbow(length(apple)), cex=0.8, 
+      labels=f_labels, explode=0.05)
 
 
 
@@ -228,6 +231,7 @@ boxplot(apple, peach, orange,
         horizontal = T)
 
 
+
 #---------------------------------------------------------------
 # treemap
 #---------------------------------------------------------------
@@ -240,10 +244,12 @@ library(treemap)
 data <- read.csv("data/all_student_score.csv")
 data
 
+# --- 08_score_treemap
+
 treemap(data, vSize="score", index="score")
-treemap(data, vSize="team", index="team")
 
 treemap(data, vSize="team", index=c("score","name"))
+
 treemap(data, vSize="score", index=c("team","score"))
 
 
@@ -265,18 +271,21 @@ row.names(data) <- data$name
 rownames(data)
 data <- data[2:7]
 
+
 # star chart
 
-# 1.
+# 1. --- 09_stardiagram_line
+
 stars(data, flip.labels = F, draw.segments = F, frame.plot = T, full = T,
       main = "Score Diagram of subject/student")
 
 label <- names(data)
 value <- table(label)
-pie(value, labels = label, radius = 0.2, cex = 0.6, col = NA)
+piechart <- pie(value, labels = label, radius = 0.2, cex = 0.6, col = NA)
 
 
-# 2.
+# 2. --- 09_stardiagram_color
+
 stars(data, flip.labels = T, draw.segments = T, frame.plot = T, full = T,
       main = "Score Diagram of subject/student")
 
@@ -286,12 +295,15 @@ color <- c("black","red","green","blue","cyan","violet")
 pie(value, labels = label, radius = 0.1, cex = 0.6, col = color)
 
 
-# 3.
+# 3. --- 09_stardiagram_color_half
+
 stars(data, flip.labels = T, draw.segments = T, frame.plot = T, full = F,
       main = "Score Diagram of subject/student")
 
 
-# star --> bar
+
+# star --> bar : --- 10_bar_multi
+
 data2 <- t(data)
 data2
 
@@ -316,7 +328,7 @@ library(ggplot2)
 data <- read.table("data/korean_score.txt", header=T, sep="")
 data
 
-# geom_point()
+# geom_point() : 11_ggplot_point
 
 ggplot(data, aes(x=name, y=score)) + geom_point()
 
@@ -324,7 +336,12 @@ ggplot(data, aes(x=name, y=score)) + geom_point()
 # geom_bar()
 # -- stat : 주어진 데이터에서 geom에 필요한 데이터를 생성.
 
+#--- 11_ggplot_bar
+
 ggplot(data, aes(x=name, y=score)) + geom_bar(stat = "identity")
+
+
+#--- 11_ggplot_bar_theme
 
 gpbar <- ggplot(data, aes(x=name, y=score)) + geom_bar(stat = "identity", fill="cyan", colour="red")
 gpbar + theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1, color="blue", size=10))
@@ -335,17 +352,22 @@ gpbar + theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1, color="blue",
 library(plyr)  # split-apply-combine paradigm !!!
 
 data <- read.csv("data/student_score_3.csv", header=T, sep=",")
-data
+head(data)
 
 transData <- arrange(data, name, subject)   # plyr : sort
+# total 컬럼 추가
 transData <- ddply(transData, "name", transform, total=cumsum(score)) # plyr : 누적합계
+# label 컬럼 추가
 transData <- ddply(transData, "name", transform, label=cumsum(score)-score*0.5) # 라벨 위치
-transData
+head(transData)
+
+# --- 12_ggplot_bar_multisection
 
 ggplot(transData, aes(x=name, y=score, fill=subject)) + 
     geom_bar(stat="identity") + 
     geom_text(aes(y=label, label=paste(score,"p")), color="black", size=4) + 
     theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1, color="blue", size=10))
+
 
 
 # geom_segment
@@ -357,12 +379,15 @@ kdata
 # theme_bw() : 배경 흑백
 # panel.grid.major.y = element_line : 가로 선 그리기
 
-ggplot(data[,1:2], aes(x=Korean, y=reorder(name,Korean))) + geom_point(size=5) +
+# --- 13_ggplot_point_grid
+
+ggplot(data[,1:2],aes(x=Korean, y=reorder(name,Korean))) + geom_point(size=5) +
   theme_bw() +                                      
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.y = element_line(color="red", linetype="dashed"))
 
+# --- 13_ggplot_point_grid2
 
 ggplot(data[,1:2], aes(x=Korean, y=reorder(name,Korean))) + 
   geom_segment(aes(yend=name, xend=0, color="red")) +
@@ -373,7 +398,7 @@ ggplot(data[,1:2], aes(x=Korean, y=reorder(name,Korean))) +
         panel.grid.major.y = element_blank())
 
 
-# geom_line
+# geom_line --- 14_ggplot_line
 
 data <- read.csv("data/student_subject_score_3.csv")
 data2 <- arrange(data, name, subject)   # plyr : sort

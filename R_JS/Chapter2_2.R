@@ -33,6 +33,8 @@ barplot(counts, main="Land Area Group", xlab="500,000(km2) break")
 bp <- barplot(d$PopDensity, names.arg = d$Nation, main="Popultion Density", col="lightcyan", ylim=c(0,1000), cex.names=0.7, las=2)
 text(x = bp, y = d$PopDensity*0.9, labels = d$PopDensity, col = "red", cex = 0.7)
 
+
+
 # Sort : PopDensity
 data <- d[order(d$PopDensity, decreasing = T), ]  
 data
@@ -70,6 +72,7 @@ bp <- barplot(d$M01/unitNumber, xlim=c(0,50),
               horiz=T)
 
 text(y=bp, x=d$M01/unitNumber + 2, labels=round(d$M01/unitNumber,2), col = "red", cex = 0.7)
+savePlot("16_horizontal_bar_subway.png", type="png")
 
 
 
@@ -103,6 +106,7 @@ lines(z, col="green", type="o")
 
 colors <- c("red","blue","green")
 legend(5, 220000, c("2011년","2012년","2013년"), cex=0.8, col=colors, lty=1, lwd=2)   # 범례 위치와 색
+savePlot("17_line_gridline.png", type="png")
 
 
 
@@ -123,6 +127,7 @@ barplot(as.matrix(gangnam)/1000, main="강남역 시간대별 승하차 현황",
 abline(h=c(50,100,150,200,250,300,350,400,450),lty=2)
 
 legend("topright", c("승차","하차"), cex=0.8, fill=c("black","white"))
+savePlot("18_bar_multi_grid.png", type="png")
 
 
 
@@ -174,4 +179,5 @@ abline(v=seq(1980,2015,1), col="gray", lty=2, lwd=0.5)
 colors <- c("red","blue")
 legend(1982, 1150, c("물가상승율","라면값상승율"), cex=0.8, col=colors, lty=1, lwd=2, fill="white", bg="white")
 
+savePlot("19_line_cummulate_grid.png", type="png")
 
