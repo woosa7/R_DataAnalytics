@@ -206,7 +206,7 @@ apply(m, 2, mean)
 
 # divide all values by 2
 apply(m, 1:2, function(x) x/2) #annonymous function
-# [,1] [,2]
+#       [,1] [,2]
 # [1,]  0.5  5.5
 # [2,]  1.0  6.0
 # [3,]  1.5  6.5

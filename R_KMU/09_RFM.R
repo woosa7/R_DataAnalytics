@@ -68,6 +68,8 @@ dummy <- basket %>%
   group_by(time, branchId) %>%
   summarize(amt=mean(amount))
 
+dummy
+
 dummy1 <- dcast(dummy, branchId ~ time, fun.aggregate=sum, value.var="amt")
 dummy1
 

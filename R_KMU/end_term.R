@@ -1,59 +1,128 @@
-# 0. 첨부해 드린 데이터 csv파일은 가상으로 작성된, 우리나라를 방문한 
-# 해외 관광객의 로밍통화 log 데이터입니다.
-# (Call Data Records, Call Detail Records 라고도 합니다)
-# 
-# - 데이터의 한행은 통화나 SMS가 한 통화 수신 혹은 발신되었음을 의미합니다.
-# - 고객 1명이 여러번의 통화를 발신 혹은 수신한 경우, 여러개의 통화 레코드가 남게 됩니다.
-# - 이러한 데이터를 알리바이의 근거로 활용하여 다양한 분석이 가능하게 됩니다.
-# - 데이터에 대한 상세한 내용은 첨부해 드린 Databook(pdf)을 참조하여 주시기 바랍니다.
-# 
-# 중간고사 평가를 통해서 미리 분석해야 할 과제를 명시적으로 드리는 것이 좋을 것 같다는
-# 생각을 하게되었습니다. 그리하여 이번에는 아래의 5개 문제를 풀어주시는 것이 
-# 리포트 작성 과제입니다.
-# 
-# 송부해 드린 데이터를 활용하여 아래 과제를 해결하는 코드를 작성하고, 
-# R 코드와 함께 결과로서 추출되는 Data file을 csv형태로 제출해 주시면 됩니다.
-# 
-# - 제출 기한은 다음주 수업 전일인 2016년 6월 17일 자정까지 입니다.
-# 
-# 문제는 아래에 보시는 바와 같이 5 문제입니다.
-# 
-# 
-# 
-# 1. 데이터를 근거로 우리나라를 가장 많이 방문한 나라의 이름은?
-# 1등 방문객수 국가와 2등 방문객수 국가의 방문객수 차이는 얼마인가요?
-# 
-# 주) 통화건수가 아니라 방문객수라는 점에 유의하시기 바랍니다.
-# 
-# 
-# 
-# 2.데이터를 근거로 해외여행객들의 통화건수가 가장 많은 요일은 무슨 요일입니까?
-# 
-# 
-# 
-# 3. 데이터를 근거로 해외여행객들의 통화건수가 가장 많은 시간대는 언제입니까? 
-# 
-# 
-# 
-# 4. 데이터를 근거로 국내행정구역별로 해외방문객의 국가별 통화건수 비중을 
-# 데이터프레임으로 작성하시오.
-# 
-# - hint : 행은 city, 열은 nation으로 작성하고, 각 city별로 합계를 구한 다음,
-# 각 city별 nation의 수치를 합계로 나누면 비중이 나옵니다. 
-# 
-# 
-# 
-# 5. 데이터를 근거로 국내를 방문한 해외 관광객 DB를 만들어 주시기 바랍니다.
-# 단, DB는 아래와 같은 Field로 구성되어야 합니다.
-# 해외 방문 고객 DB를 만드는 코드와 그 결과물을 제출해 주시면 됩니다.
-# 
-# - touristID : 해외방문객의 unique한 touristID
-# - totalCall : 데이터에 근거한 총통화건수
-# - callDays : 데이터에 근거한 총통화발생일수 
-# (여러번의 통화가 있더라도 같은 날이면 하루로 환산해야 함에 유의)
-# - visitAreas : 데이터에 근거한 국내 방문지역 수 (행정구역 기준)
-# 
-# - hint : dplyr 패키지를 적절한 group_by를 통해 각각의 필드에 해당하는
-# 데이터를 추출한 후,  join으로 DB를 구성하시기 바랍니다.
+# 우리나라를 방문한 해외 관광객의 로밍통화 log 데이터(Call Data Records, Call Detail Records)
+# 데이터의 한행은 통화나 SMS가 한 통화 수신 혹은 발신되었음을 의미.
 
+#----------------------------------------------------------------
+# 0. load data
+
+setwd("/Volumes/MacHDD/workspace/R_Study/R_KMU")
+
+cdrData <- read.csv("trainData_CDR.csv", header = T, stringsAsFactors = F)
+summary(cdrData)
+head(cdrData)
+
+library(dplyr)
+library(reshape2)
+
+#----------------------------------------------------------------
+# 1. 우리나라를 가장 많이 방문한 나라의 이름은? 1등과 2등 국가의 방문객수 차이는?
+
+# touristID 를 기준으로 묶은 후, nation 별로 집계
+sumByNation <- cdrData %>%
+    group_by(touristID, nation) %>%
+    summarize(N=n()) %>%
+        group_by(nation) %>%
+        summarize(Total=n()) %>%
+        arrange(desc(Total))
+
+# Answer
+sumByNation                                     # 1위 China, 2위 Japan
+sumByNation$Total[1] - sumByNation$Total[2]     # 1,2위 방문객수 차이 = 9,312
+
+
+#----------------------------------------------------------------
+# 2.해외여행객들의 통화건수가 가장 많은 요일은?
+
+cdrData$weekDay <- weekdays.Date(strptime(cdrData$dateChar, format = "%Y/%m%d"))
+head(cdrData)
+
+cdrData %>%
+    group_by(weekDay) %>%
+    summarize(Total=n())  %>%
+    arrange(desc(Total))
+
+# Answer : 금요일 32,217건
+
+
+#----------------------------------------------------------------
+# 3.해외여행객들의 통화건수가 가장 많은 시간대는? 
+
+cdrData %>%
+    group_by(Time=substr(timeChar,1,2)) %>%
+    summarize(Total=n())  %>%
+    arrange(desc(Total))
+
+# Answer : 17시 18,248건
+
+
+#----------------------------------------------------------------
+# 4.국내행정구역별로 해외방문객의 국가별 통화건수 비중을 데이터프레임으로 작성.
+
+summary1 <-
+    cdrData %>%
+        group_by(city, nation) %>%
+        summarize(Total=n())
+
+summary1
+
+# 행은 city, 열은 nation
+summary2 <- dcast(summary1, city ~ nation, fun.aggregate=sum, value.var="Total")
+
+# 각 city별로 합계와 비중. 
+summary2$Total <- apply(summary2[-1], 1, sum)
+totalCount <- sum(summary2$Total)
+summary2$Ratio <- round(summary2$Total / totalCount * 100,2)
+summary2
+
+# Answer : 비중을 기준으로 정렬
+df_AreaNation <- summary2[order(-summary2$Total),]
+df_AreaNation
+
+
+#----------------------------------------------------------------
+# 5.국내를 방문한 해외 관광객 DB 생성. 해외 방문 고객 DB를 만드는 코드와 그 결과물 제출.
+# - touristID : 해외방문객의 unique한 touristID
+# - totalCall : 총통화건수
+# - callDays : 총통화발생일수 (여러번의 통화가 있더라도 같은 날이면 하루로 환산)
+# - visitAreas : 국내 방문지역 수 (행정구역 기준)
+# 
+# dplyr 패키지를 적절한 group_by를 통해 각각의 필드에 해당하는 데이터를 추출한 후,  join으로 DB를 구성.
+
+# 5-1. totalCall
+callCount <- cdrData %>%
+    group_by(touristID) %>%
+    summarize(totalCall=n())
+
+head(callCount)
+nrow(callCount)
+
+# 5-2. callDays
+dayCount <- cdrData %>%
+    group_by(touristID, dateChar) %>%
+    summarize(N=n())  %>%
+        group_by(touristID) %>%
+        summarize(callDays=n())
+
+head(dayCount)
+nrow(dayCount)
+
+# 5-3. visitAreas
+areaCount <- cdrData %>%
+    group_by(touristID, city) %>%
+    summarize(N=n())  %>%
+    group_by(touristID) %>%
+    summarize(visitAreas=n())
+
+head(areaCount)
+nrow(areaCount)
+
+# 5-4. 위 데이터 join
+library(plyr)
+touristsData <- join(callCount, dayCount)
+touristsData <- join(touristsData, areaCount)
+
+head(touristsData)
+nrow(touristsData)
+
+# Answer
+write.csv(touristsData, "touristsData_callSummary.csv")
 
