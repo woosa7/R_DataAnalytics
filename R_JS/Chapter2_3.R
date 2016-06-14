@@ -2,9 +2,10 @@
 # 구간 (범위) 데이터 분석 - boxplot
 #----------------------------------------------------------------------------
 
-#----------------------------------------------------------------------------
+require(ggplot2)
 
-library(ggplot2)
+#----------------------------------------------------------------------------
+# boxplot
 
 tempratureData <- read.csv("data/Trend_Temperature_Seoul.csv", header=T)
 str(tempratureData)
@@ -22,32 +23,37 @@ savePlot("20_temperature_ggplot_point.png", type="png")
 
 
 #----------------------------------------------------------------------------
+# boxplot
+
+# geom_jitter : 데이터의 분포를 점으로 표시
 
 sales <- read.csv("data/emp_monthly_score.csv", header=T)
 head(sales)
 
 # 1. box만
-ggplot(sales,aes(factor(name),score))+geom_boxplot()
+ggplot(sales,aes(factor(name),score)) + geom_boxplot()
 savePlot("21_boxplot.png", type="png")
 
 # 2. 분포위치
-ggplot(sales,aes(factor(name),score))+geom_boxplot() + geom_jitter()
+ggplot(sales,aes(factor(name),score)) + geom_boxplot() + geom_jitter()
 savePlot("21_boxplot_point.png", type="png")
 
 # 3. 색상넣기
-ggplot(sales,aes(factor(name),score))+geom_boxplot(aes(fill=(name)))
+ggplot(sales,aes(factor(name),score)) + geom_boxplot(aes(fill=(name))) + geom_jitter()
 savePlot("21_boxplot_color.png", type="png")
 
 
 
 #----------------------------------------------------------------------------
+# boxplot
 
 total <- read.csv("data/all_student_score.csv", header=T)
-total
+head(total)
 
-ggplot(total,aes(factor(team),score))+geom_boxplot(aes(fill=(team)))
+ggplot(total,aes(factor(team),score)) + geom_boxplot(aes(fill=(team)))
 
-ggplot(total,aes(factor(team),score))+geom_boxplot(aes(fill=(team)))+geom_jitter()
+ggplot(total,aes(factor(team),score)) + geom_boxplot(aes(fill=(team))) + geom_jitter()
+
 
 
 #----------------------------------------------------------------------------
@@ -58,7 +64,9 @@ sales <- read.csv("data/emp_monthly_score_1.csv", header=T, stringsAsFactors=FAL
 sales
 
 # function
-dash_t <- function(x, q.1, q.3, title) {
+# x : 표현할 값, angle1 : 좌측 게이지 각도, angle3 : 우측 게이지 각도, title : Dashboard 제목
+
+dash_t <- function(x, angle1, angle3, title) {
     i <- matrix(c(-1,0,0,1,1,0), 3, 2, byrow=T)
     plot(i, xlab="", ylab="", axes=F, type="n")
     x.cir <- cos(seq(0,180,1)*pi/180)
