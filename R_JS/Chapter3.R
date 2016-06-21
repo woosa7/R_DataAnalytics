@@ -57,3 +57,31 @@ ggsave("24_ggmap_jeju_tour_path.png", dpi=700)
 
 
 
+
+#----------------------------------------------------------------------------
+# Google Motion Chart
+#----------------------------------------------------------------------------
+
+require(googleVis)
+
+#----------------------------------------------------------------------------
+Fruits      # 내장 연습용 데이터
+
+# 각 과일별 연도별 판매량
+fchart <- gvisMotionChart(Fruits, idvar = "Fruit", timevar = "Year")
+plot(fchart)     # 자동으로 웹브라우저 실행됨
+
+
+
+#----------------------------------------------------------------------------
+# 시간대별 1-4호선 승하차 승객수
+
+pdata <- read.csv("data/line_1_4_passengers.csv", header = T, sep = ",")
+head(pdata)
+
+pchart <- gvisMotionChart(pdata, idvar = "line_no", timevar = "time", options = list(width=1000, height=500))
+plot(pchart)
+
+
+
+

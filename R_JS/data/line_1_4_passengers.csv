@@ -1,4 +1,4 @@
-line_no,time,in,out
+line_no,time,getin,getout
 line_1,506,88136,35394
 line_1,607,114628,195028
 line_1,708,259282,483162
