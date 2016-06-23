@@ -219,7 +219,7 @@ head(bike_df)
 tail(bike_df)
 
 
-windows(800, 600, pointsize = 12)   # 별도의 윈도우 열기
+windows(8000, 6000, pointsize = 5)   # 별도의 윈도우 열기
 
 
 # 10-1. 분기별 사용시간 (Line Chart)
