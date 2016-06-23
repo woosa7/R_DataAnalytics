@@ -19,6 +19,8 @@ names(roulette_vector) <- days
 poker_vector
 roulette_vector
 
+poker_vector > roulette_vector
+
 # Calculate
 poker_vector + roulette_vector              # total_daily
 sum(poker_vector) + sum(roulette_vector)    # total_week
