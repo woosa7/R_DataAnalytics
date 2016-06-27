@@ -2,8 +2,6 @@
 # KMU : Lecture
 ###########################
 
-setwd("/Volumes/MacHDD/workspace/R_Study/R_KMU")
-
 library(dplyr)
 library(reshape2)
 

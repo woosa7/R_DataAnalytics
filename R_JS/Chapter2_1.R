@@ -39,10 +39,13 @@ mergeUserDic(data.frame("에코랜드", "ncn"))
 txt <- readLines("data/jeju.txt")       # data를 변수로 읽어오기
 mode(txt)                               # 변수의 데이터형식 표시
 
-txt <- txt[txt != '']                   # 불필요한 값들 제거
+# 공백 제거
+txt <- txt[txt != '']
 txt <- txt[txt != ' ']
 txt <- txt[txt != '  ']
 txt <- txt[txt != '   ']
+# 불필요한 값들 제거
+# gsub("변경전 글자","변경후 글자","원본데이터")
 txt <- gsub("-"," ", txt)
 txt <- gsub("&"," ", txt)
 txt <- gsub("=>"," ", txt)
@@ -59,14 +62,13 @@ txt <- gsub(","," ", txt)
 # sapply : 함수의 결과를 list 에 담는다.
 nounList <- sapply(txt, extractNoun, USE.NAMES = F)
 
-# unlist : filtering 위해 일반 텍스트로 저장
-place <- unlist(nounList)                        
+# unlist : filtering 위해 list 객체를 일반 벡터로 변환
+place <- unlist(nounList)
 # 두글자 이상 되는 것만 필터링. nchar() = character length
 place <- Filter(function(x) {nchar(x) >= 2}, place) 
 place
 
 # 원하지 않는 내용 걸러내기.
-# gsub("변경전 글자","변경후 글자","원본데이터")
 place <- gsub("제주","", place) 
 place <- gsub("통운","", place)  
 place <- gsub("전국","", place)  
@@ -147,7 +149,7 @@ place <- gsub("\\d+","", place)    #  모든 숫자 없애기
 place <- Filter(function(x) {nchar(x) >= 2}, place)
 place
 
-# 정리된 데이터를 파일로 저장한 후 다시 table 형식으로 다시 불러오기
+# 정리된 데이터를 파일로 저장한 후 다시 table 형식으로 다시 불러오기. 빈 라인들 제거됨.
 write(unlist(place), "jeju_step2.txt")
 place2 <- read.table("jeju_step2.txt")
 wordcount <- table(place2)
@@ -181,6 +183,21 @@ names(a)
 labelname <- paste(names(a), percnt, "%")   # % 값 넣기
 pie(a, main = "Jeju Tour Point", col = rainbow(10), cex = 0.8, labels = labelname) # cex : size of label
 
+# Conditiional Color
+colors <- c()
+for (i in 1:length(a)) {
+    if (a[i] >= 50) {
+        colors <- c(colors, "red")
+    }
+    else if (a[i] >= 15) {
+        colors <- c(colors, "yellow")
+    }
+    else {
+        colors <- c(colors, "green")
+    }
+}
+
+pie(a, col = colors, radius = 1)
 
 # -------------------------------------------
 # (3) Donut Chart - 위에 흰색 원을 덮음.
@@ -256,7 +273,7 @@ pie3D(a, main="제주도 관광지", col=rainbow(10), cex=0.7, labels=clabels, explode
 
 # chr (문장) --> 단어 list --> chr (단어) --> txt --> table list --> wordcount (numeric)
 
-txt <- readLines("data/propose.txt")
+txt <- readLines("data/propose_utf8.txt", encoding = "UTF-8")
 txt
 
 txt <- txt[txt != '']
