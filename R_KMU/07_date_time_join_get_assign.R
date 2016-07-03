@@ -2,62 +2,46 @@
 # KMU : Lecture
 ###########################
 
-###############
+###########################
 # date / time
-###############
+###########################
 
 thistime <- strptime("20160502 101210", format="%Y%m%d %H%M%S")
 thistime
 as.numeric(thistime)
 
+thistime$hour
+thistime$wday    # 요일
 
-difftime(thistime, Sys.time(), unit="hours")
-# > difftime(thistime, Sys.time(), unit="hours")
-# Time difference of -24.33783 hours
 
-difftime(Sys.time(),thistime, unit="hours", tz="Asia/Seoul")
-#difftime(Sys.time(),thistime, unit="hours", tz="America/Dawson")
-# Time difference of 24.36624 hours
-
-?difftime  #units = c("auto", "secs", "mins", "hours", "days", "weeks")
+# Time Intervals 1
+?difftime              #units = c("auto", "secs", "mins", "hours", "days", "weeks")
 example(difftime)
 
-utcthistime <- as.POSIXct(thistime, tz="UTC")
-thistime
+z <- difftime(Sys.time(), thistime, unit="hours")    # Time difference of 000.000 hours
+typeof(z)
+
+difftime(Sys.time(),thistime, unit="hours", tz="Asia/Seoul")
+difftime(Sys.time(),thistime, unit="auto", tz="America/Dawson")
+
+
+# Time Intervals 2
+(utcthistime <- as.POSIXct(thistime, tz="UTC"))   # UTC == GMT
 as.numeric(utcthistime)
 as.numeric(thistime)
 
-thistime$hour
-
-
-difference <- as.numeric(utcthistime) - as.numeric(thistime)
-difference/60/60 # 9hours difference
-
-gmtthistime <- as.POSIXct(thistime, tz="GMT")
-as.numeric(gmtthistime)
-
-difference <- as.numeric(gmtthistime) - as.numeric(thistime)
-difference/60/60 # same 9 hours
-
-tokyothistime <- as.POSIXct(thistime, tz="Asia/Tokyo")
-as.numeric(tokyothistime)
-
-difference <- as.numeric(tokyothistime) - as.numeric(thistime)
-difference/60/60 # 0 difference
+difference <- (as.numeric(utcthistime) - as.numeric(thistime))/60/60
+difference      # 9hours difference
 
 hkthistime <- as.POSIXct(thistime, tz="Asia/Hong_kong")
-as.numeric(hkthistime)
-
-difference <- as.numeric(hkthistime) - as.numeric(thistime)
-difference/60/60 # 1 hour difference
+difference <- (as.numeric(hkthistime) - as.numeric(thistime))/60/60
+difference      # 1 hour difference
 
 
 
-
-
-###############
-# get / assign
-###############
+###########################
+# assign / get
+###########################
 
 # 계산된 결과를 변수에 넣는다.
 for (i in 1:10) {
@@ -74,22 +58,30 @@ for (i in 1:10) {
 objdf
 
 
-###############
-# join
-###############
+
+###########################
+# match / merge / join
+###########################
+
 example(merge)
 example(match)
 
+#----------------------------------------------------
+# match : 앞 벡터 기준으로 뒤 벡터에서의 인덱스 리턴
+#----------------------------------------------------
+
 match(c(255,11,22),c(255,11,33))
-match(c(255,11,22),c(11,33, 255))
+match(c(255,11,22),c(11,33,255))
 
-?match
+match(1:10, 7:20) # NA NA NA NA NA NA  1  2  3  4
+match(10:1, 7:20) # 4  3  2  1 NA NA NA NA NA NA
 
-match(1:10, 7:20) #[1] 0 0 0 0 0 0 1 2 3 4
-match(10:1, 7:20) #[1]  4  3  2  1 NA NA NA NA NA NA
-match(1:10, 7:20, nomatch=0)
+match(1:10, 7:20, nomatch=0)       # NA는 0으로 표기
 max(match(1:10, 7:20, nomatch=0))
+
+# match를 사용한 함수 생성. 뒤쪽 벡터에서 일치하는 값만 리턴.
 intersect <- function(x, y) y[match(x, y, nomatch = 0)]
+
 intersect(1:10, 7:20)
 
 intersect_nomatch_1 <- function(x, y) y[match(x, y, nomatch = 1)]
@@ -103,6 +95,12 @@ intersect_nomatch_ln(1:10, 7:20)
 
 intersect_nomatch_asterisk <- function(x, y) y[match(x, y, nomatch = "*")]
 intersect_nomatch_asterisk(1:10, 7:20)
+
+
+
+#----------------------------------------------------
+# merge : 이름이 같은 컬럼을 기준으로 join
+#----------------------------------------------------
 
 df1 = data.frame(CustomerId = c(1:6), Product = c(rep("Toaster", 3), rep("Radio", 3)))
 df2 = data.frame(CustomerId = c(2, 4, 6), State = c(rep("Alabama", 2), rep("Ohio", 1)))
@@ -130,7 +128,13 @@ merge(x = df2, y = df1, by = "CustomerId", all.y = TRUE)
 merge(x = df1, y = df2, by = NULL)
 merge(x = df2, y = df1, by = NULL)
 
-# install.packages("plyr")
+
+
+#----------------------------------------------------
+# plyr :: join
+#----------------------------------------------------
+
+#install.packages("plyr")
 library(plyr)
 ?join
 
@@ -151,13 +155,17 @@ join(df1, df2, type="full")
 join(df2, df1, type="full")
 
 
-###############
-# data handling
-###############
 
-dummy <- dir()
+###########################
+# data handling
+###########################
+
+dummy <- dir("data/")
+dummy
+
 dumwhich <- which(substr(dummy, nchar(dummy)-2, nchar(dummy)) == "csv")   # csv 파일 체크
 loadlist <- dummy[dumwhich]
+loadlist
 
 for (i in seq_along(loadlist)) {
   assign(paste0("bikedata_",i), read.csv(loadlist[i], stringsAsFactors = F))

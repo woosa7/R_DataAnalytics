@@ -315,7 +315,7 @@ c <- subset(d, nchar(d) > 100)             # nchar : 문자열 길이
 length(c)
 
 
-# 정규식 표현
+# 정규표현식
 
 regexpr("ORACLE", c)
 
