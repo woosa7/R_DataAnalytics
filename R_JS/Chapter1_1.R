@@ -126,13 +126,6 @@ x <- rbind(x, c(77, 88))       # 행 추가
 x <- cbind(x, c(9, 8, 7))      # 열 추가
 x
 
-# apply(대상, 1=행/2=열, 적용함수) --> vector
-
-apply(x, 1, max)     # 각 행의 최대값
-apply(x, 2, min)     # 각 열의 최소값
-apply(x, 2, mean)    # 각 열의 평균
-typeof(x)
-
 colnames(x) <- c("no1", "no2", "no3")
 x
 
@@ -149,18 +142,6 @@ member$birth <- "1990-05-07"      # list에 항목 추가
 member$birth <- NULL              # list 항목 삭제
 
 length(member)                    # 항목 갯수
-
-func <- function(x) x*2
-lx <- list(1:5)
-ly <- list(3:10)
-
-# list에 적용되는 apply 함수
-
-lapply(c(lx, ly), func)           
-sapply(c(lx, ly), func)
-
-lapply(c(lx, ly), max)  # --> list
-sapply(c(lx, ly), max)  # --> vector
 
 
 #-----------------------------------------------------------
@@ -246,21 +227,10 @@ order(df$highprice)           # 정렬된 위치 인덱스 리턴
 rank(df$highprice)            # 정렬되지 않은 위치 인덱스 리턴
 
 
-# 분할
+# split
 
 split(df, df$name)            # 해당 컬럼 기준으로 분할
 split(df, df$no > 2)
-
-
-# apply / by
-
-funcA <- function(x) x * 2
-
-apply(df[c(3:5)], 2, funcA)   # 두번째 항목 = 1 row : 2 column
-apply(df[c(3:5)], 2, sum)
-
-by(df[c(3,4)], df$no, funcA)  # no 컬럼별로 함수 적용.
-by(df[c(3,4)], df$no, sum)
 
 
 # merge
@@ -269,6 +239,8 @@ x <- data.frame( names=c("A", "B", "C"), address=c("Seoul", "Busan", "Tyokyo"))
 y <- data.frame( names=c("A", "B", "D"), telno=c("001", "003", "888"))
 
 merge(x, y)      # 공통적으로 있는 데이터만 merge
+merge(x, y, by = "names")
+merge(x, y, by = "names", all = T)
 
 
 # subset : dataframe 에서 조건에 맞는 데이터를를 dataframe으로 추출
@@ -276,11 +248,65 @@ merge(x, y)      # 공통적으로 있는 데이터만 merge
 subset(df, df$qty > 5)
 subset(df, highprice > 500)
 subset(df, name == "apple")
+subset(df, select = c(name,qty), subset = df$qty > 5)
+subset(df, select = -no)
+
+library(MASS)
+str(Cars93)
+
+subset(Cars93, select = c(Model, Type, Price), MPG.city > 30)
+
+subset(Cars93, select = c(Manufacturer, Model, Type, Price, Make), 
+       MPG.highway > median(MPG.highway) & Manufacturer == "Subaru")
 
 
 # Dataframe 내용 저장.
 
 write.table(df, "data/save_fruits.txt", quote = F, append = F)     
+
+
+
+#-----------------------------------------------------------
+# apply, lapply, sapply, by
+
+# lapply : 결과를 list 형태로 반환
+# sapply : 결과를 vector 또는 matrix로 반환
+
+# list
+s1 <- c(91, 87, 95, 96, 89, 87, 86)
+s2 <- c(89, 86, 85, 92, 93, 91, 90)
+s3 <- c(89, 86, 78, 99, 95, 87, 89)
+score <- list(korean=s1, english=s2, math=s3)
+
+lapply(score, mean)   # ---> list
+sapply(score, mean)   # ---> vector
+sapply(score, range)
+
+sapply(score, t.test)
+
+
+# matrix : 1 행 / 2 열
+x <- c(s1, s2, s3)
+dim(x) <- c(3,7)
+colnames(x) <- c("t1","t2","t3","t4","t5","t6","t7")
+rownames(x) <- c("Sun", "Jess", "Soo")
+x
+
+apply(x, 1, mean)
+apply(x, 2, max)
+
+
+# dataframe
+df <- read_excel(path = "data/fruits.xlsx", sheet = "Sheet1", col_names = TRUE)
+df
+
+apply(df, 1, mean)   # error : 각 열의 데이터타입이 다름
+
+apply(df[3:5], 2, mean)
+lapply(df[3:5], mean)
+sapply(df[3:5], mean)
+
+by(df[c(3,4)], df$no, sum)
 
 
 #-----------------------------------------------------------

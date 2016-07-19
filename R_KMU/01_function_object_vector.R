@@ -157,10 +157,14 @@ identical(x, y)
 identical(x, z)
 identical(y, z)
 
+z
+append(z, 1000, after = 5)   # vector에 data 추가
+
 
 # sequence & replicate ----------------------------------------------
 seq(1, 10, 2)                 # from, to, by
 seq(1, 10000, by = 5)
+seq(1, 10000, length.out = 100)  # length 만큼 균등 분할
 
 rep(1:3, 3)
 rep(1:3, times=3)
