@@ -61,7 +61,7 @@ new_hope <- c(460.998, 314.4)
 empire_strikes <- c(290.475, 247.900)
 return_jedi <- c(309.306, 165.8)
 
-box_office <- c(new_hope, empire_strikes, return_jedi)    # 그냥 c로 묶으면 vector
+box_office <- c(new_hope, empire_strikes, return_jedi)
 box_office
 
 matrix(box_office, nrow = 3, byrow = TRUE)
@@ -93,7 +93,7 @@ star_wars_matrix[1:2,2]
 star_wars_matrix <- star_wars_matrix[,1:2]
 star_wars_matrix
 
-visitors <- (star_wars_matrix * 10000) / 5    # 1장당 $5
+visitors <- (star_wars_matrix * 10000) / 5    # ticket per $5
 visitors
 
 
@@ -117,7 +117,7 @@ survey <- c("M", "F", "F", "M", "M")
 factor_survey <- factor(survey)
 factor_survey
 
-levels(factor_survey) <- c("Female", "Male")  # Levels: F M
+levels(factor_survey) <- c("Female", "Male")  # Levels : F M --> Female Male
 factor_survey
 
 summary(survey)

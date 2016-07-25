@@ -4,26 +4,6 @@
 
 
 
-###One Sample T-Test
-#1# 귀무가설, 대립가설 설정
-#2# 가정 체크
-#3# 검정통계량, P-value 계산
-#4# 결론
-
-x <- c(15.5, 11.21, 12.67, 8.87, 12.15, 9.88, 2.06, 14.5, 0, 4.97)
-boxplot(x)
-hist(x)9
-qqnorm(x)
-qqline(x)
-
-#Shapiro-Wilk noramlity test (정규분포를 따른다 as 귀무가설)
-shapiro.test(x)
-
-t.test(x, mu=8.1)   #귀무가설 구체화
-#평균에 가까울수록 T분포의 값이 작아진다 
-t.test(x, mu=8.1, alternative="greater")
-
-
 ############ PRACTICE ##############
 names(mov)
 unique(mov$rating)
