@@ -10,6 +10,17 @@
 # 가설검정(testing hypothesis) : 모집단 실제 값이 얼마나 되는가 하는 주장과 관련해
 #                            표본이 가지고 있는 정보를 이용해 가설이 올바른지 판정
 
+
+# 1. 한 그룹과 특정 숫자의 비교
+# 양적 변수 (연속값) : 한 집단의 평균 T-검정
+# 질적 변수 (Y/N)    : 한 집단의 비율 Z-검정
+
+# 2. 두 그룹의 비교
+# 양적 변수 (연속값) : 독립표본/쌍체표본 T-검정
+# 질적 변수 (Y/N)    : 두 집단의 비율 Z-검정
+
+
+
 #---------------------------------------------------------------
 # 구간 추정
 #---------------------------------------------------------------
@@ -45,8 +56,9 @@ t.test(tips$total_bill)
 t.test(tips$total_bill, conf.level = 0.99)   # 99% 신뢰구간
 
 
+
 #---------------------------------------------------------------
-# 단일 집단 모평균에 대한 검정 (One sample t-test)
+# 단일 모집단 평균에 대한 T-검정 (One sample T-test)
 #---------------------------------------------------------------
 
 # One sample t-test : 모집단의 평균이 어떤 특정한 값과 같은지를 검증
@@ -67,8 +79,8 @@ summary(x)
 xx <- c(15.5, 11.21, 12.67, 8.87, 12.15, 9.88, 2.06, 14.5, 0, 4.97, 10.55, 20.1, 9.99, 17.97, 8.05, 13.13, 15.78)
 summary(xx)
 
-# (1) 귀무가설 : 2008년 평균 알콜 섭취량은 8.1g 이다. (늘지 않았다)
 
+# (1) 귀무가설 : 2008년 평균 알콜 섭취량은 8.1g 이다. (늘지 않았다)
 # (2) 가정 체크
 #     --- 자료가 정규분포를 따르는지.
 #     --- 심하게 편중되거나 극단치가 있는 경우 표본수가 50개 (또는 30개) 이상인지.
@@ -88,6 +100,7 @@ qqline(xx)
 shapiro.test(x)
 shapiro.test(xx)
 
+
 # (3) T-검정
 
 t.test(x, mu=8.1)
@@ -97,6 +110,7 @@ t.test(x, mu=8.1)
 t.test(xx, mu=8.1)   
 # t = 2.276, df = 16, p-value = 0.03695
 # mean of x : 11.02235 
+
 
 # (4)결론
 
@@ -108,10 +122,12 @@ t.test(xx, mu=8.1)
 # Case 2.
 # p-value < 0.05 이므로 귀무가설 기각 --> 2008년 평균 알콜 섭취량이 증가했다
 
+
 # --------------------------------
 # = : 양측검정 / > or < : 단측검정
 t.test(x, mu=8.1, alternative = "greater")
 t.test(x, mu=8.1, alternative = "less")
+
 
 
 #---------------------------------------------------------------
@@ -123,72 +139,204 @@ t.test(x, mu=8.1, alternative = "less")
 # 귀무가설이 옳다면, 이런 데이터 패턴이 관찰될 가능성
 # p-value가 작으면 귀무가설이 틀렸을 거라고 합리적으로 의심.
 
-# ??? 위약을 투약한 환자의 49%, 신약을 투약한 환자의 91%가 호전
+# 위약을 투약한 환자의 49%, 신약을 투약한 환자의 91%가 호전
 #   : 신약이 심장병에 효과가 없는데(귀무가설) 위의 결과를 얻을 확률은?
-# ??? 자폐증 어린이 59명의 뇌가 그렇지 않은 어린이 38명에 비해 최대 10% 이상 큼
+# 자폐증 어린이 59명의 뇌가 그렇지 않은 어린이 38명에 비해 최대 10% 이상 큼
 #   : 두 집단의 뇌크기에 실제로 차이가 없는데 표본집단에서 뇌크기의 차이가 관찰될 확률은?
 
 
+# 유의수준(a)
+
+# 귀무가설이 옳은데 기각하는 오류(1종 오류)를 범할 확률
+# 귀무가설을 기각하기 위한 p-value의 임계치로 사용
+
+# 1종 오류와 2종 오류의 상충관계
+# (귀무가설 = 효과가 없다 일 경우)
+# a가 너무 크면 효과가 없는 약을 효과가 있다고 잘못 판단 (1종 오류)
+# a가 너무 작으면 효과가 있는 약을 승인하지 않을 수 있음 (2종 오류)
+# 상황에 따라 어느 오류를 줄이는 것이 중요한가 (유의수준 조정) 판단 필요
 
 
 
-#-------------------------------
-# exercise
+#---------------------------------------------------------------
+# 두 모집단 평균에 대한 독립표본 T-검정 (Two sample T-test)
+#---------------------------------------------------------------
 
-movie <- read.csv("movie_MBA.csv")
-head(movie)
+# 줄기세포 이용한 배양치아 제작
+# 다른 두 조건(control, test)에서 배양된 뼈세포수(resp) 측정 후 비교
+# 범주형 변수와 양적 변수
 
-df <- movie[movie$rating == "15세이상관람가",]
-hist(df$total_seen, 20)
+# (1) 귀무가설 H0 : mu1 = mu2
 
-t.test(df$total_seen, mu=1500000) # 양측 검정
-t.test(df$total_seen, mu=1500000, alternative = "greater") # 단측 검정
-# p-value = 0.02183 : 0.05보다 작으므로 귀무가설 기각
+# (2) 가정 체크
+# --- 두 집단 모두 정규분포를 따른다.
+# --- 정규분포를 따르지 않아도 관측치가 충분히 많다면(n1 + n2 > 30) 독립표본 T-검정 사용 가능.
 
-movie3 <- movie[movie$rating == "15세이상관람가" | movie$rating == "12세이상관람가",]
-movie3$rating <- factor(movie3$rating, labels = c("12세", "15세"))
-boxplot(log(total_seen)~rating, movie3)
-
-var.test(total_seen~rating, movie3)
-t.test(total_seen~rating, movie3, alternative = "less") # 12세 - 15세
-
-var.test(log(total_seen)~rating, movie3)
-t.test(log(total_seen)~rating, movie3, var.equal=T, alternative = "less") # 12세 - 15세
-
-
-#-------------------------------
 dental <- read.csv("dental.csv")
 dental
 
-boxplot(log(resp)~treatment, dental, horizontal=T)
+library(psych)
+describeBy(dental, group = dental$treatment)
 
-boxplot(resp~treatment,data=dental)
-boxplot(log(resp)~treatment,data=dental)
+# test군의 분산이 control군의 분산보다 크고, 두 그룹 모두 편향되어(skew) 있다.
+# log 변환을 통해 분산 차이를 좁히고, 편향도를 낮춘다.
+# 많은 경우 실제 데이터는 편향된 분포를 가진다.
+# --> 여러 통계기법들은 정규분포를 가정하므로 분석 전 변수 변환이 필요한지 체크한다.
 
-var.test(log(resp)~treatment,data=dental)
+par(mfcol=c(1,2))
+boxplot(resp ~ treatment, data = dental, col = "red", ylab = "resp")
+boxplot(log(resp) ~ treatment, data = dental, col = "blue", ylab = "log(resp)")
+par(mfcol=c(1,1))
+
+# T-test
+# One Sample T-test : T = 자료의 평균 x_bar가 모집단 평균 mu로부터 떨어진 상대적인 거리.
+# Two Sample T-test : T = (x1_bar - x2_bar) / root(Var(x1_bar - x2_bar)). 두 자료의 평균이 서로 떨어진 상대적인 거리.
+
+# 등분산검정 : var.test
+# 두 집단의 분산이 같으면 t.test( , var.equal = T) --> 귀무가설
+# 두 집단의 분산이 다르면 t.test()
+
+var.test(log(resp) ~ treatment, data = dental)   # p-value > 0.05 : 귀무가설 인정. 분산이 같다.
+var.test(resp ~ treatment, data = dental)        # p-value < 0.05 : 귀무가설 기각.
 
 
-t.test(log(resp)~treatment,var.equal=T,data=dental)
+# (3) T-검정
 
-var.test(resp~treatment,data=dental)
+t.test(log(resp) ~ treatment, var.equal = T, data = dental)
+# Case 1
+# p-value = 0.03571 < 0.05 : 귀무가설 기각.
+# 두 그룹의 평균은 유의수준 5% 하에서 차이가 있다.
 
-FT=read.csv("FT.csv")
-with(FT,boxplot(Postwt-Prewt))
-with(FT,hist(Postwt-Prewt))
+t.test(resp ~ treatment, data = dental)
+# Case 2
+# log 변환 전 자료로 가설검정시
+# p-value = 0.08988 > 0.05 : 귀무가설 기각할 수 없다.
+# 두 그룹의 평균은 유의수준 5% 하에서 차이가 없다.
+# 95% 신뢰구간에 0 이 포함됨 (-122.239 ~ 12.639)
 
-with(FT,t.test(Postwt-Prewt,alternative="greater"))
 
 
-#-------------------------------
-# exercise
+#---------------------------------------------------------------
+# 두 모집단 평균에 대한 쌍체표본 T-검정 (Paired T-test)
+#---------------------------------------------------------------
+
+# 쌍을 이룬 두 변수 (matched sample)의 차이를 보는 검정
+# 한 집단을 대상으로 약의 복용 전후, 치료 전후, 교육방법 도입 등
+# 두 집단이더라도 쌍둥이 또는 부부처럼 변수들 간의 상관관계가 존재할 때
+# http://math7.tistory.com/107
+
+# 남성과 여성의 경력 차이로 인한 임금 비교.
+# 부모의 최종학력(대졸/고졸)에 따른 응시자들의 SAT점수 차이를 비교. 
+# ---> 독립표본 T-검정
+
+# 15명의 개인, 케이블 TV 시청시간과 라디오 청취시간에 대한 자료를 비교.
+# 과거 3개월간 DM 발송 유무에 따른 평균 구매금액 차이 (A/B Test)
+# 디자인 변경 전/후 상품 구매자 수 증가 유무
+# ---> 쌍체표본 T-검정
+
+
+# Case
+# 거식증 치료제 FT 복용 전후 체중변화 --> FT가 "체중 증가"에 영향이 있는지 검증
+# 귀무가설 : postwt - prewt <= 0
+# 대립가설 : postwt - prewt > 0
+
+ft <- read.csv("FT.csv")
+ft
+
+attach(ft)
+boxplot(Postwt-Prewt)
+hist(Postwt-Prewt)
+qqnorm(Postwt-Prewt)
+qqline(Postwt-Prewt)
+
+shapiro.test(Postwt-Prewt)  # p-value = 0.5156 > 0.05 : 정규분포를 따른다
+
+t.test(Postwt-Prewt, alternative="greater")   
+# p-value = 0.0003501 < 0.05 : 귀무가설 기각. 유의미한 체중 중가가 있다.
+
+
+
+#---------------------------------------------------------------
+# practice 1
+#---------------------------------------------------------------
+
+# 2012 - 2013 년 국내 개봉 영화
+kmovie <- read.csv("movie_utf8.csv")
+View(kmovie)
+str(kmovie)
+
+unique(kmovie$rating)
+
+# (1) 15세이상 관람가 영화의 평균 관객수를 95% 신뢰구간을 통해 추정
+df <- kmovie[kmovie$rating == "15세이상관람가", ]
+summary(df$total_seen)
+
+t.test(df$total_seen)   # 95% 신뢰구간 : 1,517,279 ~ 2,674,186
+
+
+# (2) 한 영화사에서 15세이상 관람가 영화의 평균 관객수가 1,500,000 보다 크다고 주장
+# ---> One sample T-test
+
+# 귀무가설 : mu <= 1,500,000
+# 대립가설 : mu > 1,500,000
+boxplot(df$total_seen)
+qqnorm(df$total_seen)
+qqline(df$total_seen)
+
+shapiro.test(df$total_seen)   # p-value = 8.782e-13 : 정규분포 따르지 않는다. but 데이터가 충분히 크므로 t-test 진행.
+
+t.test(df$total_seen, mu = 1500000, alternative = "greater")   # p-value = 0.02183 < 0.05 : 귀무가설 기각
+
+
+# (3) 한 영화사에서 15세이상 관람가 영화의 평균 관객수가 12세이상 관람가 영화의 평균관객수보다 많다고 주장
+# ---> Two sample T-test
+
+# 귀무가설 : 12세 - 15세 >= 0
+# 대립가설 : 12세 - 15세 < 0
+df2 <- kmovie[kmovie$rating == "15세이상관람가" | kmovie$rating == "12세이상관람가", c("rating", "total_seen")]
+df2$rating <- factor(df2$rating, labels = c("12세", "15세"))
+df2
+
+boxplot(total_seen ~ rating, df2)       # 이상치 많고, 편향되어 있으므로 변수 변환
+boxplot(log(total_seen) ~ rating, df2)
+
+var.test(log(total_seen) ~ rating, df2) # 등분산검정 : p-value > 0.05 분산이 같다.
+
+t.test(log(total_seen) ~ rating, df2, var.equal=T, alternative = "less") # 12세 - 15세
+# p-value = 0.3881 > 0.05 : 귀무가설을 기각할 수 없다.
+# 15세이상 관람가 영화의 평균 관객수가 12세 관람가 영화보다 많다고 할 수 없다.
+
+
+
+#---------------------------------------------------------------
+# practice 2
+#---------------------------------------------------------------
+
+# 대기업의 2002년 주당이익 자료.
+# 2002년 이전에 애널리스트들이 이들 대기업에 대한 주당이익을 예측
 
 earning <- read.csv("earnings.csv")
+earning
+
 attach(earning)
 
-boxplot(Actual-Predicted)
-t.test(Actual-Predicted)
+# (1) 실제 평균 주당이익과 추정 평균 주당이익에 대한 기술 통계
+library(psych)
+describe(earning[ , c(2,3)])
+summary(earning)
 
+# (2) 실제 모집단 평균 주당이익과 추정 모집단 평균 주당이익 간의 차이에 대하여 가설검정을 a = 0.05에서 수행
+# --> Paired T-test
 
+# 귀무가설 : Actual - Predicted = 0
 
+boxplot(Actual - Predicted)
+qqnorm(Actual - Predicted)
+qqline(Actual - Predicted)
 
+shapiro.test(Actual - Predicted)  # p-value = 0.6816
 
+t.test(Actual - Predicted)   # p-value = 0.5602 : 귀무가설 기각할 수 없음. 실제와 추정의 차이가 크지 않다.
+
+# 두 평균의 차이에 대한 점 추정치 : mean of x = -0.103 
+# 해당 기업의 주당 이익에 대해 약간 과대평가.
