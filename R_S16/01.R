@@ -113,6 +113,8 @@ plot(tip~total_bill, tips)
 # practice
 #--------------------------------------------
 
+# 2012 - 2013 년 국내 개봉 영화
+
 kmovie <- read.csv("movie_utf8.csv", stringsAsFactors = F)
 View(kmovie)
 str(kmovie)
