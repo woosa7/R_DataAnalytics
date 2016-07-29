@@ -55,6 +55,8 @@ apple <- c(260, 400, 250, 200, 310)
 peach <- c(180, 200, 210, 190, 170)
 orange <- c(210, 250, 260, 330, 300)
 
+fruits <- c(apple, peach, orange)
+stem(fruits, scale = 0.5)           # stem-leaf plot
 
 #---------------------------------------------------------------
 # plot
