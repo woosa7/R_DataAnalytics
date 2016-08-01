@@ -105,32 +105,53 @@ step(lm(time ~ 1, data = hills),
 # 시계열분석
 #--------------------------------------------------------------
 
+# 자기회귀모형(AR, Autoregressive model)
+# 이동평균모형(MA, Moving average model)
+# 자기회귀 누적 이동평균 모형 (ARIMA)
+
+# 비정상시계열 모형인 ARIMA를 차분이나 변환을 통해
+# AR, MA, 또는 ARMA 모형으로 정상화
+# d : 차분, p : AR모형 차수, q : MA 모형 차수
+
+# 자기상관계수 함수(ACF, Autocorrelation Function)
+# 부분 자기상관계수 함수(PACF, Partial ACF)
+
 #--------------------------------------------------------------
 # R functions
 
-# 1) 소스 데이터를 시계열 데이터로 변환
+# 1) 소스 데이터를 시계열 데이터로 변환  
 ts(data, frequency = n, start = c(시작년도, 월))
+
 # 2) 시계열 데이터를 x, trend, seasonal, random 값으로 분해
 decompose(data)
+
 # 3) 시계열 데이터를 이동평균한 값 생성
 SMA(data, n = 이동평균수)
+
 # 4) 시계열 데이터를 차분
 diff(data, differences = 차분수)
+
 # 5) ACF 값과 그래프를 통해 래그 절단값을 확인
 acf(data, lag.max = 래그수)
+
 # 6) PACF 값과 그래프를 통해 래그 절단값을 확인
 pacf(data, lag.max = 래그수)
+
 # 7) 데이터를 활용하여 최적의 ARIMA 모형을 선택
 auto.arima(data)
 
 # 8) 선정된 ARIMA 모형으로 데이터를 보정(fitting)
 arima(data, order = c(p, d, q))
+
 # 9) ARIMA 모형에 의해 보정된 데이터를 통해 미래값을 예측
 forecast.Arima(fittedData, h = 미래예측수)
+
 # 10) 시계열 데이터를 그래프로 표현
 plot.ts(시계열데이터)
+
 # 11) 예측된 시계열 데이터를 그래프로 표현
 plot.forecast(예측된시계열데이터)
+
 #--------------------------------------------------------------
 
 install.packages("TTR")
@@ -146,15 +167,36 @@ library(forecast)
 kings <- scan("http://robjhyndman.com/tsdldata/misc/kings.dat", skip = 3)
 kings
 
+kings_ts <- ts(kings)
+kings_ts
+
+plot.ts(kings_ts)
+
+kings_sma3 <- SMA(kings_ts, n = 3)
+kings_sma8 <- SMA(kings_ts, n = 8)
+kings_sma12 <- SMA(kings_ts, n = 12)
+
+par(mfrow = c(2,2))
+plot.ts(kings_ts)
+plot.ts(kings_sma3)
+plot.ts(kings_sma8)
+plot.ts(kings_sma12)
 
 
+# 차분을 통해 데이터 정상화
+kings_dif1 <- diff(kings_ts, differences = 1)
+kings_dif2 <- diff(kings_ts, differences = 2)
+kings_dif3 <- diff(kings_ts, differences = 3)
 
+par(mfrow = c(2,2))
+plot.ts(kings_ts)
+plot.ts(kings_dif1)
+plot.ts(kings_dif2)
+plot.ts(kings_dif3)
+par(mfrow = c(1,1))
 
-
-
-
-
-
+# 1차 차분한 데이터로 ACF
+acf(kings_dif1, lag.max = 20)
 
 
 
