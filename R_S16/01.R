@@ -52,11 +52,11 @@ boxplot(tip, col = "red", horizontal = T, xlab = "Tip")
 
 hist(tip)
 hist(tip, 20, probability = T, xlim = c(0,10), ylim = c(0,0.5))   # break : 20 / probability : 갯수가 아닌 확률로 표시
-lines(density(tip), col="blue")
+lines(density(tip), col = "blue")
 
 # Q-Q Normality Plot : 자료가 정규분포에 얼마나 근접한지 판단
 qqnorm(tip)
-qqline(tip) # 점들이 선위에 가까이 있을수로 정규분포를 따름.
+qqline(tip)     # 점들이 선위에 가까이 있을수로 정규분포를 따름.
 
 
 #---------------------------------------------------------------
@@ -72,6 +72,7 @@ barplot(table(day))
 
 tips$day <- factor(day, levels = c("Thur","Fri","Sat","Sun"))   # 요일 순서대로 나오도록 factor levels 변경
 summary(day)
+
 mytable <- table(day)
 mytable
 
@@ -90,7 +91,7 @@ pie(mytable, labels = lbl, col = rainbow(length(mytable)), main = "Day of Tips")
 # xtabs(~그룹변수1 + 그룹변수2, data) : 분할표
 
 # 성별~요일별
-mytable2 <- xtabs(~sex+day, tips)
+mytable2 <- xtabs(~ sex + day, tips)
 mytable2
 
 barplot(mytable2, legend.text = c("Female", "Male"), ylim = c(0,100))
@@ -103,7 +104,7 @@ mosaicplot(mytable2)     # 성별 기준으로 요일별 비교
 mosaicplot(t(mytable2))  # 요일 기준으로 성별 비교
 
 # 범주형 변수와 양적 변수의 요약 
-boxplot(tip~day, data=tips, ylab="tips", xlab="day")
+boxplot(tip~day, data=tips, ylab = "tips", xlab = "day")
 
 # 두 양적변수의 요약 (주문금액 대비 팁)
 plot(tip~total_bill, tips)
@@ -147,8 +148,8 @@ hist(total_seen, 20)   # ---> 우측에 outlier가 너무 많다. 적당히 변환 후 분석 진
 unique(rating)
 aggregate(total_sales~rating, data = kmovie, mean)
 par(las = 2, mar = c(10,5,5,5))   
-boxplot(total_sales~rating, data = kmovie, ylab="sales (x1,000,000)", xlab="rating")
-boxplot(log(total_sales)~rating, data = kmovie, ylab="sales : log(x1,000,000)", xlab="rating")
+boxplot(total_sales~rating, data = kmovie, ylab = "sales (x1,000,000)", xlab = "rating")
+boxplot(log(total_sales)~rating, data = kmovie, ylab = "sales : log(x1,000,000)", xlab = "rating")
 
 library(plyr)
 msales <- ddply(kmovie, ~rating, summarise, mean_sales=mean(total_sales))
@@ -173,7 +174,7 @@ pie(tableOfRating, labels = lbl2, col = rainbow(4))
 tab = xtabs(~genre+rating, kmovie)
 tab
 
-barplot(tab, legend.text=row.names(tab), col = rainbow(9), beside=T, ylim = c(0,40))
+barplot(tab, legend.text=row.names(tab), col = rainbow(9), beside = T, ylim = c(0,40))
 
 mosaicplot(tab)
 mosaicplot(t(tab))
