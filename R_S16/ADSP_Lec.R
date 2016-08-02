@@ -109,15 +109,15 @@ step(lm(time ~ 1, data = hills),
 # 이동평균모형(MA, Moving average model)
 # 자기회귀 누적 이동평균 모형 (ARIMA)
 
-# 비정상시계열 모형인 ARIMA를 차분이나 변환을 통해
-# AR, MA, 또는 ARMA 모형으로 정상화
+# 비정상시계열 모형인 ARIMA를 차분이나 변환을 통해 AR, MA, ARMA 모형으로 정상화
+# 평균 비정상 : 차분 / 분산 비정상 : 변환
 # d : 차분, p : AR모형 차수, q : MA 모형 차수
 
 # 자기상관계수 함수(ACF, Autocorrelation Function)
 # 부분 자기상관계수 함수(PACF, Partial ACF)
 
 #--------------------------------------------------------------
-# R functions
+# R functions for TimeSeries
 
 # 1) 소스 데이터를 시계열 데이터로 변환  
 ts(data, frequency = n, start = c(시작년도, 월))
@@ -129,7 +129,7 @@ decompose(data)
 SMA(data, n = 이동평균수)
 
 # 4) 시계열 데이터를 차분
-diff(data, differences = 차분수)
+diff(data, differences = 차분횟수)
 
 # 5) ACF 값과 그래프를 통해 래그 절단값을 확인
 acf(data, lag.max = 래그수)
@@ -152,6 +152,11 @@ plot.ts(시계열데이터)
 # 11) 예측된 시계열 데이터를 그래프로 표현
 plot.forecast(예측된시계열데이터)
 
+
+
+#--------------------------------------------------------------
+# Decompose non-seasonal data
+# 영국왕들의 사망시 나이
 #--------------------------------------------------------------
 
 install.packages("TTR")
@@ -160,18 +165,15 @@ install.packages("forecast")
 library(TTR)
 library(forecast)
 
-#--------------------------------------------------------------
-# Decompose non-seasonal data
-# 영국왕들의 사망시 나이
-
 kings <- scan("http://robjhyndman.com/tsdldata/misc/kings.dat", skip = 3)
 kings
 
+# 시계열 데이터로 변환
 kings_ts <- ts(kings)
 kings_ts
-
 plot.ts(kings_ts)
 
+# 이동평균
 kings_sma3 <- SMA(kings_ts, n = 3)
 kings_sma8 <- SMA(kings_ts, n = 8)
 kings_sma12 <- SMA(kings_ts, n = 12)
@@ -182,24 +184,129 @@ plot.ts(kings_sma3)
 plot.ts(kings_sma8)
 plot.ts(kings_sma12)
 
-
 # 차분을 통해 데이터 정상화
-kings_dif1 <- diff(kings_ts, differences = 1)
-kings_dif2 <- diff(kings_ts, differences = 2)
-kings_dif3 <- diff(kings_ts, differences = 3)
+kings_diff1 <- diff(kings_ts, differences = 1)
+kings_diff2 <- diff(kings_ts, differences = 2)
+kings_diff3 <- diff(kings_ts, differences = 3)
 
 par(mfrow = c(2,2))
 plot.ts(kings_ts)
-plot.ts(kings_dif1)
-plot.ts(kings_dif2)
-plot.ts(kings_dif3)
+plot.ts(kings_diff1)
+plot.ts(kings_diff2)
+plot.ts(kings_diff3)
 par(mfrow = c(1,1))
 
-# 1차 차분한 데이터로 ACF
-acf(kings_dif1, lag.max = 20)
+mean(kings_diff1); sd(kings_diff1)
+
+# 1차 차분한 데이터로 ARIMA 모형 확인
+acf(kings_diff1, lag.max = 20)      # lag 2부터 점선 안에 존재. lag 절단값 = 2. --> MA(1)
+pacf(kings_diff1, lag.max = 20)     # lag 4에서 절단값 --> AR(3)
+    # --> ARIMA(3,1,1)
+
+# 자동으로 ARIMA 모형 확인
+auto.arima(kings)   # --> ARIMA(0,1,1)
+
+# 예측
+kings_arima <- arima(kings_ts, order = c(3,1,1))    # 차분통해 확인한 값 적용
+kings_arima
+kings_fcast <- forecast.Arima(kings_arima, h = 5)
+kings_fcast
+plot.forecast(kings_fcast)
+
+kings_arima1 <- arima(kings_ts, order = c(0,1,1))   # auto.arima 추천값 적용
+kings_arima1
+kings_fcast1 <- forecast.Arima(kings_arima1, h = 5)
+kings_fcast1
+plot.forecast(kings_fcast1)
 
 
 
+#--------------------------------------------------------------
+# Decompose seasonal data
+# 1946년 1월부터 1959년 12월까지 뉴욕의 월별 출생자 수 데이터
+#--------------------------------------------------------------
+
+data <- scan("http://robjhyndman.com/tsdldata/data/nybirths.dat")
+data
+
+birth <- ts(data, frequency = 12, start = c(1946, 1))
+birth
+plot.ts(birth)
+
+# 데이터 분해 - trend, seasonal, random 데이터 추세 확인
+birth_comp <- decompose(birth)
+plot(birth_comp)
+
+birth_comp$trend
+birth_comp$seasonal
+
+# 시계열 데이터에서 계절성 요인 제거
+birth_adjusted <- birth - birth_comp$seasonal
+
+# 차분을 통해 정상성 확인
+birth_diff1 <- diff(birth_adjusted, differences = 1)
+plot.ts(birth_diff1)   # 분산의 변동성이 크다
+
+auto.arima(birth)   # ARIMA(2,1,2)(1,1,1)[12]
+
+# birth_arima <- arima(birth, order = c(4,1,3))
+birth_arima <- arima(birth, order = c(2,1,2), seasonal = list(order = c(0,1,1), period = 12))
+birth_arima
+birth_fcast <- forecast.Arima(birth_arima)
+birth_fcast
+plot(birth_fcast)
 
 
+
+#--------------------------------------------------------------
+# 1987년 1월부터 1993년 12월까지 리조트 기념품매장 매출액
+#--------------------------------------------------------------
+
+data <- scan("http://robjhyndman.com/tsdldata/data/fancy.dat")
+data
+
+fancy <- ts(data, frequency = 12, start = c(1987, 1))
+fancy
+plot.ts(fancy)   # 분산이 증가하는 경향 --> log 변환으로 분산 조정
+
+fancy_log <- log(fancy)
+plot.ts(fancy_log)
+
+fancy_diff <- diff(fancy_log, differences = 1)
+plot.ts(fancy_diff)   
+    # 평균은 어느정도 일정하지만 특정 시기에 분산이 크다 --> ARIMA 보다는 다른 모형 적용 추천
+
+acf(fancy_diff, lag.max = 100)
+pacf(fancy_diff, lag.max = 100)
+
+auto.arima(fancy)   # ARIMA(1,1,1)(0,1,1)[12]
+
+fancy_arima <- arima(fancy, order = c(1,1,1), seasonal = list(order = c(0,1,1), period = 12))
+fancy_fcast <- forecast.Arima(fancy_arima)
+plot(fancy_fcast)
+
+
+
+#--------------------------------------------------------------
+# 1500년부터 1969년까지 화산폭발 먼지량
+#--------------------------------------------------------------
+
+data <- scan("http://robjhyndman.com/tsdldata/annual/dvi.dat", skip = 1)
+data
+
+dust <- ts(data, start = c(1500))
+dust
+plot.ts(dust)  # 한두개 데이터를 제외하고는 평균과 분산이 어느정도 일정하다 --> 차분 안함.
+
+acf(dust, lag.max = 20)     # lag = 4 : MA(3)
+pacf(dust, lag.max = 20)    # lag = 2 : AR(2)
+
+auto.arima(dust)            # ARIMA(1,0,2)
+
+# d = 0 이므로 AR(2) / MA(3) / ARIMA(2,0,3) 중 선택해서 적용 가능.
+# 모수가 가장 적은 모형을 선택하는 것을 추천 --> AR(2) 적용
+
+dust_arima <- arima(dust, order = c(2,0,0))
+dust_fcast <- forecast.Arima(dust_arima, h = 30)
+plot.forecast(dust_fcast)
 
