@@ -178,3 +178,28 @@ barplot(tab, legend.text=row.names(tab), col = rainbow(9), beside = T, ylim = c(
 
 mosaicplot(tab)
 mosaicplot(t(tab))
+
+
+#---------------------------------------------------------------
+# 유형에 따른 분석기법
+
+# 평균에 대한 구간추정  : T-test
+
+# 한 그룹의 평균        : One sample T-test
+# 두 그룹의 평균        : Two sample T-test
+# 세 그룹 이상의 평균   : ANOVA (분산분석)
+
+# 한 그룹의 두 변수     : Paired T-test
+# 연관성 높은 두 그룹   : Paired T-test
+
+# 한 그룹의 비율        : prop.test (Z-검정)
+# 두 그룹의 비율        : prop.test
+
+# --- 비모수적 방법 (자료가 정규분포를 따르지 않는 경우)
+# One sample / Paired T-test    : Wilcoxon Signed-Rank Test
+# Two sample T-test             : Wilcoxon Rank-Sum Test
+# ANOVA                         : Kurskal-Wallis Test
+
+# 정규성 검정           : shapiro.test
+# 등분산 검정           : var.test
+#---------------------------------------------------------------

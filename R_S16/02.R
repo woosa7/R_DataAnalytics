@@ -11,26 +11,6 @@
 #                            표본이 가지고 있는 정보를 이용해 가설이 올바른지 판정
 
 #---------------------------------------------------------------
-# 한 그룹의 평균        : One sample T-test
-# 두 그룹의 평균        : Two sample T-test
-# 세 그룹 이상의 평균   : ANOVA (분산분석)
-
-# 한 그룹의 두 변수     : Paired T-test
-# 연관성 높은 두 그룹   : Paired T-test
-
-# 한 그룹의 비율        : prop.test (Z-검정)
-# 두 그룹의 비율        : prop.test
-
-# --- 비모수적 방법 (자료가 정규분포를 따르지 않는 경우)
-# One sample / Paired T-test    : Wilcoxon Signed-Rank Test
-# Two sample T-test             : Wilcoxon Rank-Sum Test
-# ANOVA                         : Kurskal-Wallis Test
-
-# 정규성 검정           : shapiro.test
-#---------------------------------------------------------------
-
-
-#---------------------------------------------------------------
 # 구간 추정
 #---------------------------------------------------------------
 
@@ -254,15 +234,20 @@ t.test(resp ~ treatment, data = dental)
 ft <- read.csv("FT.csv")
 ft
 
-attach(ft)
-boxplot(Postwt-Prewt)
-hist(Postwt-Prewt)
-qqnorm(Postwt-Prewt)
-qqline(Postwt-Prewt)
+changed <- ft$Postwt - ft$Prewt
 
-shapiro.test(Postwt-Prewt)  # p-value = 0.5156 > 0.05 : 정규분포를 따른다
+boxplot(changed)
+hist(changed)
+qqnorm(changed)
+qqline(changed)
 
-t.test(Postwt-Prewt, alternative = "greater")
+shapiro.test(changed)  # p-value = 0.5156 > 0.05 : 정규분포를 따른다
+
+t.test(changed, alternative = "greater")
+
+t.test(ft$Postwt, ft$Prewt, alternative = "greater", paired = TRUE)
+
+    # 위 두 t.test의 결과는 동일하다.
     # p-value = 0.0003501 < 0.05 : 귀무가설 기각. 유의한 체중 중가가 있다.
 
 
@@ -358,12 +343,51 @@ t.test(Actual - Predicted)   # p-value = 0.5602 : 귀무가설 기각할 수 없음. 실제�
 # Wilcoxon Signed-Rank Test
 #---------------------------------------------------------------
 
-# One sample / Paired T-test 에 해당하는 비모수적 방법
+# One sample / Paired T-test에 해당하는 비모수적 방법
+
+# 정규분포는 평균과 표준편차로 모양이 결정된다. (평균 = 0)
+# 그러나 데이터의 분포를 모르는 경우 정규분포를 가정하여 t-test를 하면 잘못된 결과를 얻을 수 있다.
+# 극단치가 있을 경우 t-test는 평균에 영향이 주어져 결과가 달라질 수 있지만, 비모수적 방법은 극단치에 영향을 받지 않는다.
+
+# Wilcoxon Signed-Rank Test는 자료의 순서를 사용한다.
+# 자료의 절대값 기준으로 순위를 부여한 후, 
+# 다시 부호를 붙이고 양과 음의 순위합을 구하여 중위수(median)가 0 인지 검정한다.
+# http://dermabae.tistory.com/159
+
+df <- read.csv("anorexia.csv")
+df <- df[df$Treat == "CBT", ]
+head(df)
+str(df)
+
+changed <- df$Postwt - df$Prewt
+
+boxplot(changed)
+qqnorm(changed)
+qqline(changed)
+
+shapiro.test(changed)  # p-value = 0.007945 < 0.05 : 정규분포를 따르지 않는다.
+
+# H0 : CBT 복용 전후 몸무게 차이의 median은 0 이다.
+
+wilcox.test(changed)   # warning : tie가 있어 정확한 p값을 계산할 수 없다 (절대값이 같은 것들이 존재)
+
+wilcox.test(changed, exact = F)   # p-value = 0.06447 > 0.05 : 귀무가설 기각 못함.
 
 
 
+#---------------------------------------------------------------
+# Wilcoxon Rank-Sum Test
+#---------------------------------------------------------------
+
+# Two sample T-test에 해당하는 비모수적 방법
 
 
+dental <- read.csv("dental.csv")
+dental
 
+# control, test 각 그룹의 자료가 5개 밖에 없으므로 정규분포를 따른다고 하기 힘들다.
+# 비모수적 분석방법 적용
 
+wilcox.test(resp ~ treatment, data = dental)   
+    # p-value = 0.05556 > 0.05 : 귀무가설 기각할 수 없다. 유의한 차이가 없다.
 

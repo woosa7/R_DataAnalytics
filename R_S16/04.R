@@ -151,12 +151,14 @@ out <- lm(dist ~ speed + 0, data = cars)
 out
 summary(out)    # y = 2.909 * x
 
-# 오차항(e)이 특정한 패턴을 보인다면 무언가 중요 정보가 모형에 포함되지 않았다는 의미
+# 오차항(e, 잔차)이 추세를 보인다면 무언가 중요 정보가 모형에 포함되지 않았다는 의미
 # e는 평균 0, 표준편차 sigma인 정규분포를 따르는 확률변수이다.
 # --> 잔차도(residual plot)의 패턴 확인 필요!
 # --> 잔차가 0과 가까울수록 좋다.
 
+par(mfcol=c(2,2))
 plot(out)
+par(mfcol=c(1,1))
 # Residuals vs Fitted plot (잔차도) / Normal Q-Q plot (정규성 검정)
 # --> 선형 패턴이 아니고, 분산이 증가하는 경향 --> 종속변수의 log 또는 sqrt 변환 시도
 
@@ -168,12 +170,17 @@ par(mfcol=c(1,1))
 out2 <- lm(sqrt(dist) ~ speed + 0, data = cars)
 str(out2)
 summary(out2)   # sqrt 변환후 회귀분석 --> R-squared 값 높아짐
-plot(out2)      # Residuals vs Fitted plot / Normal Q-Q plot 좋은 패턴을 보임
 
-shapiro.test(residuals(out2)) # 잔차가 정규분포를 따른다 (p-value > 0.05)
+par(mfcol=c(2,2))
+plot(out2)      # Residuals vs Fitted plot / Normal Q-Q plot 좋은 패턴을 보임
+par(mfcol=c(1,1))
+
+shapiro.test(out2$residuals)    # 잔차가 정규분포를 따른다 (p-value > 0.05)
 
 # 최종 모형으로 추정된 회귀식
 sqrt(dist) =  0.397 * speed
+
+dist = (0.397 * speed)^2
 
 
 
