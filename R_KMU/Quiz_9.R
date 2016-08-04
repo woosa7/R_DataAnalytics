@@ -1,10 +1,7 @@
-
-setwd("/Volumes/MacHDD/workspace/R_Study/R_KMU")
-
 load("data/smpl_lda_df.RData")
 df <- smpl_lda_df
 head(df)
-
+str(df)
 
 # 1. È®·üÀÌ 0 º¸´Ù Å« ÅäÇÈÀÇ °¹¼ö ¸®ÅÏ
 fCountTopic <- function(x) {
@@ -21,8 +18,8 @@ fTopicNames <- function(x) {
 }
 
 
-df[,"Ntopic"] <- apply(df[1:20], 1, fCountTopic) # ÅäÇÈ °¹¼ö ÀÏ°ý Àû¿ë
-df[,"Tname"] <- apply(df[1:20], 1, fTopicNames)  # ÅäÇÈ¸í ÀÏ°ý Àû¿ë
+df$Ntopic <- apply(df[1:20], 1, fCountTopic) # ÅäÇÈ °¹¼ö ÀÏ°ý Àû¿ë
+df$Tname <- apply(df[1:20], 1, fTopicNames)  # ÅäÇÈ¸í ÀÏ°ý Àû¿ë
 answer <- df[21:22]
 head(answer)
 

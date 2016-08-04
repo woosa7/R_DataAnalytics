@@ -157,7 +157,7 @@ rownames(mtcars)[15]
 
 rownames(mtcars)[which(mtcars$cyl == 4)]
 
-
+mtcars[which(mtcars$cyl == 4), ]
 
 
 # --------------------------------------------------------

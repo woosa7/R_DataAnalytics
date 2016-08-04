@@ -267,16 +267,21 @@ write.table(df, "data/save_fruits.txt", quote = F, append = F)
 
 
 #-----------------------------------------------------------
-# apply, lapply, sapply, by
+# apply, lapply, sapply, by, tapply, aggregate
 
-# lapply : 결과를 list 형태로 반환
-# sapply : 결과를 vector 또는 matrix로 반환
+# apply     : 결과를 vector로 반환 (1 행 / 2 열)
+# lapply    : 결과를 list로 반환
+# sapply    : 결과를 vector 또는 matrix로 반환
+#-----------------------------------------------------------
+
+s1 <- c(91, 87, 95, 96, 89, 87, 86, 85, 92, 93)
+s2 <- c(89, 86, 85, 92, 93, 91, 90, 95, 87, 89)
+s3 <- c(89, 86, 78, 99, 95, 87, 89, 86, 85, 92)
+
 
 # list
-s1 <- c(91, 87, 95, 96, 89, 87, 86)
-s2 <- c(89, 86, 85, 92, 93, 91, 90)
-s3 <- c(89, 86, 78, 99, 95, 87, 89)
-score <- list(korean=s1, english=s2, math=s3)
+score <- list(korean = s1, english = s2, math = s3)
+score
 
 lapply(score, mean)   # ---> list
 sapply(score, mean)   # ---> vector
@@ -285,28 +290,47 @@ sapply(score, range)
 sapply(score, t.test)
 
 
-# matrix : 1 행 / 2 열
-x <- c(s1, s2, s3)
-dim(x) <- c(3,7)
-colnames(x) <- c("t1","t2","t3","t4","t5","t6","t7")
-rownames(x) <- c("Sun", "Jess", "Soo")
-x
+# matrix
+score <- c(s1, s2, s3)
+dim(score) <- c(3, 10)
+colnames(score) <- c("t1","t2","t3","t4","t5","t6","t7","t8","t9","t10")
+rownames(score) <- c("K", "L", "M")
+score
 
-apply(x, 1, mean)
-apply(x, 2, max)
+apply(score, 1, mean)
+apply(score, 2, max)
 
 
 # dataframe
-df <- read_excel(path = "data/fruits.xlsx", sheet = "Sheet1", col_names = TRUE)
+
+# Case 1.
+data <- as.data.frame(score)
+data$name <- c("K", "L", "M")
+data
+
+apply(data, 1, mean)   # error : 각 열의 데이터타입이 다름
+
+df <- data[-11]
 df
 
-apply(df, 1, mean)   # error : 각 열의 데이터타입이 다름
-
+apply(df, 1, mean)
 apply(df[3:5], 2, mean)
-lapply(df[3:5], mean)
-sapply(df[3:5], mean)
 
-by(df[c(3,4)], df$no, sum)
+lapply(df, mean)
+sapply(df, mean)
+
+
+# Case 2.
+df2 <- data.frame(score=c(s1, s2, s3))
+df2$name <- c("K", "L", "M")
+df2
+
+by(df2$score, df2$name, mean)
+
+tapply(df2$score, df2$name, mean)
+
+aggregate(score ~ name, data = df2, mean)
+
 
 
 #-----------------------------------------------------------
