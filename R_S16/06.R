@@ -6,9 +6,12 @@
 #
 ################################################################
 
-# 한 집단의 평균과 특정한 수 비교   : One Sample T-test
-# 독립적인 두 집단의 평균 비교      : Two Sample T-test 
-# 세 그룹 이상의 평균 비교          : ANOVA
+# 한 그룹의 평균과 특정한 수 비교   : One Sample T-test
+# 두 그룹의 평균 비교               : Two Sample T-test 
+# 세 그룹 이상의 평균 비교
+#   --- 설명변수 범주형             : ANOVA (분산분석)
+#   --- 설명변수 범주형 + 범주형    : Two-way ANOVA
+#   --- 설명변수 범주형 + 연속형    : ANCOVA (공분산분석)
 
 #---------------------------------------------------------------
 # 분산분석 (ANOVA) = 설명변수가 "범주형"인 회귀분석
@@ -37,7 +40,7 @@
 # 영화 등급이 총관객수에 영향을 미치는가?
 
 movie <- read.csv("movie_utf8.csv", header = T)
-summary(movie)
+summary(movie$rating)
 
 # 독립변수 = factor
 levels(movie$rating)
@@ -50,7 +53,12 @@ describeBy(movie$total_seen, group = movie$rating, mat = T)
 hist(movie$total_seen)      # 데이터가 한쪽으로 몰려있으므로 log 변환을 해준다.
 hist(log(movie$total_seen))
 
+with(movie, tapply(log(total_seen), rating, mean))
+boxplot(log(total_seen) ~ rating, col = "red", data = movie)
+
 # 회귀분석
+par(mfcol=c(2,2))
+
 out0 <- lm(total_seen ~ rating, movie)
 plot(out0)
 
@@ -58,10 +66,12 @@ out <- lm(log(total_seen) ~ rating, movie)
 plot(out)                   # 종속변수 변환 전보다 후에 잔차도가 안정됨
 
 summary(out)
-#--------------------------
+
+par(mfcol=c(1,1))
+
 # Result
 
-# F-검정 (H0 : mu1 = mu2 = mu3 = mu4)
+# F-검정 (H0 : mu1 = mu2 = mu3 = mu4, 모든 그룹의 평균이 같다)
 # p-value: 0.001601 < 0.05 : 등급별 총관객수는 서로 유의미한 '차이'가 있다.
 
 # (Intercept)                   --- (b0) 12years 평균
@@ -73,11 +83,14 @@ summary(out)
 # 각 변수 95% 신뢰구간 ---> 0.95 * 0.95 * 0.95 : 신뢰구간이 작아진다.
 # 실제로 유의하지 않은데 유의하게 결론이 나올 수 있다.
 # 그래서 t-test 대신에 Dunnett 또는 Tukey 방법론 사용 !!!
-#--------------------------
 
+
+#---------------------------------------------------------------
 # 다중비교
+
 # Dunnett Method : reference level(기준)과 각 범주의 평균 차이 검정 
 # Tukey Method : 가능한 모든 범주 쌍의 평균 차이 검정
+#---------------------------------------------------------------
 
 install.packages("multcomp")
 library(multcomp)
@@ -87,17 +100,20 @@ out <- lm(log(total_seen) ~ rating, movie)
 # Dunnett Method
 dunnet <- glht(out, linfct = mcp(rating = "Dunnett"))
 summary(dunnet)
+plot(dunnet)
+    # All vs 12years : 유의한 차이가 있다.
+    # 나머지는 p-value > 0.05 이고, 95% 신뢰구간이 0을 포함하므로 유의한 차이가 없다.
 
 # Tukey Method
 tukey <- glht(out, linfct = mcp(rating = "Tukey"))
 summary(tukey)
+plot(tukey)
+    # All vs 15years 사이에도 유의한 차이가 있음을 알 수 있다.
 
 # 추정된 회귀식
 # y = 13.70 + 0.068*x1 - 0.682*x2 - 0.431*x3
 # 13.70 : 12세관람가 영화의 평균 log(총관객수)
 # 13.70 + 0.068 : 15세 관람가 영화의 평균 log(총관객수)
-
-
 
 #---------------------------------------------------------------
 # 특정 범주를 하나로 합쳐서 분석하고자 할 경우
@@ -155,8 +171,9 @@ boxplot(Postwt - Prewt ~ Treat, df)
 out <- lm(Postwt - Prewt ~ Treat, df)
 summary(out)
 
-# 공분산 분석 : 이전 몸무게가 동일한 사람들을 기준으로 분석.
-out <- lm(Postwt-Prewt ~ Prewt + Treat, df)
+# 공분산 분석 : 이전 몸무게가 동일한 사람들을 기준으로 분석
+# 설명변수 = 범주형(Treat) + 연속형(Prewt)
+out <- lm(Postwt - Prewt ~ Prewt + Treat, df)
 anova(out)
     # Prewt 통제시 Treat 변수가 설명해 주는 y의 변동성에 대한 F-test. 
     # p-value < 0.05 --> Treat 3개 그룹간 평균의 차이가 유의하다.
@@ -210,13 +227,43 @@ summary(model)
 # 두 회귀선은 평행한가? --> H0 : b3 = 0
 model1 <- lm(SBP ~ AGE + SEX + AGE*SEX, sbp)
 summary(model1)
+anova(model1)
+    # AGE:SEX의 p-value 0.9342 > 0.05 이므로 서로 interaction이 없다.
 
 # 두 회귀선이 동일한가? --> H0 : b2 = b3 = 0
 model2 <- lm(SBP ~ AGE, sbp)
 summary(model2)
 anova(model2)
 
-anova(model2, model1)
+anova(model2, model1)   # model1과 model2 비교. 귀무가설 기각 = 동일하지 않다.
+
+
+
+#---------------------------------------------------------------
+# Two-way ANOVA = 범주형 설명변수가 2개인 회귀분석
+#---------------------------------------------------------------
+
+# 두 범주형 변수가 서로 interaction을 하는 경우
+
+attach(warpbreaks)  
+summary(warpbreaks)
+# breaks : 베틀에서 실이 끊어지는 횟수
+# wool : 울의 타입
+# tension : 실의 장력 수준
+
+boxplot(breaks ~ wool + tension, col = "red", data = warpbreaks, xlab = "wool+tension")
+
+interaction.plot(tension, wool, breaks, col = c("red", "blue"))
+    # 두 변수가 interaction이 없으면 비슷한 거리를 유지하면서 평행하다
+    # 두 변수가 interaction이 있으면 서로 만난다
+
+model <- lm(breaks ~ wool + tension + wool*tension, warpbreaks)
+anova(model)
+    # wool:tension의 p-value < 0.05 로 서로 interaction이 있다.
+    # interaction이 있으면 두 변수이 효과를 각각 분리해서 해석할 수 없다.
+
+summary(model)
+plot(model)
 
 
 

@@ -381,7 +381,6 @@ wilcox.test(changed, exact = F)   # p-value = 0.06447 > 0.05 : ±Í¹«°¡¼³ ±â°¢ ¸øÇ
 
 # Two sample T-test¿¡ ÇØ´çÇÏ´Â ºñ¸ğ¼öÀû ¹æ¹ı
 
-
 dental <- read.csv("dental.csv")
 dental
 

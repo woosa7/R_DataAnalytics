@@ -179,27 +179,29 @@ barplot(tab, legend.text=row.names(tab), col = rainbow(9), beside = T, ylim = c(
 mosaicplot(tab)
 mosaicplot(t(tab))
 
-
+?var.test
 #---------------------------------------------------------------
 # 유형에 따른 분석기법
 
-# 평균에 대한 구간추정  : T-test
+# 평균에 대한 구간 추정     : T-test                t.test(x)
+# 한 그룹의 평균            : One Sample T-test     t.test(x, mu = , alternative = )
+# 한 그룹의 두 변수 
+# 연관성 높은 두 그룹       : Paired T-test         t.test(x2 - x1)
+# 두 그룹의 평균            : Two Sample T-test     t.test(y ~ x, var.equal = , data = )
+# 세 그룹 이상의 평균       : ANOVA / ANCOVA        lm / anova / glht("Dunnett") / interaction.plot
+# 하나의 비율               : Binomial test         binom.test
+# 한 그룹의 비율 구간 추정
+# 두 그룹 이상의 비율       : Proportions test      prop.test(x, n, p)
+# 정규성 검정               : Shapiro-Wilk test     shapiro.test(x)
+# 등분산 검정               : Variance test         var.test(y ~ x, data = )
+# 독립성 검정               : Chi-squard test       chisq.test(x)
+# 상관계수                  : Correlation test      cor.test
+# 예측과 추정               :                       predict
+# 회귀분석 모델 선택        :                       step / regsubsets
 
-# 한 그룹의 평균        : One sample T-test
-# 두 그룹의 평균        : Two sample T-test
-# 세 그룹 이상의 평균   : ANOVA (분산분석)
+# 비모수적 방법 (정규분포를 따르지 않는 경우)
+# One Sample / Paired T-test 일 경우    : Wilcoxon Signed-Rank Test     wilcox.test(x)
+# Two Sample T-test 일 경우             : Wilcoxon Rank-Sum Test        wilcox.test(y ~ x, data = )
+# ANOVA일 경우                          : Kurskal-Wallis Test           kruskal.test
 
-# 한 그룹의 두 변수     : Paired T-test
-# 연관성 높은 두 그룹   : Paired T-test
-
-# 한 그룹의 비율        : prop.test (Z-검정)
-# 두 그룹의 비율        : prop.test
-
-# --- 비모수적 방법 (자료가 정규분포를 따르지 않는 경우)
-# One sample / Paired T-test    : Wilcoxon Signed-Rank Test
-# Two sample T-test             : Wilcoxon Rank-Sum Test
-# ANOVA                         : Kurskal-Wallis Test
-
-# 정규성 검정           : shapiro.test
-# 등분산 검정           : var.test
 #---------------------------------------------------------------
