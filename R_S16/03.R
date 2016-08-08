@@ -46,14 +46,14 @@ prop.test(x = 67, n = 120, p = 0.5)
 # 광고 캠페인이 제품에 대한 인지도를 증가시켰는가?
 
 # H0 : p1 - p2 = 0
-# H1 : p1 - p2 < 0
+# H1 : p1 - p2 < 0   (= p1 < p2)
 
 # 가정 체크 : np >= 5 && n(1-p) >= 5
 150 * (60/150)
 150 * (1 - 60/150)
 
 # prop.test( x, n )
-prop.test( c(60,120), c(150,250), alternative = "less")
+prop.test( c(60, 120), c(150, 250), alternative = "less")
 
 # 결론
 # p-value = 0.07308 > 0.05 : 귀무가설 기각할 수 없음. 캠페인 효과 인정할 수 없음.
@@ -83,7 +83,7 @@ prop.test( c(60,120), c(150,250), alternative = "less")
 #   중간층                 28       122
 #   고소득                 5        45
 
-# H0 : 우울증과 소득수준은 독립이다.
+# H0 : 소득수준(가로)과 우울증(세로)은 독립적이다 (서로 영향을 주지 않는다).
 
 data <- matrix(c(33,28,5,67,122,45), 3, 2)
 data
@@ -101,29 +101,45 @@ chisq.test(data)
 # 분할표 (Contingency Table) - xtabs()
 #---------------------------------------------------------------
 
-# 1. 각 셀에 해당하는 자료의 수가 있는 경우
+# 1. 각 셀에 해당하는 자료의 수(count)가 있는 경우
+
 # treat     outcome     count
-# a         1           16
-# b         0           48
+# placebo   1           16
+# placebo   0           48
+# test      1           40
+# test      0           20
 
 # xtabs(도수 ~ 가로 + 세로)  :  xtabs(count ~ treat + outcome, data = df)
 
 
 # 2. 각 셀에 해당하는 자료의 수가 없는 경우
+
 # treat     outcome
-# a         1
-# b         0
+# placebo   1
+# placebo   0
+# test      1
+# test      0
 
 # xtabs(~ 가로 + 세로)  :  xtabs(~ treat + outcome, data = df)
 
+df <- data.frame(treat = sample(c("placebo","test"), 100, replace = T), outcome = sample(0:1, 100,replace = T))
+head(df);tail(df)
+
+xtabs(~ treat + outcome, data = df)
+
 
 # 3. 직접 만들기
-tab <- matrix( c(48,20,16,40), ncol = 2)
+tab <- matrix(c(48,20,16,40), ncol = 2)
 colnames(tab) <- c("0", "1")
 rownames(tab) <- c("placebo", "test")
 tab
 
+
 mosaicplot(tab, xlab = "treat", ylab = "outcome")
+
+chisq.test(tab) # 가로(치료방법)와 세로(치료결과)가 독립적인지(= H0) 검정. 
+                # p-value < 0.05 : 귀무가설 기각.
+                # 치료방법은 치료결과에 영향을 준다.
 
 
 
