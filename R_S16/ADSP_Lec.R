@@ -52,7 +52,7 @@ Math <- sample(1:50, replace = F)
 rank <- cbind(sno, Korean, English, Math)
 rownames(rank) <- seq(1,50)
 rank    
-    
+
 rcorr(as.matrix(rank), type = "spearman")    
 
 
@@ -201,7 +201,7 @@ mean(kings_diff1); sd(kings_diff1)
 # 1차 차분한 데이터로 ARIMA 모형 확인
 acf(kings_diff1, lag.max = 20)      # lag 2부터 점선 안에 존재. lag 절단값 = 2. --> MA(1)
 pacf(kings_diff1, lag.max = 20)     # lag 4에서 절단값 --> AR(3)
-    # --> ARIMA(3,1,1)
+# --> ARIMA(3,1,1)
 
 # 자동으로 ARIMA 모형 확인
 auto.arima(kings)   # --> ARIMA(0,1,1)
@@ -274,7 +274,7 @@ plot.ts(fancy_log)
 
 fancy_diff <- diff(fancy_log, differences = 1)
 plot.ts(fancy_diff)   
-    # 평균은 어느정도 일정하지만 특정 시기에 분산이 크다 --> ARIMA 보다는 다른 모형 적용 추천
+# 평균은 어느정도 일정하지만 특정 시기에 분산이 크다 --> ARIMA 보다는 다른 모형 적용 추천
 
 acf(fancy_diff, lag.max = 100)
 pacf(fancy_diff, lag.max = 100)
@@ -309,4 +309,153 @@ auto.arima(dust)            # ARIMA(1,0,2)
 dust_arima <- arima(dust, order = c(2,0,0))
 dust_fcast <- forecast.Arima(dust_arima, h = 30)
 plot.forecast(dust_fcast)
+
+
+
+#--------------------------------------------------------------
+# Data Mart
+#--------------------------------------------------------------
+
+#--------------------------------------------------------------
+# Reshape
+
+library(reshape)
+
+# Example 1
+id <- c(1, 1, 2, 2)
+time <- c(1, 2, 1, 2)
+x1 <- c(5, 3, 7, 2)
+x2 <- c(6, 5, 1, 4)
+
+mydata <- data.frame(id, time, x1, x2)
+mydata
+
+
+md <- melt(mydata, id = c("id", "time"))    # melt
+md
+
+
+cast(md, id + time ~ variable)
+cast(md, id + variable ~ time)
+cast(md, id ~ variable + time)
+
+cast(md, id ~ variable, mean)   # with aggregate
+cast(md, time ~ variable, mean)
+
+
+# Example 2
+airquality
+
+airData <- melt(airquality, id = c("Month", "Day"), na.rm = T)
+head(airData);tail(airData)
+
+cast(airData, Month ~ Day ~ variable)  # 3차원
+
+cast(airData, Month ~ variable, mean)
+cast(airData, Month ~ variable, mean, margins = c("grand_row", "grand_col"))
+cast(airData, Month ~ variable, mean, subset = variable == "Ozone")
+cast(airData, Month ~ variable, range)
+
+
+
+#--------------------------------------------------------------
+# sqldf
+
+install.packages("sqldf")
+library(sqldf)
+
+iris
+head(iris);tail(iris)
+str(iris)
+
+sqldf("select * from iris limit 10")
+
+sqldf("select * from iris where Species like 'se%'")
+
+sqldf("select * from iris where Species in ('setosa', 'virginica')")
+
+sqldf('select * from iris where "Sepal.Length" between 5.0 and 6.0')
+
+sqldf('select * from iris where "Sepal.Length" > 7.0')
+
+
+
+#--------------------------------------------------------------
+# plyr
+
+library(plyr)
+
+?airquality
+
+# Example 1
+data <- airquality
+head(data)
+
+# 1
+ddply(
+    .data = subset(data, Ozone >= 30),
+    .variables = c('Month'),
+    .fun = function(p) {
+        summarize(p, mean_Temper = mean(Temp))
+    }
+)
+
+# 2
+ddply(subset(data, Ozone >= 30), c('Month'), summarize, mean_Temper = mean(Temp))
+
+
+# Example 2
+
+set.seed(1)
+data <- data.frame(year = rep(2000:2002, each = 6), count = round(runif(18, 0, 20)))
+data
+
+funcM <- function(x) {
+    mean <- mean(x$count)
+    sd <- sd(x$count)
+    cv <- sd / mean
+    data.frame(cv)      # only return cv
+}
+
+ddply(data, "year", funcM)
+
+ddply(data, "year", summarize, mean = mean(count))  # summarize : year 기준 요약
+
+ddply(data, "year", transform, total = sum(count))  # transform : 기존 데이터에 추가
+
+
+
+#--------------------------------------------------------------
+# data.table
+
+install.packages("data.table")
+library(data.table)
+
+?data.table
+
+titanic <- read.csv("titanic.csv", header = T)
+head(titanic)
+str(titanic)
+
+dt <- data.table(titanic)
+class(dt)
+
+dt[1, ]
+dt[ , 1, with = F]
+
+setkey(dt, pclass)
+tables()
+
+dt[J("1st")]    # pclass == 1st
+
+dt[J("1st"), mean(survived)]        # 생존율 61.9%
+dt[pclass == "1st", mean(survived)]
+
+dt[ , mean(survived), by = "pclass"]
+dt[ , mean(survived), by = c("pclass", "sex")]
+
+
+
+
+
 
