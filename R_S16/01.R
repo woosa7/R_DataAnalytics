@@ -58,6 +58,8 @@ lines(density(tip), col = "blue")
 qqnorm(tip)
 qqline(tip)     # 점들이 선위에 가까이 있을수로 정규분포를 따름.
 
+detach(tips)
+
 
 #---------------------------------------------------------------
 # 질적자료의 요약
@@ -67,19 +69,22 @@ qqline(tip)     # 점들이 선위에 가까이 있을수로 정규분포를 따름.
 # barplot()
 # pie()
 
-summary(day)
-barplot(table(day))
+tips
+summary(tips$day)
+barplot(table(tips$day))
 
-tips$day <- factor(day, levels = c("Thur","Fri","Sat","Sun"))   # 요일 순서대로 나오도록 factor levels 변경
-summary(day)
+tips$day <- factor(tips$day, levels = c("Thur","Fri","Sat","Sun"))   # 요일 순서대로 나오도록 factor levels 변경
+summary(tips$day)
 
-mytable <- table(day)
+mytable <- table(tips$day)
 mytable
 
 barplot(mytable)
-barplot(mytable / sum(mytable))
 
-lbl <- paste(names(mytable), ", ", round(mytable/sum(mytable)*100), "%", sep="")
+ratio <- round(mytable/sum(mytable)*100)
+ratio
+lbl <- paste(names(mytable), ", ", ratio, "%", sep="")
+lbl
 pie(mytable, labels = lbl, col = rainbow(length(mytable)), main = "Day of Tips")
 
 
@@ -88,7 +93,7 @@ pie(mytable, labels = lbl, col = rainbow(length(mytable)), main = "Day of Tips")
 #---------------------------------------------------------------
 
 # 두 범주형 변수의 요약
-# xtabs(~그룹변수1 + 그룹변수2, data) : 분할표
+# xtabs(~그룹변수1 + 그룹변수2, data) = 분할표
 
 # 성별~요일별
 mytable2 <- xtabs(~ sex + day, tips)
@@ -97,17 +102,17 @@ mytable2
 barplot(mytable2, legend.text = c("Female", "Male"), ylim = c(0,100))
 barplot(mytable2, legend.text = c("Female", "Male"), ylim = c(0,80), beside = T)
 
-barplot(xtabs(~sex+smoker, tips), legend.text = c("Female", "Male"), ylim = c(0,100), beside = T, xlab = "smoker")
-barplot(xtabs(~size+time, tips), legend.text = c(1,2,3,4,5,6), beside = T, xlab = "size - time")
+barplot(xtabs(~ sex + smoker, tips), legend.text = c("Female", "Male"), ylim = c(0,100), beside = T, xlab = "smoker")
+barplot(xtabs(~ size + time, tips), legend.text = c(1,2,3,4,5,6), beside = T, xlab = "size - time")
 
 mosaicplot(mytable2)     # 성별 기준으로 요일별 비교
 mosaicplot(t(mytable2))  # 요일 기준으로 성별 비교
 
 # 범주형 변수와 양적 변수의 요약 
-boxplot(tip~day, data=tips, ylab = "tips", xlab = "day")
+boxplot(tip ~ day, data = tips, ylab = "tips", xlab = "day")
 
 # 두 양적변수의 요약 (주문금액 대비 팁)
-plot(tip~total_bill, tips)
+plot(tip ~ total_bill, tips)
 
 
 #--------------------------------------------
@@ -116,14 +121,14 @@ plot(tip~total_bill, tips)
 
 # 2012 - 2013 년 국내 개봉 영화
 
-kmovie <- read.csv("movie_utf8.csv", stringsAsFactors = F)
+kmovie <- read.csv("movie_MBA.csv", stringsAsFactors = F)
 View(kmovie)
 str(kmovie)
 
 quantile(kmovie$total_seen)
-kmovie$total_seen <- kmovie$total_seen/1000
-
 quantile(kmovie$total_sales)
+
+kmovie$total_seen <- kmovie$total_seen/1000
 kmovie$total_sales <- kmovie$total_sales/1000000
 
 attach(kmovie)
@@ -146,10 +151,11 @@ hist(total_seen, 20)   # ---> 우측에 outlier가 너무 많다. 적당히 변환 후 분석 진
 # 2. 등급별 평균 매출액
 
 unique(rating)
-aggregate(total_sales~rating, data = kmovie, mean)
-par(las = 2, mar = c(10,5,5,5))   
-boxplot(total_sales~rating, data = kmovie, ylab = "sales (x1,000,000)", xlab = "rating")
-boxplot(log(total_sales)~rating, data = kmovie, ylab = "sales : log(x1,000,000)", xlab = "rating")
+aggregate(total_sales ~ rating, data = kmovie, mean)
+
+# par(las = 2, mar = c(10,5,5,5))   
+boxplot(total_sales ~ rating, data = kmovie, ylab = "sales (x1,000,000)", xlab = "rating")
+boxplot(log(total_sales) ~ rating, data = kmovie, ylab = "sales : log(x1,000,000)", xlab = "rating")
 
 library(plyr)
 msales <- ddply(kmovie, ~rating, summarise, mean_sales=mean(total_sales))
@@ -179,7 +185,8 @@ barplot(tab, legend.text=row.names(tab), col = rainbow(9), beside = T, ylim = c(
 mosaicplot(tab)
 mosaicplot(t(tab))
 
-?var.test
+
+
 #---------------------------------------------------------------
 # 유형에 따른 분석기법
 

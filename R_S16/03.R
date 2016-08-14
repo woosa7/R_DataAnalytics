@@ -164,7 +164,7 @@ summary(df_NY)
 tab1 <- xtabs(~PayCut + Party, data = df_NY)
 tab1
 
-chisq.test(tab1)   # p-value = 0.006135 < 0.05 : 상관관계가 있다.
+chisq.test(tab1)   # p-value = 0.006135 < 0.05 : 독립적이지 않다. 소속 정당과 상관관계가 있다.
 
 par(mfcol=c(1,2), las = 1)
 mosaicplot(tab1)

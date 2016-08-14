@@ -113,9 +113,9 @@ t.test(xx, mu = 8.1)
 
 
 #--------------------------------
-t.test(x, mu = 8.1)                             # Ha : mu <> 8.1
-t.test(x, mu = 8.1, alternative = "greater")    # Ha : mu > 8.1
-t.test(x, mu = 8.1, alternative = "less")       # Ha : mu < 8.1
+t.test(xx, mu = 8.1)                             # Ha : mu <> 8.1
+t.test(xx, mu = 8.1, alternative = "greater")    # Ha : mu > 8.1
+t.test(xx, mu = 8.1, alternative = "less")       # Ha : mu < 8.1
 
 
 #--------------------------------
@@ -299,8 +299,8 @@ boxplot(log(total_seen) ~ rating, df2)
 var.test(log(total_seen) ~ rating, df2) # 등분산검정 : p-value > 0.05 분산이 같다.
 
 t.test(log(total_seen) ~ rating, df2, var.equal=T, alternative = "less") # 12세 - 15세
-# p-value = 0.3881 > 0.05 : 귀무가설을 기각할 수 없다.
-# 15세이상 관람가 영화의 평균 관객수가 12세 관람가 영화보다 많다고 할 수 없다.
+    # p-value = 0.3881 > 0.05 : 귀무가설을 기각할 수 없다.
+    # 15세이상 관람가 영화의 평균 관객수가 12세 관람가 영화보다 많다고 할 수 없다.
 
 
 
