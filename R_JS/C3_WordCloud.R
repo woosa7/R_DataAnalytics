@@ -1,55 +1,56 @@
 #-------------------------------------------------------------------------------------
-# ºñÁ¤Çü µ¥ÀÌÅÍ ºĞ¼® | Drawing Charts
+# ë¹„ì •í˜• ë°ì´í„° ë¶„ì„ | Drawing Charts
 #-------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------------
-# Á¦ÁÖµµ ¿©ÇàÄÚ½º
+# ì œì£¼ë„ ì—¬í–‰ì½”ìŠ¤
 #-------------------------------------------------------------------------------------
 
 # 1.
 
-# ÇÑ±¹¾î °ü·Ã ÀÛ¾÷À» ÇÒ ¶§ ÇÊ¿äÇÑ »çÀü
+# í•œêµ­ì–´ ê´€ë ¨ ì‘ì—…ì„ í•  ë•Œ í•„ìš”í•œ ì‚¬ì „
 library(KoNLP)
 library(wordcloud)
 
 useSejongDic()            
-mergeUserDic(data.frame("ÁÖ»óÀı¸®", "ncn"))   # ÇÊ¿äÇÑ ´Ü¾î¸¦ »çÀü¿¡ Ãß°¡
-mergeUserDic(data.frame("ÇùÀçÇØº¯", "ncn"))
-mergeUserDic(data.frame("¼º»êÀÏÃâºÀ", "ncn"))
-mergeUserDic(data.frame("¼·ÁöÄÚÁö", "ncn"))
-mergeUserDic(data.frame("ÃµÁö¿¬ÆøÆ÷", "ncn"))
-mergeUserDic(data.frame("¿ìµµ", "ncn"))
-mergeUserDic(data.frame("»ê¹æ»ê", "ncn"))
-mergeUserDic(data.frame("Áß¹®°ü±¤´ÜÁö", "ncn"))
-mergeUserDic(data.frame("Àá¼öÇÔ", "ncn"))
-mergeUserDic(data.frame("·¯ºê·£µå", "ncn"))
-mergeUserDic(data.frame("¿ëµÎ¾Ï", "ncn"))
-mergeUserDic(data.frame("½ÅºñÀÇµµ·Î", "ncn"))
-mergeUserDic(data.frame("ÇÑ¶ó»ê", "ncn"))
-mergeUserDic(data.frame("¿À¼³·Ï", "ncn"))
-mergeUserDic(data.frame("À¯¸®ÀÇ¼º", "ncn"))
-mergeUserDic(data.frame("ÇÑ¸²°ø¿ø", "ncn"))
-mergeUserDic(data.frame("¿ë¸Ó¸®ÇØ¾È", "ncn"))
-mergeUserDic(data.frame("ÇØ¼ö¿åÀå", "ncn"))
-mergeUserDic(data.frame("Áß¹®", "ncn"))
-mergeUserDic(data.frame("Á¦ÁÖ¹Î¼ÓÃÌ", "ncn"))
-mergeUserDic(data.frame("¿Üµ¹°³", "ncn"))
-mergeUserDic(data.frame("¿¡ÄÚ·£µå", "ncn"))
+mergeUserDic(data.frame("ì£¼ìƒì ˆë¦¬", "ncn"))   # í•„ìš”í•œ ë‹¨ì–´ë¥¼ ì‚¬ì „ì— ì¶”ê°€
+mergeUserDic(data.frame("í˜‘ì¬í•´ë³€", "ncn"))
+mergeUserDic(data.frame("ì„±ì‚°ì¼ì¶œë´‰", "ncn"))
+mergeUserDic(data.frame("ì„­ì§€ì½”ì§€", "ncn"))
+mergeUserDic(data.frame("ì²œì§€ì—°í­í¬", "ncn"))
+mergeUserDic(data.frame("ìš°ë„", "ncn"))
+mergeUserDic(data.frame("ì‚°ë°©ì‚°", "ncn"))
+mergeUserDic(data.frame("ì¤‘ë¬¸ê´€ê´‘ë‹¨ì§€", "ncn"))
+mergeUserDic(data.frame("ì ìˆ˜í•¨", "ncn"))
+mergeUserDic(data.frame("ëŸ¬ë¸Œëœë“œ", "ncn"))
+mergeUserDic(data.frame("ìš©ë‘ì•”", "ncn"))
+mergeUserDic(data.frame("ì‹ ë¹„ì˜ë„ë¡œ", "ncn"))
+mergeUserDic(data.frame("í•œë¼ì‚°", "ncn"))
+mergeUserDic(data.frame("ì˜¤ì„¤ë¡", "ncn"))
+mergeUserDic(data.frame("ìœ ë¦¬ì˜ì„±", "ncn"))
+mergeUserDic(data.frame("í•œë¦¼ê³µì›", "ncn"))
+mergeUserDic(data.frame("ìš©ë¨¸ë¦¬í•´ì•ˆ", "ncn"))
+mergeUserDic(data.frame("í•´ìˆ˜ìš•ì¥", "ncn"))
+mergeUserDic(data.frame("ì¤‘ë¬¸", "ncn"))
+mergeUserDic(data.frame("ì œì£¼ë¯¼ì†ì´Œ", "ncn"))
+mergeUserDic(data.frame("ì™¸ëŒê°œ", "ncn"))
+mergeUserDic(data.frame("ì—ì½”ëœë“œ", "ncn"))
 
-txt <- readLines("data/jeju.txt")       # data¸¦ º¯¼ö·Î ÀĞ¾î¿À±â
-mode(txt)                               # º¯¼öÀÇ µ¥ÀÌÅÍÇü½Ä Ç¥½Ã
+txt <- readLines("data/jeju_utf8.txt")  # dataë¥¼ ë³€ìˆ˜ë¡œ ì½ì–´ì˜¤ê¸°
+txt
+mode(txt)                               # ë³€ìˆ˜ì˜ ë°ì´í„°í˜•ì‹ í‘œì‹œ
 
-# °ø¹é Á¦°Å
+# ê³µë°± ì œê±°
 txt <- txt[txt != '']
 txt <- txt[txt != ' ']
 txt <- txt[txt != '  ']
 txt <- txt[txt != '   ']
-# ºÒÇÊ¿äÇÑ °ªµé Á¦°Å
-# gsub("º¯°æÀü ±ÛÀÚ","º¯°æÈÄ ±ÛÀÚ","¿øº»µ¥ÀÌÅÍ")
+# ë¶ˆí•„ìš”í•œ ê°’ë“¤ ì œê±°
+# gsub("ë³€ê²½ì „ ê¸€ì","ë³€ê²½í›„ ê¸€ì","ì›ë³¸ë°ì´í„°")
 txt <- gsub("-"," ", txt)
 txt <- gsub("&"," ", txt)
 txt <- gsub("=>"," ", txt)
-txt <- gsub("¡æ"," ", txt)
+txt <- gsub("â†’"," ", txt)
 txt <- gsub("\\("," ", txt)
 txt <- gsub("\\)"," ", txt)
 txt <- gsub("/"," ", txt)
@@ -58,104 +59,104 @@ txt <- gsub(","," ", txt)
 
 # 2.
 
-# extractNoun : µ¥ÀÌÅÍ Áß ¸í»ç¸¸ °ñ¶óÁÖ´Â ÇÔ¼ö.
-# sapply : ÇÔ¼öÀÇ °á°ú¸¦ list ¿¡ ´ã´Â´Ù.
+# extractNoun : ë°ì´í„° ì¤‘ ëª…ì‚¬ë§Œ ê³¨ë¼ì£¼ëŠ” í•¨ìˆ˜.
+# sapply : í•¨ìˆ˜ì˜ ê²°ê³¼ë¥¼ list ì— ë‹´ëŠ”ë‹¤.
 nounList <- sapply(txt, extractNoun, USE.NAMES = F)
 
-# unlist : filtering À§ÇØ list °´Ã¼¸¦ ÀÏ¹İ º¤ÅÍ·Î º¯È¯
+# unlist : filtering ìœ„í•´ list ê°ì²´ë¥¼ ì¼ë°˜ ë²¡í„°ë¡œ ë³€í™˜
 place <- unlist(nounList)
-# µÎ±ÛÀÚ ÀÌ»ó µÇ´Â °Í¸¸ ÇÊÅÍ¸µ. nchar() = character length
+# ë‘ê¸€ì ì´ìƒ ë˜ëŠ” ê²ƒë§Œ í•„í„°ë§. nchar() = character length
 place <- Filter(function(x) {nchar(x) >= 2}, place) 
 place
 
-# ¿øÇÏÁö ¾Ê´Â ³»¿ë °É·¯³»±â.
-place <- gsub("Á¦ÁÖ","", place) 
-place <- gsub("Åë¿î","", place)  
-place <- gsub("Àü±¹","", place)  
-place <- gsub("Ã¼ÀÎ","", place) 
-place <- gsub("¾÷Ã¼","", place)  
-place <- gsub("Áú¹®","", place)
-place <- gsub("°¡°İ","", place)  
-place <- gsub("¹«³­","", place)   
-place <- gsub("¿©Çà","", place)
-place <- gsub("°Ë»ö","", place)
-place <- gsub("ÄÚ½º","", place)
-place <- gsub("¼÷¼Ò","", place)
-place <- gsub("ÁØºñ","", place)
-place <- gsub("´Ù¿î·Îµå","", place)
-place <- gsub("Á¶È¸¼ö","", place)
-place <- gsub("ÃßÃµ¼ö","", place)
-place <- gsub("ÃßÃµ","", place)
-place <- gsub("´äº¯¼ö","", place)
-place <- gsub("Ã¹Â°³¯","", place)
-place <- gsub("Ã¹Â¶³¯","", place) 
-place <- gsub("ÁÁ±¸¿ä","", place)
-place <- gsub("ÀÌ·±°Å","", place)
-place <- gsub("µÑÂ°³¯","", place)
-place <- gsub("¼ÂÂ°³¯","", place)
-place <- gsub("¼¼Â¶³¯","", place)
-place <- gsub("Åä¿äÀÏ","", place)
-place <- gsub("ÀÏ¿äÀÏ","", place)
-place <- gsub("½Ã°£","", place)
-place <- gsub("Ç×°ø","", place)
-place <- gsub("°ü±¤Áö","", place)
-place <- gsub("ÀÔÀå·á","", place)
-place <- gsub("Àú°¡","", place)
-place <- gsub("Ç×°ø»ç","", place)
-place <- gsub("µµ¿ò","", place)
-place <- gsub("´ë·«","", place)
-place <- gsub("¿ä±İ","", place)
+# ì›í•˜ì§€ ì•ŠëŠ” ë‚´ìš© ê±¸ëŸ¬ë‚´ê¸°.
+place <- gsub("ì œì£¼","", place) 
+place <- gsub("í†µìš´","", place)  
+place <- gsub("ì „êµ­","", place)  
+place <- gsub("ì²´ì¸","", place) 
+place <- gsub("ì—…ì²´","", place)  
+place <- gsub("ì§ˆë¬¸","", place)
+place <- gsub("ê°€ê²©","", place)  
+place <- gsub("ë¬´ë‚œ","", place)   
+place <- gsub("ì—¬í–‰","", place)
+place <- gsub("ê²€ìƒ‰","", place)
+place <- gsub("ì½”ìŠ¤","", place)
+place <- gsub("ìˆ™ì†Œ","", place)
+place <- gsub("ì¤€ë¹„","", place)
+place <- gsub("ë‹¤ìš´ë¡œë“œ","", place)
+place <- gsub("ì¡°íšŒìˆ˜","", place)
+place <- gsub("ì¶”ì²œìˆ˜","", place)
+place <- gsub("ì¶”ì²œ","", place)
+place <- gsub("ë‹µë³€ìˆ˜","", place)
+place <- gsub("ì²«ì§¸ë‚ ","", place)
+place <- gsub("ì²«ì¨‹ë‚ ","", place) 
+place <- gsub("ì¢‹êµ¬ìš”","", place)
+place <- gsub("ì´ëŸ°ê±°","", place)
+place <- gsub("ë‘˜ì§¸ë‚ ","", place)
+place <- gsub("ì…‹ì§¸ë‚ ","", place)
+place <- gsub("ì„¸ì¨‹ë‚ ","", place)
+place <- gsub("í† ìš”ì¼","", place)
+place <- gsub("ì¼ìš”ì¼","", place)
+place <- gsub("ì‹œê°„","", place)
+place <- gsub("í•­ê³µ","", place)
+place <- gsub("ê´€ê´‘ì§€","", place)
+place <- gsub("ì…ì¥ë£Œ","", place)
+place <- gsub("ì €ê°€","", place)
+place <- gsub("í•­ê³µì‚¬","", place)
+place <- gsub("ë„ì›€","", place)
+place <- gsub("ëŒ€ëµ","", place)
+place <- gsub("ìš”ê¸ˆ","", place)
 place <- gsub("\\-","", place)
-place <- gsub("ÀÌ¿ë","", place)
-place <- gsub("°øÇ×","", place)
-place <- gsub("ÇØ¾È","", place)
-place <- gsub("µå¶óÀÌºê","", place)
-place <- gsub("°æÀ¯","", place)
-place <- gsub("¹Ù´Ù","", place)
-place <- gsub("Àü¸Á","", place)
-place <- gsub("ÇÏ·ç","", place)
-place <- gsub("·»Æ®Ä«","", place)
-place <- gsub("ÇÏ½Ã","", place)
-place <- gsub("¿¹¾à","", place)
-place <- gsub("»çÁø","", place)
-place <- gsub("À§Ä¡","", place)
-place <- gsub("ÇÊ¿ä","", place)
-place <- gsub("ÇÒÀÎ","", place)
-place <- gsub("Ãâ¹ß","", place)
-place <- gsub("°¡´É","", place)
-place <- gsub("¼Ò¿ä","", place)
-place <- gsub("ÀÏÁ¤","", place)
-place <- gsub("ÇÏ°Ô","", place)
-place <- gsub("±ÙÃ³","", place)
-place <- gsub("Áß°£","", place)
-place <- gsub("´Ù¾ç","", place)
-place <- gsub("Ã¹³¯","", place)
-place <- gsub("µµÂø","", place)
-place <- gsub("¿ë¸Ó","", place)
-place <- gsub("¹ÙÀ§","", place)
-place <- gsub("À¯¸í","", place)
-place <- gsub("Á¤µµ","", place)
-place <- gsub("ÀÌµ¿","", place)
-place <- gsub("¹«·á","", place)
-place <- gsub("Ã¼Çè","", place)
-place <- gsub("µÑÂ°","", place)
+place <- gsub("ì´ìš©","", place)
+place <- gsub("ê³µí•­","", place)
+place <- gsub("í•´ì•ˆ","", place)
+place <- gsub("ë“œë¼ì´ë¸Œ","", place)
+place <- gsub("ê²½ìœ ","", place)
+place <- gsub("ë°”ë‹¤","", place)
+place <- gsub("ì „ë§","", place)
+place <- gsub("í•˜ë£¨","", place)
+place <- gsub("ë ŒíŠ¸ì¹´","", place)
+place <- gsub("í•˜ì‹œ","", place)
+place <- gsub("ì˜ˆì•½","", place)
+place <- gsub("ì‚¬ì§„","", place)
+place <- gsub("ìœ„ì¹˜","", place)
+place <- gsub("í•„ìš”","", place)
+place <- gsub("í• ì¸","", place)
+place <- gsub("ì¶œë°œ","", place)
+place <- gsub("ê°€ëŠ¥","", place)
+place <- gsub("ì†Œìš”","", place)
+place <- gsub("ì¼ì •","", place)
+place <- gsub("í•˜ê²Œ","", place)
+place <- gsub("ê·¼ì²˜","", place)
+place <- gsub("ì¤‘ê°„","", place)
+place <- gsub("ë‹¤ì–‘","", place)
+place <- gsub("ì²«ë‚ ","", place)
+place <- gsub("ë„ì°©","", place)
+place <- gsub("ìš©ë¨¸","", place)
+place <- gsub("ë°”ìœ„","", place)
+place <- gsub("ìœ ëª…","", place)
+place <- gsub("ì •ë„","", place)
+place <- gsub("ì´ë™","", place)
+place <- gsub("ë¬´ë£Œ","", place)
+place <- gsub("ì²´í—˜","", place)
+place <- gsub("ë‘˜ì§¸","", place)
 place <- gsub(" ","", place)
-place <- gsub("\\d+","", place)    #  ¸ğµç ¼ıÀÚ ¾ø¾Ö±â
+place <- gsub("\\d+","", place)    #  ëª¨ë“  ìˆ«ì ì—†ì• ê¸°
 
-# nouns1 <- grep("^ORA-+", txt, value=T)     # Ã¹±ÛÀÚ°¡ ORA- ÀÎ µ¥ÀÌÅÍ¸¸ »ç¿ë.
-# nouns2 <- substr(nouns1,5,9)               #ORA-12345 Çü½Ä¿¡¼­ ¼ıÀÚºÎºĞ¸¸ Àß¶ó³¿
-# nouns3 <- gsub("[A-z]","",nouns2)          # ¿µ¾î°¡ ÀÖ´Â ºÎºĞÀ» Á¦°ÅÇÏ°í ¼ıÀÚ¸¸ ³²°ÜµÒ
+# nouns1 <- grep("^ORA-+", txt, value=T)     # ì²«ê¸€ìê°€ ORA- ì¸ ë°ì´í„°ë§Œ ì‚¬ìš©.
+# nouns2 <- substr(nouns1,5,9)               #ORA-12345 í˜•ì‹ì—ì„œ ìˆ«ìë¶€ë¶„ë§Œ ì˜ë¼ëƒ„
+# nouns3 <- gsub("[A-z]","",nouns2)          # ì˜ì–´ê°€ ìˆëŠ” ë¶€ë¶„ì„ ì œê±°í•˜ê³  ìˆ«ìë§Œ ë‚¨ê²¨ë‘ 
 
 place <- Filter(function(x) {nchar(x) >= 2}, place)
 place
 
-# Á¤¸®µÈ µ¥ÀÌÅÍ¸¦ ÆÄÀÏ·Î ÀúÀåÇÑ ÈÄ ´Ù½Ã table Çü½ÄÀ¸·Î ´Ù½Ã ºÒ·¯¿À±â. ºó ¶óÀÎµé Á¦°ÅµÊ.
+# ì •ë¦¬ëœ ë°ì´í„°ë¥¼ íŒŒì¼ë¡œ ì €ì¥í•œ í›„ ë‹¤ì‹œ table í˜•ì‹ìœ¼ë¡œ ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸°. ë¹ˆ ë¼ì¸ë“¤ ì œê±°ë¨.
 write(unlist(place), "jeju_step2.txt")
 place2 <- read.table("jeju_step2.txt")
 wordcount <- table(place2)
 
 head(wordcount, 10)
-head(sort(wordcount, decreasing=T), 50)   # ºóµµ¼ö°¡ ¸¹Àº ¼øÀ¸·Î Á¤·ÄÇØ¼­ »óÀ§ 30°³ Á¶È¸
+head(sort(wordcount, decreasing=T), 50)   # ë¹ˆë„ìˆ˜ê°€ ë§ì€ ìˆœìœ¼ë¡œ ì •ë ¬í•´ì„œ ìƒìœ„ 30ê°œ ì¡°íšŒ
 
 
 # 3.
@@ -163,11 +164,11 @@ head(sort(wordcount, decreasing=T), 50)   # ºóµµ¼ö°¡ ¸¹Àº ¼øÀ¸·Î Á¤·ÄÇØ¼­ »óÀ§ 3
 # -------------------------------------------
 # (1) Wordcloud
 
-# min.freq : ÃÖ¼Ò ºóµµ ÀÌ»ó ¾ğ±ŞµÈ ´Ü¾î¸¸ Ãâ·Â
+# min.freq : ìµœì†Œ ë¹ˆë„ ì´ìƒ ì–¸ê¸‰ëœ ë‹¨ì–´ë§Œ ì¶œë ¥
 # scle : range of sizes of the words
 
-library(RColorBrewer)       # color library ·Îµù
-palete <- brewer.pal(9,"Set1") # ±ÛÀÚ »ö±ò ÁöÁ¤
+library(RColorBrewer)       # color library ë¡œë”©
+palete <- brewer.pal(9,"Set1") # ê¸€ì ìƒ‰ê¹” ì§€ì •
 wordcloud(names(wordcount), freq=wordcount, scale=c(5, 0.5), min.freq=5, random.order=F, random.color=T, colors=palete)
 
 
@@ -180,7 +181,7 @@ pie(a, col = rainbow(10), radius = 1)
 
 percnt <- round(a/sum(a)*100, 1)      
 names(a)
-labelname <- paste(names(a), percnt, "%")   # % °ª ³Ö±â
+labelname <- paste(names(a), percnt, "%")   # % ê°’ ë„£ê¸°
 pie(a, main = "Jeju Tour Point", col = rainbow(10), cex = 0.8, labels = labelname) # cex : size of label
 
 # Conditiional Color
@@ -200,7 +201,7 @@ for (i in 1:length(a)) {
 pie(a, col = colors, radius = 1)
 
 # -------------------------------------------
-# (3) Donut Chart - À§¿¡ Èò»ö ¿øÀ» µ¤À½.
+# (3) Donut Chart - ìœ„ì— í°ìƒ‰ ì›ì„ ë®ìŒ.
 
 par(new = T)
 pie(a, radius = 0.5, col = "white", labels = NA, border = NA)
@@ -209,8 +210,8 @@ pie(a, radius = 0.5, col = "white", labels = NA, border = NA)
 # -------------------------------------------
 # (4) Bar Chart --- 15_barplot_rainbow
 
-# space : bar »çÀÌÀÇ °£°İ
-# ylim : y Ãà °ª¹üÀ§
+# space : bar ì‚¬ì´ì˜ ê°„ê²©
+# ylim : y ì¶• ê°’ë²”ìœ„
 # cex : size of label
 
 bp <- barplot(a, main="Jeju Tour Point", col=rainbow(10), space=0.2, ylim=c(0,35), cex.names=1.0, las=2)
@@ -222,7 +223,7 @@ text(x=bp, y=a*0.9, labels=paste(a), col="black", cex = 0.7)
 # -------------------------------------------
 # (5) Horizontal Bar Chart --- 15_horizontal_barplot
 
-# xlim : x Ãà °ª¹üÀ§
+# xlim : x ì¶• ê°’ë²”ìœ„
 
 bp <- barplot(a, main="Jeju Tour Point", col=rainbow(10), xlim=c(0,35), cex.names=0.7, las=1, horiz=T)
 text(y=bp, x=a*1.15, labels=paste(percnt,"%"), col="black", cex = 0.7)
@@ -232,46 +233,46 @@ text(y=bp, x=a*0.9, labels=paste(a), col="black", cex = 0.7)
 # -------------------------------------------
 # (6) Line Chart
 
-# xlab : x Ãà labels
-# ylab : y Ãà labels
-# type="o" : »ç¼± / type="s" : Á÷¼±
-# lwd : ¼± ±½±â
+# xlab : x ì¶• labels
+# ylab : y ì¶• labels
+# type="o" : ì‚¬ì„  / type="s" : ì§ì„ 
+# lwd : ì„  êµµê¸°
 # h : y-value(s) for horizontal line(s).
 # v : x-value(s) for vertical line(s).
 
 plot(a, main="Jeju Tour Point", xlab="", ylab="", ylim=c(0,35), axes=FALSE, type="s", col="red", lwd=5)
-axis(1, at=1:10, labels=names(a), las=2)   # x Ãà
-axis(2, las=1)                             # y Ãà
+axis(1, at=1:10, labels=names(a), las=2)   # x ì¶•
+axis(2, las=1)                             # y ì¶•
 abline(h=seq(0,35,5), v=seq(1,10,1), col="gray", lty=2)
 
 
 # -------------------------------------------
 # (7) 3D Pie Chart
 
-# explode : °¢ Á¶°¢ÀÇ °£°İ
+# explode : ê° ì¡°ê°ì˜ ê°„ê²©
 
 install.packages("plotrix")
 library("plotrix")
 
 cpercnt <- round(a/sum(a)*100, 1)
 clabels <- paste(names(a), "\n", "(", cpercnt, ")")
-pie3D(a, main="Á¦ÁÖµµ °ü±¤Áö", col=rainbow(10), cex=0.7, labels=clabels, explode=0.05)
+pie3D(a, main="ì œì£¼ë„ ê´€ê´‘ì§€", col=rainbow(10), cex=0.7, labels=clabels, explode=0.05)
 
 
-# Plot ÀÌ¹ÌÁö·Î ÀúÀåÇÏ±â
+# Plot ì´ë¯¸ì§€ë¡œ ì €ì¥í•˜ê¸°
 
-# windows(800, 600, pointsize = 12)   # º°µµÀÇ À©µµ¿ì ¿­±â
-# pie(a)                              # Â÷Æ® ±×¸®±â
-# savePlot("jeju.png", type="png")    # °á°ú¹°À» ±×¸²À¸·Î ÀúÀå
-# dev.off()                           # À©µµ¿ì ´İ±â
+# windows(800, 600, pointsize = 12)   # ë³„ë„ì˜ ìœˆë„ìš° ì—´ê¸°
+# pie(a)                              # ì°¨íŠ¸ ê·¸ë¦¬ê¸°
+# savePlot("jeju.png", type="png")    # ê²°ê³¼ë¬¼ì„ ê·¸ë¦¼ìœ¼ë¡œ ì €ì¥
+# dev.off()                           # ìœˆë„ìš° ë‹«ê¸°
 
 
 
 #-------------------------------------------------------------------------------------
-# ºñÁ¤Çü ÀÚ·á ºĞ¼® - Propose
+# ë¹„ì •í˜• ìë£Œ ë¶„ì„ - Propose
 #-------------------------------------------------------------------------------------
 
-# chr (¹®Àå) --> ´Ü¾î list --> chr (´Ü¾î) --> txt --> table list --> wordcount (numeric)
+# chr (ë¬¸ì¥) --> ë‹¨ì–´ list --> chr (ë‹¨ì–´) --> txt --> table list --> wordcount (numeric)
 
 txt <- readLines("data/propose_utf8.txt", encoding = "UTF-8")
 txt
@@ -283,16 +284,16 @@ txt <- txt[txt != '  ']
 nounList <- sapply(txt, extractNoun, USE.NAMES = F)
 
 tempText <- unlist(nounList)
-tempText <- gsub("ÇÁ·ÎÆ÷Áî","", tempText)
-tempText <- gsub("¼±¹°","", tempText)
-tempText <- gsub("ÃßÃµ","", tempText)
-tempText <- gsub("´äº¯","", tempText)
-tempText <- gsub("Á¶È¸","", tempText)
-tempText <- gsub("»ı°¢","", tempText)
-tempText <- gsub("»ıÈ°","", tempText)
-tempText <- gsub("ÀÌº¥Æ®","", tempText)
-tempText <- gsub("ÁØºñ","", tempText)
-tempText <- gsub("\\d+","", tempText)    #  ¸ğµç ¼ıÀÚ ¾ø¾Ö±â
+tempText <- gsub("í”„ë¡œí¬ì¦ˆ","", tempText)
+tempText <- gsub("ì„ ë¬¼","", tempText)
+tempText <- gsub("ì¶”ì²œ","", tempText)
+tempText <- gsub("ë‹µë³€","", tempText)
+tempText <- gsub("ì¡°íšŒ","", tempText)
+tempText <- gsub("ìƒê°","", tempText)
+tempText <- gsub("ìƒí™œ","", tempText)
+tempText <- gsub("ì´ë²¤íŠ¸","", tempText)
+tempText <- gsub("ì¤€ë¹„","", tempText)
+tempText <- gsub("\\d+","", tempText)    #  ëª¨ë“  ìˆ«ì ì—†ì• ê¸°
 tempText <- Filter(function(x) {nchar(x) >= 2}, tempText)
 
 

@@ -1,54 +1,54 @@
 #---------------------------------------------------------------
-# Graph : Chapter2_1 ÂüÁ¶
+# Graph : Chapter2_1 ì°¸ì¡°
 #---------------------------------------------------------------
 
 #---------------------------------------------------------------
 # Graph Options
 
-#   main=""			    Á¦¸ñ
-#   sub=""			    ºÎÁ¦¸ñ
-#   xlab="", ylab=""    x, y Ãà Á¦¸ñ ¹®ÀÚ¿­
-#   xlim= , ylim=       x, y Ãà ÇÑ°è°ª
-#   ann=F			    x, y Ãà Á¦¸ñ Ç¥½ÃÇÏÁö ¾ÊÀ½
-#   axes=F			    x, y Ãà Ç¥½ÃÇÏÁö ¾ÊÀ½
-#   tmag=2              Á¦¸ñ µî¿¡ »ç¿ëµÇ´Â ¹®ÀÚÀÇ È®´ë¹èÀ²
+#   main = ""			    ì œëª©
+#   sub = ""			    ë¶€ì œëª©
+#   xlab = "", ylab = ""    x, y ì¶• ì œëª© ë¬¸ìì—´
+#   xlim = , ylim =         x, y ì¶• í•œê³„ê°’
+#   ann = F			        x, y ì¶• ì œëª© í‘œì‹œí•˜ì§€ ì•ŠìŒ
+#   axes = F			    x, y ì¶• í‘œì‹œí•˜ì§€ ì•ŠìŒ
+#   tmag = 2                ì œëª© ë“±ì— ì‚¬ìš©ë˜ëŠ” ë¬¸ìì˜ í™•ëŒ€ë°°ìœ¨
 # 
-#   axis(...)		    »ç¿ëÀÚÁöÁ¤ x, y Ãà
-#   title               ¸ŞÀÎ, x, y Ãà Á¦¸ñ ÁöÁ¤
+#   axis(...)		    ì‚¬ìš©ìì§€ì • x, y ì¶•
+#   title               ë©”ì¸, x, y ì¶• ì œëª© ì§€ì •
 # 
-#   <±×·¡ÇÁ Å¸ÀÔ>
-#   type = "p"		    Á¡ (±âº»°ª)
-#   type = "l"		    ²ªÀº ¼±
-#   type = "b"		    Á¡°ú ¼±
-#   type = "c"		    "b"¿¡¼­ Á¡ »ı·«
-#   type = "o"		    Á¡°ú ¼± ÁßÃ¸
-#   type = "h"		    °¢ Á¡¿¡¼­ xÃà±îÁö ¼öÁ÷¼± ±×·¡ÇÁ
-#   type = "s"		    ¿ŞÂÊ °ªÀ» ±âÃÊ·Î °è´Ü ¸ğ¾çÀ¸·Î ¿¬°á
-#   type = "S"		    ¿À¸¥ÂÊ °ªÀ» ±âÃÊ·Î °è´Ü ¸ğ¾çÀ¸·Î ¿¬°á
-#   type = "n"		    Ãà¸¸ ±×¸®°í ±×·¡ÇÁ´Â ±×¸®Áö ¾ÊÀ½
+#   <ê·¸ë˜í”„ íƒ€ì…>
+#   type = "p"		    ì  (ê¸°ë³¸ê°’)
+#   type = "l"		    êº¾ì€ ì„ 
+#   type = "b"		    ì ê³¼ ì„ 
+#   type = "c"		    "b"ì—ì„œ ì  ìƒëµ
+#   type = "o"		    ì ê³¼ ì„  ì¤‘ì²©
+#   type = "h"		    ê° ì ì—ì„œ xì¶•ê¹Œì§€ ìˆ˜ì§ì„  ê·¸ë˜í”„
+#   type = "s"		    ì™¼ìª½ ê°’ì„ ê¸°ì´ˆë¡œ ê³„ë‹¨ ëª¨ì–‘ìœ¼ë¡œ ì—°ê²°
+#   type = "S"		    ì˜¤ë¥¸ìª½ ê°’ì„ ê¸°ì´ˆë¡œ ê³„ë‹¨ ëª¨ì–‘ìœ¼ë¡œ ì—°ê²°
+#   type = "n"		    ì¶•ë§Œ ê·¸ë¦¬ê³  ê·¸ë˜í”„ëŠ” ê·¸ë¦¬ì§€ ì•ŠìŒ
 #   
-#   <¼±>
-#   lty=0, lty="blank" 
-#   lty=1, lty="solid"
-#   lty=2, lty="dashed"
-#   lty=3, lty="dotted"
-#   lty=4, lty="dotdash"
-#   lty=5, lty="longdash"
-#   lty=6, lty="twodash"
+#   <ì„ >
+#   lty = 0, lty = "blank" 
+#   lty = 1, lty = "solid"
+#   lty = 2, lty = "dashed"
+#   lty = 3, lty = "dotted"
+#   lty = 4, lty = "dotdash"
+#   lty = 5, lty = "longdash"
+#   lty = 6, lty = "twodash"
 #   
-#   <»ö, ±âÈ£>
-#   col=1, col="blue"	»ö»ó 1 ~ 8
-#   pch=0, pch="¹®ÀÚ"	Á¡ ¸ğ¾ç ÁöÁ¤
-#   bg="blue"           ±×·¡ÇÁ ¹è°æ»ö
-#   lwd="¼ıÀÚ"		    ¼± ±½±â
-#   cex="¼ıÀÚ"		    Á¡ ¶Ç´Â ¹®ÀÚ ±½±â
+#   <ìƒ‰, ê¸°í˜¸>
+#   col = 1, col = "blue"	ìƒ‰ìƒ 1 ~ 8
+#   pch = 0, pch = "ë¬¸ì"	ì  ëª¨ì–‘ ì§€ì •
+#   bg = "blue"             ê·¸ë˜í”„ ë°°ê²½ìƒ‰
+#   lwd = "ìˆ«ì"		    ì„  êµµê¸°
+#   cex = "ìˆ«ì"		    ì  ë˜ëŠ” ë¬¸ì êµµê¸°
 #   
-#   par(mfrow = c(Çà¼ö, ¿­¼ö))        : ÇÑ ÆäÀÌÁö¿¡ ¿©·¯ ±×·¡ÇÁ ¹èÄ¡
-#   par(new=T)                        : ±×·¡ÇÁ ÁßÃ¸
+#   par(mfrow = c(í–‰ìˆ˜, ì—´ìˆ˜))      : í•œ í˜ì´ì§€ì— ì—¬ëŸ¬ ê·¸ë˜í”„ ë°°ì¹˜
+#   par(new = T)                    : ê·¸ë˜í”„ ì¤‘ì²©
 #
-#   lines                             : ±×·¡ÇÁ À§¿¡ »õ·Î¿î ±×·¡ÇÁ ±×¸®±â
+#   lines                           : ê·¸ë˜í”„ ìœ„ì— ìƒˆë¡œìš´ ê·¸ë˜í”„ ê·¸ë¦¬ê¸°
 #   
-#   legend                            : ¹ü·Ê
+#   legend                          : ë²”ë¡€
 #---------------------------------------------------------------
 
 apple <- c(260, 400, 250, 200, 310)
@@ -66,10 +66,10 @@ stem(fruits, scale = 0.5)           # stem-leaf plot
 
 x <- c(1:20)
 y <- sample(1:20)
-plot(x, y, xlim=c(0,20), ylim=c(0,25), main="sample", type="o", lty=2, col=2)
+plot(x, y, xlim = c(0,20), ylim = c(0,25), main = "sample", type = "o", lty = 2, col = 2)
 
 
-# »ç¿ëÀÚÁöÁ¤ x, y Ãà --- 01_fruits_line.png
+# ì‚¬ìš©ìì§€ì • x, y ì¶• --- 01_fruits_line.png
 
 plot(apple, type="o", col="red", ylim=c(0,400), axes = F, ann=F)
 axis(1, at=1:5, labels = c("Mon","Tue","Wed","Thu","Fri"))
@@ -92,22 +92,23 @@ par(mfrow = c(1,3))
 plot(apple, type="o", col="red", ylim=c(0,400))
 plot(peach, type="o", col="red", ylim=c(0,400))
 plot(orange, type="o", col="red", ylim=c(0,400))
+par(mfrow = c(1,1))
 
 
 #---------------------------------------------------------------
 # barplot
 #---------------------------------------------------------------
 
-# angle, density, col   : ¸·´ë¸¦ Ä¥ÇÏ´Â ¼±ÀÇ °¢µµ, ¹Ğµµ, »ö»ó
-# lengent               : ¹ü·Ê
-# names                 : °¢ ¸·´ëÀÇ ¶óº§
-# width                 : °¢ ¸·´ëÀÇ »ó´ëÀûÀÎ Æø
-# space                 : °¢ ¸·´ë »çÀÌÀÇ °£°İ
-# beside                : True ÀÏ °æ¿ì °¢ °ª¸¶´Ù ¸·´ë¸¦ ±×¸°´Ù.
-# horiz                 : True ÀÏ °æ¿ì °¡·Î¸·´ë Ãâ·Â
+# angle, density, col   : ë§‰ëŒ€ë¥¼ ì¹ í•˜ëŠ” ì„ ì˜ ê°ë„, ë°€ë„, ìƒ‰ìƒ
+# lengent               : ë²”ë¡€
+# names                 : ê° ë§‰ëŒ€ì˜ ë¼ë²¨
+# width                 : ê° ë§‰ëŒ€ì˜ ìƒëŒ€ì ì¸ í­
+# space                 : ê° ë§‰ëŒ€ ì‚¬ì´ì˜ ê°„ê²©
+# beside                : True ì¼ ê²½ìš° ê° ê°’ë§ˆë‹¤ ë§‰ëŒ€ë¥¼ ê·¸ë¦°ë‹¤.
+# horiz                 : True ì¼ ê²½ìš° ê°€ë¡œë§‰ëŒ€ ì¶œë ¥
 
 
-# ¿äÀÏº° apple ÆÇ¸Å·®
+# ìš”ì¼ë³„ apple íŒë§¤ëŸ‰
 
 # density --- 02_apple_bar_density
 
@@ -117,7 +118,7 @@ barplot(apple, main="Apple", xlab="Day", ylab="Qty", border="blue",
 
 
 
-# condition color Æ¯Á¤ Á¶°ÇÀ» ¸¸Á·ÇÏ´Â °æ¿ì¿¡ »ö±ò Ç¥½Ã
+# condition color íŠ¹ì • ì¡°ê±´ì„ ë§Œì¡±í•˜ëŠ” ê²½ìš°ì— ìƒ‰ê¹” í‘œì‹œ
 # --- 03_apple_bar_conditionColor
 
 colors <- c()
@@ -135,7 +136,7 @@ barplot(apple, main="Apple", xlab="Day", ylab="Qty", border="blue", col=colors,
 
 
 
-# °úÀÏº°/¿äÀÏº° ÆÇ¸Å¶û --- 04_fruits_bar_multi
+# ê³¼ì¼ë³„/ìš”ì¼ë³„ íŒë§¤ë‘ --- 04_fruits_bar_multi
 
 fruits10 <- cbind(apple, peach, orange)
 fruits10
@@ -146,7 +147,7 @@ legend(10, 450, c("Mon","Tue","Wed","Thu","Fri"), cex=0.8, fill=rainbow(5))
 
 
 
-# ¿äÀÏº°/°úÀÏº° ÆÇ¸Å·® --- 05_fruits_bar_multisection
+# ìš”ì¼ë³„/ê³¼ì¼ë³„ íŒë§¤ëŸ‰ --- 05_fruits_bar_multisection
 
 fruits11 <- t(fruits10)
 colnames(fruits11) <- c(1,2,3,4,5)
@@ -162,11 +163,11 @@ legend(4, 1100, rownames(fruits11), cex=0.8, fill=rainbow(3))
 # Pie Chart
 #---------------------------------------------------------------
 
-# angle, density, col : °¢µµ, ¹Ğµµ, »ö»ó
-# labels          : °¢ ºÎºĞÀÇ ÀÌ¸§ ÁöÁ¤
-# radius          : ¿øÇüÀÇ Å©±â
-# clockwise       : È¸Àü ¹æÇâ. ±âº» = ¹İ½Ã°è¹æÇâ
-# init.angle      : ½ÃÀÛµÇ´Â ÁöÁ¡ÀÇ °¢µµ
+# angle, density, col : ê°ë„, ë°€ë„, ìƒ‰ìƒ
+# labels          : ê° ë¶€ë¶„ì˜ ì´ë¦„ ì§€ì •
+# radius          : ì›í˜•ì˜ í¬ê¸°
+# clockwise       : íšŒì „ ë°©í–¥. ê¸°ë³¸ = ë°˜ì‹œê³„ë°©í–¥
+# init.angle      : ì‹œì‘ë˜ëŠ” ì§€ì ì˜ ê°ë„
 
 
 apple <- c(260, 400, 250, 200, 310)
@@ -177,7 +178,7 @@ pie(apple, init.angle = 90, col=rainbow(length(apple)), radius = 1,
     labels = c("Mon","Tue","Wed","Thu","Fri"))
 
 
-# 2. ºñÀ² --- 06_apple_pie
+# 2. ë¹„ìœ¨ --- 06_apple_pie
 
 f_ratio <- round(apple/sum(apple)*100, 1)
 f_labels <- paste(f_ratio, "%", sep = "")
@@ -202,7 +203,7 @@ pie(apple, main="Apple", init.angle = 90, col=rainbow(length(apple)), radius = 1
 # 3D Pie Chart
 #---------------------------------------------------------------
 
-# explode : °¢ Á¶°¢ÀÇ °£°İ --- 07_apple_3Dpie
+# explode : ê° ì¡°ê°ì˜ ê°„ê²© --- 07_apple_3Dpie
 
 library(plotrix)
 
@@ -219,12 +220,12 @@ pie3D(apple, main="Apple", col=rainbow(length(apple)), cex=0.8,
 # boxplot
 #---------------------------------------------------------------
 
-# col         : ¹Ú½º »ö»ó
-# names       : ¸·´ë ¶óº§
-# range       : ¹Ú½º ³¡¿¡¼­ ¼ö¿°±îÁöÀÇ ±æÀÌ. default = 1.5
-# width       : ¹Ú½º Æø
-# notch       : TrueÀÏ °æ¿ì »óÀÚÀÇ Çã¸®ºÎºĞ °¡´Ã°Ô Ç¥½Ã
-# horizontal  : °¡·Î »óÀÚ
+# col         : ë°•ìŠ¤ ìƒ‰ìƒ
+# names       : ë§‰ëŒ€ ë¼ë²¨
+# range       : ë°•ìŠ¤ ëì—ì„œ ìˆ˜ì—¼ê¹Œì§€ì˜ ê¸¸ì´. default = 1.5
+# width       : ë°•ìŠ¤ í­
+# notch       : Trueì¼ ê²½ìš° ìƒìì˜ í—ˆë¦¬ë¶€ë¶„ ê°€ëŠ˜ê²Œ í‘œì‹œ
+# horizontal  : ê°€ë¡œ ìƒì
 
 
 boxplot(apple, peach, orange,
@@ -238,8 +239,8 @@ boxplot(apple, peach, orange,
 # treemap
 #---------------------------------------------------------------
 
-# vSize   : ±×·ìÇÎ ±âÁØ
-# index   : È­¸é Ç¥½Ã ±âÁØ
+# vSize   : ê·¸ë£¹í•‘ ê¸°ì¤€
+# index   : í™”ë©´ í‘œì‹œ ê¸°ì¤€
 
 library(treemap)
 
@@ -260,15 +261,15 @@ treemap(data, vSize="score", index=c("team","score"))
 # stars
 #---------------------------------------------------------------
 
-# draw.segments = T : ºÎÃ¤²Ã·Î »ö»ó Ç¥½Ã
-# full              : T ¿øÇü / F ¹İ¿øÇü
+# draw.segments = T : ë¶€ì±„ê¼´ë¡œ ìƒ‰ìƒ í‘œì‹œ
+# full              : T ì›í˜• / F ë°˜ì›í˜•
 
 
 data <- read.csv("data/all_subject_score.csv")
 data
 nrow(data)
 
-# 1¹ø ÀÌ¸§ ÄÃ·³À» rownameÀ¸·Î ¼³Á¤ÇÏ°í »èÁ¦ÇÔ
+# 1ë²ˆ ì´ë¦„ ì»¬ëŸ¼ì„ rownameìœ¼ë¡œ ì„¤ì •í•˜ê³  ì‚­ì œí•¨
 row.names(data) <- data$name
 rownames(data)
 data <- data[2:7]
@@ -323,7 +324,7 @@ legend(50,140, label, cex=0.8, fill = rainbow(5))
 # ggplot2
 #---------------------------------------------------------------
 
-# ggplot(data, aes(x=x axis data, y=y axis data)) + geom ÇÔ¼ö
+# ggplot(data, aes(x=x axis data, y=y axis data)) + geom í•¨ìˆ˜
 
 library(ggplot2)
 
@@ -336,7 +337,7 @@ ggplot(data, aes(x=name, y=score)) + geom_point()
 
 
 # geom_bar()
-# -- stat : ÁÖ¾îÁø µ¥ÀÌÅÍ¿¡¼­ geom¿¡ ÇÊ¿äÇÑ µ¥ÀÌÅÍ¸¦ »ı¼º.
+# -- stat : ì£¼ì–´ì§„ ë°ì´í„°ì—ì„œ geomì— í•„ìš”í•œ ë°ì´í„°ë¥¼ ìƒì„±.
 
 #--- 11_ggplot_bar
 
@@ -357,10 +358,10 @@ data <- read.csv("data/student_score_3.csv", header=T, sep=",")
 head(data)
 
 transData <- arrange(data, name, subject)   # plyr : sort
-# total ÄÃ·³ Ãß°¡
-transData <- ddply(transData, "name", transform, total=cumsum(score)) # plyr : ´©ÀûÇÕ°è
-# label ÄÃ·³ Ãß°¡
-transData <- ddply(transData, "name", transform, label=cumsum(score)-score*0.5) # ¶óº§ À§Ä¡
+# total ì»¬ëŸ¼ ì¶”ê°€
+transData <- ddply(transData, "name", transform, total=cumsum(score)) # plyr : ëˆ„ì í•©ê³„
+# label ì»¬ëŸ¼ ì¶”ê°€
+transData <- ddply(transData, "name", transform, label=cumsum(score)-score*0.5) # ë¼ë²¨ ìœ„ì¹˜
 head(transData)
 
 # --- 12_ggplot_bar_multisection
@@ -378,8 +379,8 @@ data <- read.csv("data/all_subject_score.csv")
 kdata <- data[, 1:2]
 kdata
 
-# theme_bw() : ¹è°æ Èæ¹é
-# panel.grid.major.y = element_line : °¡·Î ¼± ±×¸®±â
+# theme_bw() : ë°°ê²½ í‘ë°±
+# panel.grid.major.y = element_line : ê°€ë¡œ ì„  ê·¸ë¦¬ê¸°
 
 # --- 13_ggplot_point_grid
 

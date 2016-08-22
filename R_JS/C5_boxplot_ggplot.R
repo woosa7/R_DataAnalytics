@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# ±¸°£ (¹üÀ§) µ¥ÀÌÅÍ ºĞ¼® - boxplot
+# êµ¬ê°„ (ë²”ìœ„) ë°ì´í„° ë¶„ì„ - boxplot
 #----------------------------------------------------------------------------
 
 require(ggplot2)
@@ -12,7 +12,7 @@ str(tempratureData)
 head(tempratureData)
 
 # ggplot > boxplot
-# aes(xÃà, yÃà)
+# aes(xì¶•, yì¶•)
 
 ggplot(tempratureData, aes(factor(Month), MeanTemp)) + geom_boxplot()
 savePlot("20_temperature_boxplot.png", type="png")
@@ -25,20 +25,20 @@ savePlot("20_temperature_ggplot_point.png", type="png")
 #----------------------------------------------------------------------------
 # boxplot
 
-# geom_jitter : µ¥ÀÌÅÍÀÇ ºĞÆ÷¸¦ Á¡À¸·Î Ç¥½Ã
+# geom_jitter : ë°ì´í„°ì˜ ë¶„í¬ë¥¼ ì ìœ¼ë¡œ í‘œì‹œ
 
 sales <- read.csv("data/emp_monthly_score.csv", header=T)
 head(sales)
 
-# 1. box¸¸
+# 1. boxë§Œ
 ggplot(sales,aes(factor(name),score)) + geom_boxplot()
 savePlot("21_boxplot.png", type="png")
 
-# 2. ºĞÆ÷À§Ä¡
+# 2. ë¶„í¬ìœ„ì¹˜
 ggplot(sales,aes(factor(name),score)) + geom_boxplot() + geom_jitter()
 savePlot("21_boxplot_point.png", type="png")
 
-# 3. »ö»ó³Ö±â
+# 3. ìƒ‰ìƒë„£ê¸°
 ggplot(sales,aes(factor(name),score)) + geom_boxplot(aes(fill=(name))) + geom_jitter()
 savePlot("21_boxplot_color.png", type="png")
 
@@ -65,7 +65,7 @@ sales <- read.csv("data/emp_monthly_score_1.csv", header=T, stringsAsFactors=FAL
 sales
 
 # function
-# x : Ç¥ÇöÇÒ °ª, angle1 : ÁÂÃø °ÔÀÌÁö °¢µµ, angle3 : ¿ìÃø °ÔÀÌÁö °¢µµ, title : Dashboard Á¦¸ñ
+# x : í‘œí˜„í•  ê°’, angle1 : ì¢Œì¸¡ ê²Œì´ì§€ ê°ë„, angle3 : ìš°ì¸¡ ê²Œì´ì§€ ê°ë„, title : Dashboard ì œëª©
 
 # matrix(c(-1,0,0,1,1,0), 3, 2, byrow=T)
 #       [,1] [,2]
@@ -79,19 +79,19 @@ dash_t <- function(x, angle1, angle3, title) {
     x.cir <- cos(seq(0,180,1)*pi/180)
     y.cir <- sin(seq(0,180,1)*pi/180)
     
-    #Ã¹¹øÂ° polygon
+    #ì²«ë²ˆì§¸ polygon
     cir <- rbind(cbind(x.cir[(181-angle1):181], y.cir[(181-angle1):181]) ,
                  cbind(0.8*x.cir[181:(181-angle1)], 0.8*y.cir[181:(181-angle1)]),
                  col="green")
     polygon(cir, col="green", border="white")
     
-    #µÎ¹øÂ° polygon
+    #ë‘ë²ˆì§¸ polygon
     cir <- rbind(cbind(x.cir[(angle3+1):(181-angle1)], y.cir[(angle3+1):(181-angle1)]) ,
                  cbind(0.8*x.cir[(181-angle1):(angle3+1)], 0.8*y.cir[(181-angle1):(angle3+1)]),
                  col="blue")
     polygon(cir,col="blue", border="white")
     
-    #¼¼¹øÂ° polygon
+    #ì„¸ë²ˆì§¸ polygon
     cir <- rbind(cbind(x.cir[1:(angle3+1)], y.cir[1:(angle3+1)]) ,
                  cbind(0.8*x.cir[(angle3+1):1], 0.8*y.cir[(angle3+1):1]),
                  col="red")
@@ -99,16 +99,16 @@ dash_t <- function(x, angle1, angle3, title) {
     
     for (i in 0:36) segments(0,0,cos(i*pi/36),sin(i*pi/36),col="white")
     
-    arrows(0,0.1,0.75*cos(pi-x*pi),0.75*sin(pi-x*pi),lwd=3,length=0.2)  # È­»ìÇ¥
-    text(0,0.1,"o",cex=3)  # °¡¿îµ¥ µ¿±×¶ó¹Ì
+    arrows(0,0.1,0.75*cos(pi-x*pi),0.75*sin(pi-x*pi),lwd=3,length=0.2)  # í™”ì‚´í‘œ
+    text(0,0.1,"o",cex=3)  # ê°€ìš´ë° ë™ê·¸ë¼ë¯¸
     title(title)
 }
 
 empNames <- sales$name
 
 windows(height=4, width=6)
-# par(mfrow=) : ÇÑ À©µµ¿ì¿¡ ¿©·¯ °³ÀÇ plot ±×¸®±â
-# oma : °¢ plot°£ÀÇ ÁÂ,¿ì,»ó,ÇÏ °£°İ.
+# par(mfrow=) : í•œ ìœˆë„ìš°ì— ì—¬ëŸ¬ ê°œì˜ plot ê·¸ë¦¬ê¸°
+# oma : ê° plotê°„ì˜ ì¢Œ,ìš°,ìƒ,í•˜ ê°„ê²©.
 par(mfrow=c(3,3), oma=c(3,3,3,3), mar=c(1,1,1,2))
 
 for (i in 1:nrow(sales)) {
@@ -122,11 +122,11 @@ savePlot("22_dashboard.png", type="png")
 #----------------------------------------------------------------------------
 # barplot / achievement
 #----------------------------------------------------------------------------
-# ÀüÃ¼ ³ôÀÌ 1 ±âÁØ ´Ş¼º·ü Ç¥½Ã Â÷Æ®
+# ì „ì²´ ë†’ì´ 1 ê¸°ì¤€ ë‹¬ì„±ë¥  í‘œì‹œ ì°¨íŠ¸
 
 a <- read.csv("data/emp_monthly_score_1.csv", header=T, stringsAsFactors=FALSE, sep=",")
 
-# ´Ş¼º·ü:¹Ì´Ş¼º·ü (0.9:0.1)
+# ë‹¬ì„±ë¥ :ë¯¸ë‹¬ì„±ë¥  (0.9:0.1)
 x <- matrix(c(a[1,5], 1-a[1,5],
               a[2,5], 1-a[2,5], 
               a[3,5], 1-a[3,5],
@@ -137,7 +137,7 @@ x <- matrix(c(a[1,5], 1-a[1,5],
 
 empNames <- a$name
 bp <- barplot(x, names=empNames, col=c("blue","red"), main="achievement rate (Jan)")
-abline(h=seq(0.05,0.95,0.05), col="white", lwd=2) # 0.5 ´ÜÀ§ ±¸ºĞ¼±
+abline(h=seq(0.05,0.95,0.05), col="white", lwd=2) # 0.5 ë‹¨ìœ„ êµ¬ë¶„ì„ 
 text(x=bp, y=a$ratio*0.95, labels =paste(a$ratio*100,"%"), col = "yellow", cex = 1.2)
 
 savePlot("23_bar_achievement.png", type="png")

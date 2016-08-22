@@ -1,15 +1,17 @@
 
-windows(800, 600, pointsize = 12)   # º°µµÀÇ À©µµ¿ì ¿­±â
-savePlot("aa.png", type="png")      # °á°ú¹°À» ±×¸²À¸·Î ÀúÀå
-dev.off()                           # À©µµ¿ì ´İ±â
+windows(800, 600, pointsize = 12)   # ë³„ë„ì˜ ìœˆë„ìš° ì—´ê¸°
+savePlot("aa.png", type="png")      # ê²°ê³¼ë¬¼ì„ ê·¸ë¦¼ìœ¼ë¡œ ì €ì¥
+dev.off()                           # ìœˆë„ìš° ë‹«ê¸°
 
-install.packages("readxl")
+install.packages("treemap")
 
 colors()   # color name list
 
+par(family="NanumGothic")   # Mac Plot í•œê¸€ í‘œì‹œ
+
 
 ##################################
-# sapply / tapply ¸¦ ÅëÇÑ °£´ÜÇÑ È¸±ÍºĞ¼®
+# sapply / tapply ë¥¼ í†µí•œ ê°„ë‹¨í•œ íšŒê·€ë¶„ì„
 
 # cors <- sapply(dataframe, cor, y = targetVariables)
 # mask <- (rank(-abs(cors)) <= 10)
@@ -17,7 +19,7 @@ colors()   # color name list
 # lm(targetVariables ~ bestprediction)
 
 
-# Æ¯Á¤ ÄÃ·³À» ±âÁØÀ¸·Î È¸±ÍºĞ¼®À» ÇÑ²¨¹ø¿¡ ÁøÇà.
+# íŠ¹ì • ì»¬ëŸ¼ì„ ê¸°ì¤€ìœ¼ë¡œ íšŒê·€ë¶„ì„ì„ í•œêº¼ë²ˆì— ì§„í–‰.
 library(MASS)
 attach(Cars93)
 head(Cars93)
@@ -25,13 +27,13 @@ head(Cars93)
 tapply(Weight, Origin, mean)
 tapply(Weight, Origin, length)
 
-# Origin ±âÁØÀ¸·Î 
+# Origin ê¸°ì¤€ìœ¼ë¡œ 
 model <- by(Cars93, Origin, function(df) lm(MPG.highway ~ Weight + EngineSize + Horsepower, data = df))
 model
 summary(model$USA)
 summary(model$`non-USA`)
 
-# Type ±âÁØÀ¸·Î
+# Type ê¸°ì¤€ìœ¼ë¡œ
 model <- by(Cars93, Type, function(df) lm(MPG.city ~ Weight + EngineSize + Horsepower, data = df))
 model
 summary(model$Small)

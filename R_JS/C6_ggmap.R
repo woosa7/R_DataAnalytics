@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Áöµµ µ¥ÀÌÅÍ È°¿ëÇÏ±â (google map)
+# ì§€ë„ ë°ì´í„° í™œìš©í•˜ê¸° (google map)
 #----------------------------------------------------------------------------
 
 require(ggmap)
@@ -8,10 +8,10 @@ require(ggmap)
 locData <- read.csv("data/library_blind_seoul.csv", header=T, encoding = "UTF-8")
 head(locData)
 
-# ¼­¿ï Áöµµ °¡Á®¿À±â
+# ì„œìš¸ ì§€ë„ ê°€ì ¸ì˜¤ê¸°
 kor <- get_map("seoul", zoom=11, maptype = "roadmap")
-# geom_point = x y ÁÂÇ¥ : À§µµ °æµµ / size : Ç¥½ÃÁ¡ Å©±â
-# geom_text = ¶óº§ Ç¥½Ã
+# geom_point = x y ì¢Œí‘œ : ìœ„ë„ ê²½ë„ / size : í‘œì‹œì  í¬ê¸°
+# geom_text = ë¼ë²¨ í‘œì‹œ
 kor.map <- ggmap(kor) + geom_point(data=locData, aes(x=LON, y=LAT), size=7, alpha=0.7)
 kor.map + geom_text(data=locData, aes(x = LON, y = LAT+0.01, label=libCode), size=3)
 
@@ -22,7 +22,7 @@ ggsave("24_ggmap_library.png", dpi=1000)
 popData <- read.csv("data/population_201404.csv", header=T, encoding = "UTF-8")
 popData
 
-population <- round(popData$poeple/10000)  # ÀÎ±¸¼ö(¸¸¸í)
+population <- round(popData$poeple/10000)  # ì¸êµ¬ìˆ˜(ë§Œëª…)
 
 df <- data.frame(popData$LON, popData$LAT, population)
 df
@@ -35,7 +35,7 @@ map1 + geom_point(aes(x=popData$LON, y=popData$LAT, colour=population, size=popu
 ggsave("24_ggmap_population.png", scale=1, width=7, height=4, dpi=1000)
 
 
-# ¹öºí ¸ğ¾ç º¯°æ
+# ë²„ë¸” ëª¨ì–‘ ë³€ê²½
 map2 <- ggmap( get_map("Jeonju", zoom=7, maptype='roadmap') )
 map2 + stat_bin2d(aes(x=popData$LON, y=popData$LAT, colour=population, fill=factor(population), size=population), data=df)
 
@@ -49,7 +49,7 @@ location
 kor <- get_map("Hallasan", zoom=10, maptype = "roadmap")
 kor.map <- ggmap(kor) + geom_point(data=location, aes(x=LON, y=LAT), size=3, alpha=0.7, col="red")
 
-# geom_path : °æ·Î Ç¥½Ã.
+# geom_path : ê²½ë¡œ í‘œì‹œ.
 kor.map + geom_path(data=location, aes(x=LON, y=LAT), size=1, linetype=2, col="green") +
     geom_text(data=location, aes(x=LON, y=LAT+0.005, label=point), size=2)
 
@@ -65,16 +65,16 @@ ggsave("24_ggmap_jeju_tour_path.png", dpi=700)
 require(googleVis)
 
 #----------------------------------------------------------------------------
-Fruits      # ³»Àå ¿¬½À¿ë µ¥ÀÌÅÍ
+Fruits      # ë‚´ì¥ ì—°ìŠµìš© ë°ì´í„°
 
-# °¢ °úÀÏº° ¿¬µµº° ÆÇ¸Å·®
+# ê° ê³¼ì¼ë³„ ì—°ë„ë³„ íŒë§¤ëŸ‰
 fchart <- gvisMotionChart(Fruits, idvar = "Fruit", timevar = "Year")
-plot(fchart)     # ÀÚµ¿À¸·Î À¥ºê¶ó¿ìÀú ½ÇÇàµÊ
+plot(fchart)     # ìë™ìœ¼ë¡œ ì›¹ë¸Œë¼ìš°ì € ì‹¤í–‰ë¨
 
 
 
 #----------------------------------------------------------------------------
-# ½Ã°£´ëº° 1-4È£¼± ½ÂÇÏÂ÷ ½Â°´¼ö
+# ì‹œê°„ëŒ€ë³„ 1-4í˜¸ì„  ìŠ¹í•˜ì°¨ ìŠ¹ê°ìˆ˜
 
 pdata <- read.csv("data/line_1_4_passengers.csv", header = T, sep = ",")
 head(pdata)

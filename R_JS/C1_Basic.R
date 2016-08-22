@@ -1,5 +1,5 @@
 #-----------------------------------------------------------
-# ±âÃÊ ¹®¹ı
+# ê¸°ì´ˆ ë¬¸ë²•
 #-----------------------------------------------------------
 
 #-----------------------------------------------------------
@@ -10,18 +10,18 @@ sum(a)
 sum(a, na.rm = T)
 
 # NA : Not Available. logical type.
-# NaN : Not a Number Á¤ÀÇµÇÁö ¾ÊÀº ¼ıÀÚ. double type.
+# NaN : Not a Number ì •ì˜ë˜ì§€ ì•Šì€ ìˆ«ì. double type.
 
 is.na(NA)                       # TRUE
 is.na(NaN)                      # TRUE
-is.na(c("NA", NA, NaN))         # FALSE TRUE FALSE / Ã³À½°ª ¶§¹®¿¡ NaNÀÌ ¹®ÀÚÇüÀ¸·Î Çüº¯È¯.
+is.na(c("NA", NA, NaN))         # FALSE TRUE FALSE / ì²˜ìŒê°’ ë•Œë¬¸ì— NaNì´ ë¬¸ìí˜•ìœ¼ë¡œ í˜•ë³€í™˜.
 is.na(c(NaN, NA))               # TRUE TRUE
 
 
 #-----------------------------------------------------------
-# factor : ¹®ÀÚ --> ¼ıÀÚ. ±×·¡ÇÁ ¶Ç´Â Åë°èÃ³¸®¿¡ À¯¸®.
+# factor : ë¬¸ì --> ìˆ«ì. ê·¸ë˜í”„ ë˜ëŠ” í†µê³„ì²˜ë¦¬ì— ìœ ë¦¬.
 
-a <- c("¼­¿ï","ºÎ»ê","Á¦ÁÖ","Á¦ÁÖ","¼­¿ï","´ëÀü","ºÎ»ê","¼­¿ï")
+a <- c("ì„œìš¸","ë¶€ì‚°","ì œì£¼","ì œì£¼","ì„œìš¸","ëŒ€ì „","ë¶€ì‚°","ì„œìš¸")
 fa <- factor(a)
 fa
 mode(fa)
@@ -46,7 +46,7 @@ as.Date(-30, "2016-05-01")
 
 
 #-----------------------------------------------------------
-# ³»Àå ÇÔ¼ö
+# ë‚´ì¥ í•¨ìˆ˜
 
 ceiling(1.6)
 floor(1.6)
@@ -58,14 +58,14 @@ x <- c(1:10)
 max(x)
 min(x)
 length(x)
-mean(x)          # Æò±Õ
-median(x)        # Áß¾Ó°ª
-sd(x)            # Ç¥ÁØÆíÂ÷
+mean(x)          # í‰ê· 
+median(x)        # ì¤‘ì•™ê°’
+sd(x)            # í‘œì¤€í¸ì°¨
 rev(x)
 
 
 #-----------------------------------------------------------
-# ÁıÇÕ ¿¬»ê
+# ì§‘í•© ì—°ì‚°
 
 a <- c(1,2,3)
 b <- c(2,3,4)
@@ -81,27 +81,27 @@ intersect(a,b)
 #-----------------------------------------------------------
 # Vector
 
-# vectorÀÇ datatypeÀº ¸ğµÎ µ¿ÀÏÇØ¾ß ÇÑ´Ù.
-# ´Ù¸¦ °æ¿ì ÀÚµ¿À¸·Î ÇÏ³ªÀÇ µ¥ÀÌÅÍÅ¸ÀÔÀ¸·Î Ã³¸®µÊ.
+# vectorì˜ datatypeì€ ëª¨ë‘ ë™ì¼í•´ì•¼ í•œë‹¤.
+# ë‹¤ë¥¼ ê²½ìš° ìë™ìœ¼ë¡œ í•˜ë‚˜ì˜ ë°ì´í„°íƒ€ì…ìœ¼ë¡œ ì²˜ë¦¬ë¨.
 a <- c(1, 2, "3")         
 a
 
-names(a) <- c("x1", "x2", "x3")   # vector °¢ ÄÃ·³¿¡ ÀÌ¸§ ÁöÁ¤ °¡´É
+names(a) <- c("x1", "x2", "x3")   # vector ê° ì»¬ëŸ¼ì— ì´ë¦„ ì§€ì • ê°€ëŠ¥
 a
 a["x1"]
 
 length(a)
-nrow(a)        # Çà·Ä¿¡¸¸ »ç¿ëµÇ´Â ÇÔ¼ö
+nrow(a)        # í–‰ë ¬ì—ë§Œ ì‚¬ìš©ë˜ëŠ” í•¨ìˆ˜
 NROW(a)
 
 seq(1, 10)
 seq(5, -5)
-seq(-5, 5, 2)   # 2¾¿ Áõ°¡
+seq(-5, 5, 2)   # 2ì”© ì¦ê°€
 
-rep(1:5, 2)         # ¹İº¹
-rep(1:5, 2, each=2) # ¿¬¼ÓÇØ¼­ ¹İº¹
+rep(1:5, 2)         # ë°˜ë³µ
+rep(1:5, 2, each=2) # ì—°ì†í•´ì„œ ë°˜ë³µ
 
-1 %in% a       # vector¿¡ Æ¯Á¤ ¹®ÀÚ Æ÷ÇÔ ¿©ºÎ
+1 %in% a       # vectorì— íŠ¹ì • ë¬¸ì í¬í•¨ ì—¬ë¶€
 
 # vector indexing
 a <- c(1,2,3,4,5,6)
@@ -111,19 +111,19 @@ a[-length(a)]
 
 
 #-----------------------------------------------------------
-# Çà·Ä matrix
+# í–‰ë ¬ matrix
 
 x <- matrix(c(1,2,3,4))
 x <- matrix(c(1,2,3,4), nrow=2)
 x <- matrix(c(1,2,3,4), nrow=2, byrow = T)
 x
 
-x[1,]      # Çà °ªµé °¡Á®¿À±â
-x[,1]      # ¿­ °ªµé °¡Á®¿À±â
+x[1,]      # í–‰ ê°’ë“¤ ê°€ì ¸ì˜¤ê¸°
+x[,1]      # ì—´ ê°’ë“¤ ê°€ì ¸ì˜¤ê¸°
 
 x <- matrix(c(1,2,3,4), nrow=2)
-x <- rbind(x, c(77, 88))       # Çà Ãß°¡
-x <- cbind(x, c(9, 8, 7))      # ¿­ Ãß°¡
+x <- rbind(x, c(77, 88))       # í–‰ ì¶”ê°€
+x <- cbind(x, c(9, 8, 7))      # ì—´ ì¶”ê°€
 x
 
 colnames(x) <- c("no1", "no2", "no3")
@@ -138,10 +138,10 @@ member
 member$name
 member[2:3]
 
-member$birth <- "1990-05-07"      # list¿¡ Ç×¸ñ Ãß°¡
-member$birth <- NULL              # list Ç×¸ñ »èÁ¦
+member$birth <- "1990-05-07"      # listì— í•­ëª© ì¶”ê°€
+member$birth <- NULL              # list í•­ëª© ì‚­ì œ
 
-length(member)                    # Ç×¸ñ °¹¼ö
+length(member)                    # í•­ëª© ê°¯ìˆ˜
 
 
 #-----------------------------------------------------------
@@ -149,7 +149,7 @@ length(member)                    # Ç×¸ñ °¹¼ö
 
 # Create Dataframe
 
-# 1. Á÷Á¢ »ı¼º
+# 1. ì§ì ‘ ìƒì„±
 
 no <- c(1:3)
 name <- c("xx", "yy", "zz")
@@ -183,7 +183,7 @@ fruitData <- read.table("data/fruits.txt", header = T, sep = "", nrows = 3)     
 # 4. from csv or Excel file
 
 cnames <- c("no", "name", "price1", "price2", "qty")
-df <- read.csv("data/fruits.csv", header = F, col.names = cnames)  # ÄÃ·³¸í ÁöÁ¤ÇØ¼­ import
+df <- read.csv("data/fruits.csv", header = F, col.names = cnames)  # ì»¬ëŸ¼ëª… ì§€ì •í•´ì„œ import
 df
 
 library("readxl")
@@ -199,7 +199,7 @@ write.xml(df, file="fruits.xml")
 
 
 #-----------------------------------------------------------
-# Dataframe ´Ù·ç±â
+# Dataframe ë‹¤ë£¨ê¸°
 
 df <- read_excel(path = "data/fruits.xlsx", sheet = "Sheet1", col_names = TRUE)
 df
@@ -223,13 +223,13 @@ rownames(df)
 sort(df$highprice)
 sort(df$highprice, decreasing = T)
 
-order(df$highprice)           # Á¤·ÄµÈ À§Ä¡ ÀÎµ¦½º ¸®ÅÏ
-rank(df$highprice)            # Á¤·ÄµÇÁö ¾ÊÀº À§Ä¡ ÀÎµ¦½º ¸®ÅÏ
+order(df$highprice)           # ì •ë ¬ëœ ìœ„ì¹˜ ì¸ë±ìŠ¤ ë¦¬í„´
+rank(df$highprice)            # ì •ë ¬ë˜ì§€ ì•Šì€ ìœ„ì¹˜ ì¸ë±ìŠ¤ ë¦¬í„´
 
 
 # split
 
-split(df, df$name)            # ÇØ´ç ÄÃ·³ ±âÁØÀ¸·Î ºĞÇÒ
+split(df, df$name)            # í•´ë‹¹ ì»¬ëŸ¼ ê¸°ì¤€ìœ¼ë¡œ ë¶„í• 
 split(df, df$no > 2)
 
 
@@ -238,12 +238,12 @@ split(df, df$no > 2)
 x <- data.frame( names=c("A", "B", "C"), address=c("Seoul", "Busan", "Tyokyo"))
 y <- data.frame( names=c("A", "B", "D"), telno=c("001", "003", "888"))
 
-merge(x, y)      # °øÅëÀûÀ¸·Î ÀÖ´Â µ¥ÀÌÅÍ¸¸ merge
+merge(x, y)      # ê³µí†µì ìœ¼ë¡œ ìˆëŠ” ë°ì´í„°ë§Œ merge
 merge(x, y, by = "names")
 merge(x, y, by = "names", all = T)
 
 
-# subset : dataframe ¿¡¼­ Á¶°Ç¿¡ ¸Â´Â µ¥ÀÌÅÍ¸¦¸¦ dataframeÀ¸·Î ÃßÃâ
+# subset : dataframe ì—ì„œ ì¡°ê±´ì— ë§ëŠ” ë°ì´í„°ë¥¼ë¥¼ dataframeìœ¼ë¡œ ì¶”ì¶œ
 
 subset(df, df$qty > 5)
 subset(df, highprice > 500)
@@ -260,7 +260,7 @@ subset(Cars93, select = c(Manufacturer, Model, Type, Price, Make),
        MPG.highway > median(MPG.highway) & Manufacturer == "Subaru")
 
 
-# Dataframe ³»¿ë ÀúÀå.
+# Dataframe ë‚´ìš© ì €ì¥.
 
 write.table(df, "data/save_fruits.txt", quote = F, append = F)     
 
@@ -269,9 +269,9 @@ write.table(df, "data/save_fruits.txt", quote = F, append = F)
 #-----------------------------------------------------------
 # apply, lapply, sapply, by, tapply, aggregate
 
-# apply     : °á°ú¸¦ vector·Î ¹İÈ¯ (1 Çà / 2 ¿­)
-# lapply    : °á°ú¸¦ list·Î ¹İÈ¯
-# sapply    : °á°ú¸¦ vector ¶Ç´Â matrix·Î ¹İÈ¯
+# apply     : ê²°ê³¼ë¥¼ vectorë¡œ ë°˜í™˜ (1 í–‰ / 2 ì—´)
+# lapply    : ê²°ê³¼ë¥¼ listë¡œ ë°˜í™˜
+# sapply    : ê²°ê³¼ë¥¼ vector ë˜ëŠ” matrixë¡œ ë°˜í™˜
 #-----------------------------------------------------------
 
 s1 <- c(91, 87, 95, 96, 89, 87, 86, 85, 92, 93)
@@ -308,7 +308,7 @@ data <- as.data.frame(score)
 data$name <- c("K", "L", "M")
 data
 
-apply(data, 1, mean)   # error : °¢ ¿­ÀÇ µ¥ÀÌÅÍÅ¸ÀÔÀÌ ´Ù¸§
+apply(data, 1, mean)   # error : ê° ì—´ì˜ ë°ì´í„°íƒ€ì…ì´ ë‹¤ë¦„
 
 df <- data[-11]
 df
@@ -334,7 +334,7 @@ aggregate(score ~ name, data = df2, mean)
 
 
 #-----------------------------------------------------------
-# ÀÔÃâ·Â
+# ì…ì¶œë ¥
 #-----------------------------------------------------------
 
 scan("data/fruits.txt", what = "")
@@ -346,71 +346,71 @@ read.table("data/fruits.txt", header = T)
 
 
 #-----------------------------------------------------------
-# ¹®ÀÚ¿­ Ã³¸® & Á¤±Ô½Ä
+# ë¬¸ìì—´ ì²˜ë¦¬ & ì •ê·œì‹
 #-----------------------------------------------------------
 
 paste("abc", "xyz")
 paste("abc", "xyz", sep = ":")
 
-substr("123456789", 3, 5)                  # ½ÃÀÛÀ§Ä¡, ³¡³ª´Â À§Ä¡
+substr("123456789", 3, 5)                  # ì‹œì‘ìœ„ì¹˜, ëë‚˜ëŠ” ìœ„ì¹˜
 substr("123456789", -2, 2)
 
 strsplit("2016-04-19", split = "-")
 
 d <- readLines("data/alert_log.txt")
-d <- gsub(" ", "_", d)                     # Æ¯Á¤ ¹®ÀÚ¿­ Ä¡È¯
+d <- gsub(" ", "_", d)                     # íŠ¹ì • ë¬¸ìì—´ ì¹˜í™˜
 length(d)
 
-c <- subset(d, nchar(d) > 100)             # nchar : ¹®ÀÚ¿­ ±æÀÌ
+c <- subset(d, nchar(d) > 100)             # nchar : ë¬¸ìì—´ ê¸¸ì´
 length(c)
 
 
-# Á¤±ÔÇ¥Çö½Ä
+# ì •ê·œí‘œí˜„ì‹
 
 regexpr("ORACLE", c)
 
-# \\d		¼ıÀÚ
-# \\D		¼ıÀÚ ¾Æ´Ñ °Í
+# \\d		ìˆ«ì
+# \\D		ìˆ«ì ì•„ë‹Œ ê²ƒ
 # 
-# \\s		°ø¹é
-# \\S		°ø¹é ¾Æ´Ñ °Í
+# \\s		ê³µë°±
+# \\S		ê³µë°± ì•„ë‹Œ ê²ƒ
 # 
 # \\t		Tab
 # \\n		new line (enter)
 # 
-# ^		    ½ÃÀÛ ±ÛÀÚ
-# $		    ¸¶Áö¸· ±ÛÀÚ
+# ^		    ì‹œì‘ ê¸€ì
+# $		    ë§ˆì§€ë§‰ ê¸€ì
 # 
-# [ab]		a ¶Ç´Â b
-# [^ab]		a¿Í b Á¦¿ÜÇÑ ¸ğµç ¹®ÀÚ
-# [0-9]		¸ğµç ¼ıÀÚ
-# [A-Z]		¿µ¾î ´ë¹®ÀÚ
-# [a-z]		¿µ¾î ¼Ò¹®ÀÚ
-# [A-z]		¸ğµç ¿µ¹®ÀÚ
+# [ab]		a ë˜ëŠ” b
+# [^ab]		aì™€ b ì œì™¸í•œ ëª¨ë“  ë¬¸ì
+# [0-9]		ëª¨ë“  ìˆ«ì
+# [A-Z]		ì˜ì–´ ëŒ€ë¬¸ì
+# [a-z]		ì˜ì–´ ì†Œë¬¸ì
+# [A-z]		ëª¨ë“  ì˜ë¬¸ì
 # 
-# i+	    i°¡ ÃÖ¼Ò 1È¸ ÀÌ»ó ³ª¿À´Â °æ¿ì
-# i*		i°¡ ÃÖ¼Ò 0È¸ ÀÌ»ó ³ª¿À´Â °æ¿ì
-# i?		i°¡ ÃÖ¼Ò 0È¸¿¡¼­ ÃÖ´ë 1È¸¸¸ ³ª¿À´Â °æ¿ì
-# i{n}		i°¡ ¿¬¼ÓÀûÀ¸·Î nÈ¸ ³ª¿À´Â °æ¿ì
-# i{n1,n2}	i°¡ n1¿¡¼­ n2È¸ ³ª¿À´Â °æ¿ì
-# i{n,}		i°¡ nÈ¸ ÀÌ»ó ³ª¿À´Â °æ¿ì
+# i+	    iê°€ ìµœì†Œ 1íšŒ ì´ìƒ ë‚˜ì˜¤ëŠ” ê²½ìš°
+# i*		iê°€ ìµœì†Œ 0íšŒ ì´ìƒ ë‚˜ì˜¤ëŠ” ê²½ìš°
+# i?		iê°€ ìµœì†Œ 0íšŒì—ì„œ ìµœëŒ€ 1íšŒë§Œ ë‚˜ì˜¤ëŠ” ê²½ìš°
+# i{n}		iê°€ ì—°ì†ì ìœ¼ë¡œ níšŒ ë‚˜ì˜¤ëŠ” ê²½ìš°
+# i{n1,n2}	iê°€ n1ì—ì„œ n2íšŒ ë‚˜ì˜¤ëŠ” ê²½ìš°
+# i{n,}		iê°€ níšŒ ì´ìƒ ë‚˜ì˜¤ëŠ” ê²½ìš°
 # 
-# [:alnum:]	¹®ÀÚ¿Í ¼ıÀÚ°¡ ³ª¿À´Â °æ¿ì
-# [:alpha:]	¹®ÀÚ
-# [:blank:]	°ø¹é
-# [:cntrl:]	Á¦¾î ¹®ÀÚ
+# [:alnum:]	ë¬¸ìì™€ ìˆ«ìê°€ ë‚˜ì˜¤ëŠ” ê²½ìš°
+# [:alpha:]	ë¬¸ì
+# [:blank:]	ê³µë°±
+# [:cntrl:]	ì œì–´ ë¬¸ì
 # [:digit:]	0 ~ 9
-# [:lower:]	¼Ò¹®ÀÚ
-# [:print:]	¼ıÀÚ, ¹®ÀÚ, Æ¯¼ö¹®ÀÚ, °ø¹é ¸ğµÎ
-# [:punct:]	Æ¯¼ö¹®ÀÚ
-# [:space:]	°ø¹é¹®ÀÚ
-# [:upper:]	´ë¹®ÀÚ
-# [:xdigit:]	16Áø¼ö
+# [:lower:]	ì†Œë¬¸ì
+# [:print:]	ìˆ«ì, ë¬¸ì, íŠ¹ìˆ˜ë¬¸ì, ê³µë°± ëª¨ë‘
+# [:punct:]	íŠ¹ìˆ˜ë¬¸ì
+# [:space:]	ê³µë°±ë¬¸ì
+# [:upper:]	ëŒ€ë¬¸ì
+# [:xdigit:]	16ì§„ìˆ˜
 
-grep("ORACLE", d)                # vector¿¡¼­ Æ¯Á¤ ÆĞÅÏÀ» Ã£¾Æ À§Ä¡ Ãâ·Â
-grep("ORACLE", d, value = T)     # °ª Ãâ·Â
+grep("ORACLE", d)                # vectorì—ì„œ íŠ¹ì • íŒ¨í„´ì„ ì°¾ì•„ ìœ„ì¹˜ ì¶œë ¥
+grep("ORACLE", d, value = T)     # ê°’ ì¶œë ¥
 
-grep("^Setting", d)              # ^ : Ã¹±ÛÀÚ
-grep("ing$", d)                  # $ : ¸¶Áö¸· ±ÛÀÚ
+grep("^Setting", d)              # ^ : ì²«ê¸€ì
+grep("ing$", d)                  # $ : ë§ˆì§€ë§‰ ê¸€ì
 grep("[7-9]", d)
 

@@ -5,7 +5,7 @@
 setwd("c:/R_Study/Capital_Bike_Share")
 
 #-------------------------------------------------------------------------
-# 1. csv ÆÄÀÏ ¸ñ·Ï
+# 1. csv íŒŒì¼ ëª©ë¡
 
 dummy <- dir()
 dummyCsv <- which(substr(dummy, nchar(dummy)-2, nchar(dummy)) == "csv")
@@ -14,7 +14,7 @@ loadlist
 
 
 #-------------------------------------------------------------------------
-# 2. csv ÆÄÀÏ ³»¿ëÀ» dataframe¿¡ ³Ö±â
+# 2. csv íŒŒì¼ ë‚´ìš©ì„ dataframeì— ë„£ê¸°
 
 for (i in seq_along(loadlist)) {
     assign(paste0("bikedata_",i), read.csv(loadlist[i], stringsAsFactors = F))
@@ -22,7 +22,7 @@ for (i in seq_along(loadlist)) {
 
 
 #-------------------------------------------------------------------------
-# 3. data ±¸Á¶ ºñ±³
+# 3. data êµ¬ì¡° ë¹„êµ
 
 for (i in 2:length(loadlist)) {
     boolEqual <- all.equal(names(get("bikedata_1")), names(get(paste0("bikedata_",i))))
@@ -44,9 +44,9 @@ totalCount
 
 
 #-------------------------------------------------------------------------
-# 4. °¢ dataframe ÄÃ·³ ¼ø¼­¿Í °¹¼ö¸¦ bikedata_1°ú µ¿ÀÏÇÏ°Ô ¸¸µé±â
+# 4. ê° dataframe ì»¬ëŸ¼ ìˆœì„œì™€ ê°¯ìˆ˜ë¥¼ bikedata_1ê³¼ ë™ì¼í•˜ê²Œ ë§Œë“¤ê¸°
 
-bikedata_13 <- bikedata_13[c(1,2,4,3,5,6,7)]    # 13 ~ 19 : End.date <-> Start.Station À§Ä¡ º¯°æ
+bikedata_13 <- bikedata_13[c(1,2,4,3,5,6,7)]    # 13 ~ 19 : End.date <-> Start.Station ìœ„ì¹˜ ë³€ê²½
 bikedata_14 <- bikedata_14[c(1,2,4,3,5,6,7)]        
 bikedata_15 <- bikedata_15[c(1,2,4,3,5,6,7)]
 bikedata_16 <- bikedata_16[c(1,2,4,3,5,6,7)]
@@ -54,7 +54,7 @@ bikedata_17 <- bikedata_17[c(1,2,4,3,5,6,7)]
 bikedata_18 <- bikedata_18[c(1,2,4,3,5,6,7)]
 bikedata_19 <- bikedata_19[c(1,2,4,3,5,6,7)]
 
-bikedata_20 <- bikedata_20[c(1,2,3,5,7,8,9)]    # 20 ~ 22 : Start.station.number & End.station.number ÄÃ·³ Á¦°Å
+bikedata_20 <- bikedata_20[c(1,2,3,5,7,8,9)]    # 20 ~ 22 : Start.station.number & End.station.number ì»¬ëŸ¼ ì œê±°
 bikedata_21 <- bikedata_21[c(1,2,3,5,7,8,9)]
 bikedata_22 <- bikedata_22[c(1,2,3,5,7,8,9)]
 
@@ -63,7 +63,7 @@ tail(bikedata_22)
 
 
 #-------------------------------------------------------------------------
-# 5. °¢ data ÄÃ·³¸í ÅëÀÏ
+# 5. ê° data ì»¬ëŸ¼ëª… í†µì¼
 
 commonColnames <- c("Duration", "Start.date", "End.date", "Start.station", "End.station", "Bike", "Member.Type")
 
@@ -95,12 +95,12 @@ tail(bikedata_22)
 
 
 #-------------------------------------------------------------------------
-# 6. ³¯Â¥ Æ÷¸Ë º¯°æ ÈÄ Duration °è»ê
+# 6. ë‚ ì§œ í¬ë§· ë³€ê²½ í›„ Duration ê³„ì‚°
 
 funcTransDateTime <- function(x) {
-    x$Start.date <- strptime(x$Start.date, format = "%m/%d/%Y %H:%M")       # ½ÃÀÛÀÏ½Ã
-    x$End.date   <- strptime(x$End.date, format = "%m/%d/%Y %H:%M")         # Á¾·áÀÏ½Ã
-    x$Duration   <- as.numeric(x$End.date - x$Start.date, unit = "mins")    # ÀÌ¿ë½Ã°£(ºĞ)
+    x$Start.date <- strptime(x$Start.date, format = "%m/%d/%Y %H:%M")       # ì‹œì‘ì¼ì‹œ
+    x$End.date   <- strptime(x$End.date, format = "%m/%d/%Y %H:%M")         # ì¢…ë£Œì¼ì‹œ
+    x$Duration   <- as.numeric(x$End.date - x$Start.date, unit = "mins")    # ì´ìš©ì‹œê°„(ë¶„)
     
     return(x)   
 }
@@ -127,18 +127,18 @@ bikedata_20 <- funcTransDateTime(bikedata_20)
 bikedata_21 <- funcTransDateTime(bikedata_21)
 bikedata_22 <- funcTransDateTime(bikedata_22)
 
-# bikedata_17 ³¯Â¥ Æ÷¸Ë ´Ù¸§
-bikedata_17$Start.date <- strptime(bikedata_17$Start.date, format = "%Y-%m-%d %H:%M")       # ½ÃÀÛÀÏ½Ã
-bikedata_17$End.date   <- strptime(bikedata_17$End.date, format = "%Y-%m-%d %H:%M")         # Á¾·áÀÏ½Ã
-bikedata_17$Duration   <- as.numeric(bikedata_17$End.date - bikedata_17$Start.date, unit = "mins")    # ÀÌ¿ë½Ã°£(ºĞ)
+# bikedata_17 ë‚ ì§œ í¬ë§· ë‹¤ë¦„
+bikedata_17$Start.date <- strptime(bikedata_17$Start.date, format = "%Y-%m-%d %H:%M")       # ì‹œì‘ì¼ì‹œ
+bikedata_17$End.date   <- strptime(bikedata_17$End.date, format = "%Y-%m-%d %H:%M")         # ì¢…ë£Œì¼ì‹œ
+bikedata_17$Duration   <- as.numeric(bikedata_17$End.date - bikedata_17$Start.date, unit = "mins")    # ì´ìš©ì‹œê°„(ë¶„)
 
 tail(bikedata_17)
 tail(bikedata_22)
 
 #-------------------------------------------------------------------------
-# 7. ³âµµ_ºĞ±â ÄÃ·³ ¸¸µé±â
+# 7. ë…„ë„_ë¶„ê¸° ì»¬ëŸ¼ ë§Œë“¤ê¸°
 
-# ÆÄÀÏ ÇÏ³ª°¡ ÇÑ ºĞ±âÀÌ¹Ç·Î Ã¹ row¸¸ Ã¼Å©
+# íŒŒì¼ í•˜ë‚˜ê°€ í•œ ë¶„ê¸°ì´ë¯€ë¡œ ì²« rowë§Œ ì²´í¬
 funcExtractQuarter <- function(x) {
     yearStr <- as.character( as.numeric(format(x[1,]$Start.date, '%Y')))
     
@@ -182,7 +182,7 @@ tail(bikedata_22)
 
 
 #-------------------------------------------------------------------------
-# 8. ´Ù½Ã ÀüÃ¼ dataframe ±¸Á¶ ºñ±³
+# 8. ë‹¤ì‹œ ì „ì²´ dataframe êµ¬ì¡° ë¹„êµ
 
 for (i in 2:22) {
     boolEqual <- all.equal(names(get("bikedata_1")), names(get(paste0("bikedata_",i))))
@@ -195,7 +195,7 @@ for (i in 2:22) {
 
 
 #-------------------------------------------------------------------------
-# 9. ÀüÃ¼ µ¥ÀÌÅÍ ÇÕÄ¡±â
+# 9. ì „ì²´ ë°ì´í„° í•©ì¹˜ê¸°
 
 bike_df <- rbind(bikedata_1,bikedata_2,bikedata_3,bikedata_4,bikedata_5,bikedata_6,bikedata_7,
                  bikedata_8,bikedata_9,bikedata_10,bikedata_11,bikedata_12,bikedata_13,bikedata_14,
@@ -208,21 +208,21 @@ bike_df$Member <- ifelse( bike_df$Member.Type == "Subscriber", "Registered",
 
 save(bike_df, file="BikeShareTotal.RData")
 
-rm(list=ls())                 # ¸Ş¸ğ¸®ÀÇ ¸ğµç °´Ã¼ »èÁ¦
+rm(list=ls())                 # ë©”ëª¨ë¦¬ì˜ ëª¨ë“  ê°ì²´ ì‚­ì œ
 
 
 #---------------------------------------------------------------------------------------------
-# 10. µ¥ÀÌÅÍ ºĞ¼®
+# 10. ë°ì´í„° ë¶„ì„
 
 load("BikeShareTotal.RData")
 head(bike_df)
 tail(bike_df)
 
 
-windows(8000, 6000, pointsize = 5)   # º°µµÀÇ À©µµ¿ì ¿­±â
+windows(8000, 6000, pointsize = 5)   # ë³„ë„ì˜ ìœˆë„ìš° ì—´ê¸°
 
 
-# 10-1. ºĞ±âº° »ç¿ë½Ã°£ (Line Chart)
+# 10-1. ë¶„ê¸°ë³„ ì‚¬ìš©ì‹œê°„ (Line Chart)
 
 Quarter_data <- aggregate(Duration ~ Quarter, data = bike_df, FUN = sum)
 labels <- Quarter_data$Quarter
@@ -235,7 +235,7 @@ axis(1, at=1:length(labels), lab=labels, las=2) # x
 axis(2, las=1)                                  # y
 
 
-# 10-2. ºĞ±âº° È¸¿øÅ¸ÀÔº° »ç¿ë½Ã°£ (Line Chart)
+# 10-2. ë¶„ê¸°ë³„ íšŒì›íƒ€ì…ë³„ ì‚¬ìš©ì‹œê°„ (Line Chart)
 
 df_Register <- bike_df[which(bike_df$Member == "Registered"),]
 head(df_Register)
@@ -263,9 +263,9 @@ colors <- c("red","blue")
 legend(5, 200000, c("Registered","Casual"), cex=0.8, col=colors, lty=1, lwd=3)
 
 
-# 10-3. È¸¿øÅ¸ÀÔº° ÀÌ¿ë½Ã°£ / ÀÌ¿ëÈ½¼ö ºñÀ²
+# 10-3. íšŒì›íƒ€ì…ë³„ ì´ìš©ì‹œê°„ / ì´ìš©íšŸìˆ˜ ë¹„ìœ¨
 
-# ÀÌ¿ë½Ã°£
+# ì´ìš©ì‹œê°„
 usageHour_R <- sum(df_Register$Duration) / 60
 usageHour_C <- sum(df_Casual$Duration) / 60
 data03 <- c(usageHour_R, usageHour_C)
@@ -278,8 +278,8 @@ pie(data03, init.angle = 90, col=c("red","green"), radius = 1, labels = f_labels
     main = "Usage (In = Count / Out = Hour )")
 
 
-# ÀÌ¿ëÈ½¼ö
-par(new = T)   # ±×·¡ÇÁ À§¿¡ ´Ù¸¥ ±×·¡ÇÁ¸¦ °ãÃÄ ±×¸°´Ù.
+# ì´ìš©íšŸìˆ˜
+par(new = T)   # ê·¸ë˜í”„ ìœ„ì— ë‹¤ë¥¸ ê·¸ë˜í”„ë¥¼ ê²¹ì³ ê·¸ë¦°ë‹¤.
 
 usageCount_R <- nrow(df_Register) / 10000
 usageCount_C <- nrow(df_Casual) / 10000

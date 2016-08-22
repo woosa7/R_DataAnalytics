@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------------
-# ¡§«¸ µ•¿Ã≈Õ ∫–ºÆ
+# Ï†ïÌòï Îç∞Ïù¥ÌÑ∞ Î∂ÑÏÑù
 #-------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------------
@@ -7,7 +7,7 @@
 #-------------------------------------------------------------------------------------
 
 #-----------------------------------------------
-# 1-1. ±π∞°∫∞ ∏È¿˚∞˙ ¿Œ±∏π–µµ ∫Ò±≥
+# 1-1. Íµ≠Í∞ÄÎ≥Ñ Î©¥Ï†ÅÍ≥º Ïù∏Íµ¨Î∞ÄÎèÑ ÎπÑÍµê
 
 d <- read.csv("data/nations_land_area.csv", sep=",")
 
@@ -20,7 +20,7 @@ d[order(d$Nation), ]
 d[order(d$LandArea, decreasing = T), ]  
 
 d$Nation
-# gsub(pattern = " ", replacement = "", x = d$Nation);          #∆Ø¡§ ∆–≈œ¿« πÆ¿⁄∏¶ ƒ°»Ø
+# gsub(pattern = " ", replacement = "", x = d$Nation);          #ÌäπÏ†ï Ìå®ÌÑ¥Ïùò Î¨∏ÏûêÎ•º ÏπòÌôò
 
 d$Group <- ifelse(d$LandArea > 500000, "Group_A", "Group_B");    # add new column 
 #d[d$PopDensity > 500, ]$PopDensity <- 500                      # change column value.
@@ -44,7 +44,7 @@ text(x = bp, y = data$PopDensity*0.9, labels = data$PopDensity, col = "red", cex
 
 
 #-----------------------------------------------
-# 1-2. ¥Î¡ﬂ±≥≈Î ºˆ¥‹∫∞ ¿ÃøÎ «ˆ»≤
+# 1-2. ÎåÄÏ§ëÍµêÌÜµ ÏàòÎã®Î≥Ñ Ïù¥Ïö© ÌòÑÌô©
 
 d <- read.csv("data/usage_public_transportation.csv",sep=",", stringsAsFactors = FALSE)
 
@@ -95,7 +95,7 @@ x <- head(f$y2011, 25)
 y <- head(f$y2012, 25)
 z <- head(f$y2013, 25)
 
-plot(x, xlab="", ylab="", ylim=c(0,250000), axes=FALSE, type="o", col="red", main="2»£º±ø™ ¿œ∆Ú±’ Ω¬∞¥ºˆ(∏Ì)")
+plot(x, xlab="", ylab="", ylim=c(0,250000), axes=FALSE, type="o", col="red", main="2Ìò∏ÏÑ†Ïó≠ ÏùºÌèâÍ∑† ÏäπÍ∞ùÏàò(Î™Ö)")
 axis(1, at=1:length(l), lab=l, las=2)
 axis(2, las=1)
 
@@ -105,7 +105,7 @@ lines(y, col="blue", type="o")
 lines(z, col="green", type="o")
 
 colors <- c("red","blue","green")
-legend(5, 220000, c("2011≥‚","2012≥‚","2013≥‚"), cex=0.8, col=colors, lty=1, lwd=2)   # π¸∑  ¿ßƒ°øÕ ªˆ
+legend(5, 220000, c("2011ÎÖÑ","2012ÎÖÑ","2013ÎÖÑ"), cex=0.8, col=colors, lty=1, lwd=2)   # Î≤îÎ°Ä ÏúÑÏπòÏôÄ ÏÉâ
 savePlot("17_line_gridline.png", type="png")
 
 
@@ -120,13 +120,13 @@ mode(gangnam)
 
 as.matrix(gangnam)
 
-barplot(as.matrix(gangnam)/1000, main="∞≠≥≤ø™ Ω√∞£¥Î∫∞ Ω¬«œ¬˜ «ˆ»≤",
-        ylab="¿Œø¯ºˆ(√µ∏Ì)", beside=TRUE, las=2, ylim=c(0,500))
+barplot(as.matrix(gangnam)/1000, main="Í∞ïÎÇ®Ïó≠ ÏãúÍ∞ÑÎåÄÎ≥Ñ ÏäπÌïòÏ∞® ÌòÑÌô©",
+        ylab="Ïù∏ÏõêÏàò(Ï≤úÎ™Ö)", beside=TRUE, las=2, ylim=c(0,500))
 
 #abline(h=seq(3,400,10), col="white", lwd=2)
 abline(h=c(50,100,150,200,250,300,350,400,450),lty=2)
 
-legend("topright", c("Ω¬¬˜","«œ¬˜"), cex=0.8, fill=c("black","white"))
+legend("topright", c("ÏäπÏ∞®","ÌïòÏ∞®"), cex=0.8, fill=c("black","white"))
 savePlot("18_bar_multi_grid.png", type="png")
 
 
@@ -141,10 +141,10 @@ f
 getIn <- (f$getIn/10000)
 getOut <- (f$getOut/10000)
 
-yrange <- range(0, getIn, getOut)     # √÷¿˙∞™∞˙ √÷∞Ì∞™ ªÁ¿Ã¿« π¸¿ß
+yrange <- range(0, getIn, getOut)     # ÏµúÏ†ÄÍ∞íÍ≥º ÏµúÍ≥†Í∞í ÏÇ¨Ïù¥Ïùò Î≤îÏúÑ
 yrange
 
-plot(getIn, xlab="", ylab="", ylim=yrange, axes=FALSE, type="o", col="red", main="2»£º± ø™∫∞ Ω¬«œ¬˜¿Œø¯(∏∏∏Ì)")
+plot(getIn, xlab="", ylab="", ylim=yrange, axes=FALSE, type="o", col="red", main="2Ìò∏ÏÑ† Ïó≠Î≥Ñ ÏäπÌïòÏ∞®Ïù∏Ïõê(ÎßåÎ™Ö)")
 
 axis(1, at=1:50, lab=c(f$station), las=2)
 axis(2,las=1)
@@ -154,7 +154,7 @@ abline(h=c(50,100,150,200,250,300), v=c(5,10,15,20,25,30,35,40,45),lty=2)
 lines(getOut, col="blue", type="o")
 
 colors <- c("red","blue")
-legend(35,300,c("Ω¬¬˜","«œ¬˜"),cex=0.8,col=colors,lty=1,lwd=2)
+legend(35,300,c("ÏäπÏ∞®","ÌïòÏ∞®"),cex=0.8,col=colors,lty=1,lwd=2)
 
 
 
@@ -163,21 +163,21 @@ legend(35,300,c("Ω¬¬˜","«œ¬˜"),cex=0.8,col=colors,lty=1,lwd=2)
 
 noodle <- read.csv("data/inflation_ramyon_rate.csv", header=T, sep=",", fileEncoding="CP949")
 
-# ann : x, y √‡ ≈∏¿Ã∆≤ «•Ω√ ø©∫Œ
+# ann : x, y Ï∂ï ÌÉÄÏù¥ÌãÄ ÌëúÏãú Ïó¨Î∂Ä
 
-plot(noodle$≥‚µµ, noodle$¥©¿˚π∞∞°ªÛΩ¬¿≤, type="o", ylim=c(-3,1200), ann=FALSE, col="red", lwd=2)
-par(new=T)                          # ±◊∑°«¡∏¶ ∞„√ƒ ±◊∏∞¥Ÿ¥¬ ¿«πÃ
-plot(noodle$≥‚µµ, noodle$¥©¿˚ªÛΩ¬¿≤, type="o", ylim=c(-3,1200), axes=FALSE, ann=FALSE, col="blue", lwd=2)
+plot(noodle$ÎÖÑÎèÑ, noodle$ÎàÑÏ†ÅÎ¨ºÍ∞ÄÏÉÅÏäπÏú®, type="o", ylim=c(-3,1200), ann=FALSE, col="red", lwd=2)
+par(new=T)                          # Í∑∏ÎûòÌîÑÎ•º Í≤πÏ≥ê Í∑∏Î¶∞Îã§Îäî ÏùòÎØ∏
+plot(noodle$ÎÖÑÎèÑ, noodle$ÎàÑÏ†ÅÏÉÅÏäπÏú®, type="o", ylim=c(-3,1200), axes=FALSE, ann=FALSE, col="blue", lwd=2)
 
-title(main="π∞∞°ªÛΩ¬∑¸ π◊ ∂Û∏È∞™ ªÛΩ¬¿≤ ∫Ò±≥")
-title(xlab="≥‚µµ", col.lab="blue")
-title(ylab="¥©¿˚ªÛΩ¬¿≤(¥‹¿ß:%)", col.lab="red")
+title(main="Î¨ºÍ∞ÄÏÉÅÏäπÎ•† Î∞è ÎùºÎ©¥Í∞í ÏÉÅÏäπÏú® ÎπÑÍµê")
+title(xlab="ÎÖÑÎèÑ", col.lab="blue")
+title(ylab="ÎàÑÏ†ÅÏÉÅÏäπÏú®(Îã®ÏúÑ:%)", col.lab="red")
 
 abline(h=seq(50,1200,50), col="gray", lty=2, lwd=0.5)
 abline(v=seq(1980,2015,1), col="gray", lty=2, lwd=0.5)
 
 colors <- c("red","blue")
-legend(1982, 1150, c("π∞∞°ªÛΩ¬¿≤","∂Û∏È∞™ªÛΩ¬¿≤"), cex=0.8, col=colors, lty=1, lwd=2, fill="white", bg="white")
+legend(1982, 1150, c("Î¨ºÍ∞ÄÏÉÅÏäπÏú®","ÎùºÎ©¥Í∞íÏÉÅÏäπÏú®"), cex=0.8, col=colors, lty=1, lwd=2, fill="white", bg="white")
 
 savePlot("19_line_cummulate_grid.png", type="png")
 

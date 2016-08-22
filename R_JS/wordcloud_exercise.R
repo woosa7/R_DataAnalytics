@@ -4,45 +4,45 @@
 
 setwd("/Volumes/MacHDD/workspace/R_Study/R_JS")
 
-library(KoNLP)  # ¼³Ä¡µÈ ÆĞÅ°Áö¸¦ Loading ÇÕ´Ï´Ù.
+library(KoNLP)  # ì„¤ì¹˜ëœ íŒ¨í‚¤ì§€ë¥¼ Loading í•©ë‹ˆë‹¤.
 library(wordcloud)
 
-#Step 3. ºĞ¼®¿ë µ¥ÀÌÅÍ¸¦ º¯¼ö·Î ÀĞ¾î µéÀÔ´Ï´Ù.
+#Step 3. ë¶„ì„ìš© ë°ì´í„°ë¥¼ ë³€ìˆ˜ë¡œ ì½ì–´ ë“¤ì…ë‹ˆë‹¤.
 
-txt <- readLines("data/hong.txt") # txt ¶ó´Â º¯¼ö¿¡ ÇÑ ÁÙ ¾¿ ÀĞ¾î µéÀÔ´Ï´Ù.
+txt <- readLines("data/hong.txt") # txt ë¼ëŠ” ë³€ìˆ˜ì— í•œ ì¤„ ì”© ì½ì–´ ë“¤ì…ë‹ˆë‹¤.
 txt
 
-#Step 4. µ¥ÀÌÅÍ Áß¿¡¼­ ¸í»ç¸¸ °ñ¶ó³½ ÈÄ nouns º¯¼ö¿¡ ÇÒ´çÇÕ´Ï´Ù.
+#Step 4. ë°ì´í„° ì¤‘ì—ì„œ ëª…ì‚¬ë§Œ ê³¨ë¼ë‚¸ í›„ nouns ë³€ìˆ˜ì— í• ë‹¹í•©ë‹ˆë‹¤.
 
-txt <- gsub("Àú","",txt)  # Á¦°ÅÇÒ ±ÛÀÚ¸¦ ÁöÁ¤ÇÕ´Ï´Ù
-txt <- gsub("¼ö","",txt)
-txt <- gsub("µé","",txt)
-txt <- gsub("°Í","",txt)
+txt <- gsub("ì €","",txt)  # ì œê±°í•  ê¸€ìë¥¼ ì§€ì •í•©ë‹ˆë‹¤
+txt <- gsub("ìˆ˜","",txt)
+txt <- gsub("ë“¤","",txt)
+txt <- gsub("ê²ƒ","",txt)
 
 nouns <- sapply(txt,extractNoun,USE.NAMES=F)
 
-#Step 5. ÃßÃâµÈ ¸í»ç¸¦ »óÀ§ 30 °³¸¸ Ãâ·ÂÇØ¼­ È®ÀÎÇÕ´Ï´Ù.
+#Step 5. ì¶”ì¶œëœ ëª…ì‚¬ë¥¼ ìƒìœ„ 30 ê°œë§Œ ì¶œë ¥í•´ì„œ í™•ì¸í•©ë‹ˆë‹¤.
 
 head(unlist(nouns), 30)
 
-#Step 6. ÆÄÀÏ¿¡ ÀúÀåÇØ µÓ´Ï´Ù. 
+#Step 6. íŒŒì¼ì— ì €ì¥í•´ ë‘¡ë‹ˆë‹¤. 
 
 write(unlist(nouns),"hong_2.txt") 
 
-#Step 7. ¼öÁ¤ ¿Ï·áµÈ ÆÄÀÏÀ» ´Ù½Ã table Çü½ÄÀ¸·Î º¯È¯ÇØ¼­ º¯¼ö¿¡ ºÒ·¯µéÀÔ´Ï´Ù.
+#Step 7. ìˆ˜ì • ì™„ë£Œëœ íŒŒì¼ì„ ë‹¤ì‹œ table í˜•ì‹ìœ¼ë¡œ ë³€í™˜í•´ì„œ ë³€ìˆ˜ì— ë¶ˆëŸ¬ë“¤ì…ë‹ˆë‹¤.
 
 rev <- read.table("hong_2.txt")
 
-#Step 8. È­¸é¿¡ ±×·¡ÇÈÀ¸·Î Ãâ·ÂÇÏ±â Àü¿¡ text ÇüÅÂ·Î °á°ú¸¦ È®ÀÎÇØ º¾´Ï´Ù
+#Step 8. í™”ë©´ì— ê·¸ë˜í”½ìœ¼ë¡œ ì¶œë ¥í•˜ê¸° ì „ì— text í˜•íƒœë¡œ ê²°ê³¼ë¥¼ í™•ì¸í•´ ë´…ë‹ˆë‹¤
 
-nrow(rev) # rev º¯¼ö¿¡ ¸î°ÇÀÇ µ¥ÀÌÅÍ°¡ ÀÖ´ÂÁö È®ÀÎÇØ º¾´Ï´Ù
+nrow(rev) # rev ë³€ìˆ˜ì— ëª‡ê±´ì˜ ë°ì´í„°ê°€ ìˆëŠ”ì§€ í™•ì¸í•´ ë´…ë‹ˆë‹¤
 wordcount <- table(rev)
 head(sort(wordcount, decreasing=T),30)
 
-#Step 9. Word Cloud ÇüÅÂ·Î ±×·¡ÇÈÀ¸·Î Ãâ·ÂÇÕ´Ï´Ù
+#Step 9. Word Cloud í˜•íƒœë¡œ ê·¸ë˜í”½ìœ¼ë¡œ ì¶œë ¥í•©ë‹ˆë‹¤
 
-library(RColorBrewer) # È­¸é¿¡ Ãâ·ÂÇÒ ÄÃ·¯¸¦ »ç¿ëÇÒ ¶óÀÌºê·¯¸®¸¦ Loading ÇÕ´Ï´Ù.
-palete <- brewer.pal(9,"Set1") # ±ÛÀÚ »ö±òÀ» ÁöÁ¤ÇÕ´Ï´Ù.
+library(RColorBrewer) # í™”ë©´ì— ì¶œë ¥í•  ì»¬ëŸ¬ë¥¼ ì‚¬ìš©í•  ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ Loading í•©ë‹ˆë‹¤.
+palete <- brewer.pal(9,"Set1") # ê¸€ì ìƒ‰ê¹”ì„ ì§€ì •í•©ë‹ˆë‹¤.
 
 wordcloud(names(wordcount),freq=wordcount,scale=c(5,0.5),rot.per=0.25,min.freq=1,
           random.order=F,random.color=T,colors=palete)
