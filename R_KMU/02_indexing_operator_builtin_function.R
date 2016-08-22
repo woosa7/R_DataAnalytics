@@ -19,12 +19,12 @@ smpl_vector[9]
 smpl_vector[length(smpl_vector)]
 smpl_vector[3:length(smpl_vector)]
 smpl_vector[3:length(smpl_vector)-1]        # c(3,4,5,6,7,8,9,10) - 1 = c(2,3,4,5,6,7,8,9)
-smpl_vector[3:(length(smpl_vector)-1)]      # °ýÈ£ À§Ä¡ Áß¿ä. ´ë°ýÈ£ ¾ÈÀÇ ¼ýÀÚ´Â ÀÚ¸® ¹øÈ£ !!!
-smpl_vector[-length(smpl_vector)]           # - : ÇØ´ç À§Ä¡ °ª Á¦¿Ü
+smpl_vector[3:(length(smpl_vector)-1)]      # ê´„í˜¸ ìœ„ì¹˜ ì¤‘ìš”. ëŒ€ê´„í˜¸ ì•ˆì˜ ìˆ«ìžëŠ” ìžë¦¬ ë²ˆí˜¸ !!!
+smpl_vector[-length(smpl_vector)]           # - : í•´ë‹¹ ìœ„ì¹˜ ê°’ ì œì™¸
 
 nchar("Hello")
-nchar(smpl_vector)                          # ¹®ÀÚ¿­ ±æÀÌ
-smpl_vector[nchar(smpl_vector) >= 2]        # FFFFFTTTTT : True À§Ä¡ÀÇ °ªµé¸¸ ¸®ÅÏ
+nchar(smpl_vector)                          # ë¬¸ìžì—´ ê¸¸ì´
+smpl_vector[nchar(smpl_vector) >= 2]        # FFFFFTTTTT : True ìœ„ì¹˜ì˜ ê°’ë“¤ë§Œ ë¦¬í„´
 
 
 char_vector <- LETTERS
@@ -64,7 +64,7 @@ bool_vector <- c(TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, FALSE)
 mode(bool_vector)
 sum(bool_vector) # count the number of TRUEs
 
-str_vector[bool_vector]       # TRUE À§Ä¡ÀÇ °Í¸¸ Ãâ·Â
+str_vector[bool_vector]       # TRUE ìœ„ì¹˜ì˜ ê²ƒë§Œ ì¶œë ¥
 
 
 # ---------------------------------------------------------------
@@ -76,7 +76,7 @@ factorial(8)
 sample(1:8, 8, replace = F)
 
 
-# ´Ü¾îÀÇ ¼ø¼­ c(1,6,4,2,7,5,8,3)¸¦ Ã£´Â ½Ã°£ ÃøÁ¤
+# ë‹¨ì–´ì˜ ìˆœì„œ c(1,6,4,2,7,5,8,3)ë¥¼ ì°¾ëŠ” ì‹œê°„ ì¸¡ì •
 
 str_vector <- c("hello", "me", "?", "it", "looking", "is", "you", "for")
 
@@ -85,7 +85,7 @@ for (i in 1:100000) {
   set.seed(i)
   dummy_str <- str_vector[sample(1:8, 8, replace=F)]
   
-  # 8°³ÀÇ ÀÚ¸®°¡ ¸ðµÎ TrueÀÌ¸é sum() == 8
+  # 8ê°œì˜ ìžë¦¬ê°€ ëª¨ë‘ Trueì´ë©´ sum() == 8
   if (sum(dummy_str == str_vector[c(1,6,4,2,7,5,8,3)] ) == 8) {
     print(i)
     print(dummy_str)
@@ -166,7 +166,7 @@ plot(x, sigmoid)
 z <- exp(9^(1/5)) / (1+exp(9^(1/5)))
 z
 
-# ÆÄÀÏ¸®½ºÆ® Áß ³¡¿¡ "R" ÀÎ ÆÄÀÏ¸í¸¸ Ãâ·Â
+# íŒŒì¼ë¦¬ìŠ¤íŠ¸ ì¤‘ ëì— "R" ì¸ íŒŒì¼ëª…ë§Œ ì¶œë ¥
 getwd()
 setwd("/Volumes/MacHDD/workspace/R_Study/R_KMU")
 dirlist <- dir()
@@ -174,7 +174,7 @@ dirlist
 nchar(dirlist)
 
 dirlist[3]
-substr(dirlist[3], nchar(dirlist[3]), nchar(dirlist[3]))  # ½ÃÀÛÀ§Ä¡, ³¡À§Ä¡
+substr(dirlist[3], nchar(dirlist[3]), nchar(dirlist[3]))  # ì‹œìž‘ìœ„ì¹˜, ëìœ„ì¹˜
 
 endIndex <- substr(dirlist, nchar(dirlist), nchar(dirlist)) == "R"
 endIndex

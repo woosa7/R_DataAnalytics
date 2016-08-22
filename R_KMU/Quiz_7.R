@@ -4,7 +4,7 @@
 chocolate <- c(210, 105, 30)
 
 convertRGBtoNumber <- function(x) {
-  numbers <- x/255    # RGB »ö»óÀº 0~255ÀÇ °ªÀ» °¡Áö¹Ç·Î
+  numbers <- x/255    # RGB ìƒ‰ìƒì€ 0~255ì˜ ê°’ì„ ê°€ì§€ë¯€ë¡œ
   return(numbers)
 }
 
@@ -12,7 +12,7 @@ convertRGBtoNumber(chocolate)
 
 
 
-# 2. myMatrixÀÇ 3¿­À» º¤ÅÍ¿Í ¸ÅÆ®¸¯½º ÇüÅÂ 2°¡Áö·Î ÃßÃâ
+# 2. myMatrixì˜ 3ì—´ì„ ë²¡í„°ì™€ ë§¤íŠ¸ë¦­ìŠ¤ í˜•íƒœ 2ê°€ì§€ë¡œ ì¶”ì¶œ
 
 myMatrix <- matrix(1:20, nrow=4)
 myMatrix

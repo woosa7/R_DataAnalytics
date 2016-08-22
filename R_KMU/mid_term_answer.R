@@ -229,11 +229,11 @@ bike_data[dummy,]$end_date <- enddummy
 sum(is.na(bike_data$start_date))
 
 # weekday and month extraction--------------
-bike_data$mon <- strftime(bike_data$start_date, format="%b") #¿ù ¼ıÀÚ
+bike_data$mon <- strftime(bike_data$start_date, format="%b") #ì›” ìˆ«ì
 
-bike_data$wday <- strftime(bike_data$start_date, format="%a") # ¿äÀÏ¼ıÀÚ
+bike_data$wday <- strftime(bike_data$start_date, format="%a") # ìš”ì¼ìˆ«ì
 
-bike_data$year <- strftime(bike_data$start_date, format="%Y") #¿ù ¼ıÀÚ
+bike_data$year <- strftime(bike_data$start_date, format="%Y") #ì›” ìˆ«ì
 
 head(bike_data)
 
@@ -257,7 +257,7 @@ bike_data[,-c(2:3)] %>%
   group_by(year, wday) %>%
   summarize(N=n())
 
-bike_data$wday <- factor(bike_data$wday, levels=c("¿ù","È­","¼ö","¸ñ","±İ","Åä","ÀÏ"), ordered=T) #¿ù ¼ıÀÚ
+bike_data$wday <- factor(bike_data$wday, levels=c("ì›”","í™”","ìˆ˜","ëª©","ê¸ˆ","í† ","ì¼"), ordered=T) # ìš”ì¼
 
 bike_data[,-c(2:3)] %>%
   group_by(year, wday) %>%
@@ -313,7 +313,7 @@ bike_eda1 <- bike_data[,-c(2,3)] %>%
 str(bike_eda1)
 
 # apply factor to wday for easy reading
-bike_eda1$wday <- factor(bike_eda1$wday, levels=c("¿ù","È­","¼ö","¸ñ","±İ","Åä","ÀÏ"), ordered=T)
+bike_eda1$wday <- factor(bike_eda1$wday, levels=c("ì›”","í™”","ìˆ˜","ëª©","ê¸ˆ","í† ","ì¼"), ordered=T)
 table(bike_eda1$wday)
 bike_eda1
 library(reshape2)
@@ -332,9 +332,9 @@ lines(as.numeric(bike_eda1_N[3,-1]), type="l", col="black")
 lines(as.numeric(bike_eda1_N[4,-1]), type="l", col="green")
 
 plot(as.numeric(bike_eda1_N[1,-1]), type="l", col="blue", ylim=c(0, max(bike_eda1_N[,-1])), 
-     xaxt="n", yaxt="n",xlab="", ylab="Number of bike riders", main="¿äÀÏº° Bike rider Trend by subs_type")
+     xaxt="n", yaxt="n",xlab="", ylab="Number of bike riders", main="ìš”ì¼ë³„ Bike rider Trend by subs_type")
 axis(1, at=1:7, labels=names(bike_eda1_N[-1]))
-axis(2, at=c(0,200000,400000,600000,800000,1000000), labels=c(0,"20¸¸","40¸¸","60¸¸","80¸¸","100¸¸"))
+axis(2, at=c(0,200000,400000,600000,800000,1000000), labels=c(0,"20ë§Œ","40ë§Œ","60ë§Œ","80ë§Œ","100ë§Œ"))
 lines(as.numeric(bike_eda1_N[2,-1]), type="l", col="red")
 lines(as.numeric(bike_eda1_N[3,-1]), type="l", col="black")
 lines(as.numeric(bike_eda1_N[4,-1]), type="l", col="green")

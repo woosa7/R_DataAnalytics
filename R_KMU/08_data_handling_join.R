@@ -172,12 +172,12 @@ bike_data$start_date <- strptime(bike_data$start_date, format="%m/%d/%Y %H:%M")
 sum(is.na(bike_data$start_date))
 bike_data$end_date <- strptime(bike_data$end_date, format="%m/%d/%Y %H:%M")
 
-bike_data$mon <- strftime(bike_data$start_date, format="%b") #¿ù ¼ıÀÚ
+bike_data$mon <- strftime(bike_data$start_date, format="%b") # ì›”
 
-bike_data$wday <- strftime(bike_data$start_date, format="%a") #¿ù ¼ıÀÚ
+bike_data$wday <- strftime(bike_data$start_date, format="%a") # ìš”ì¼
 
 
-bike_data$year <- strftime(bike_data$start_date, format="%Y") #¿ù ¼ıÀÚ
+bike_data$year <- strftime(bike_data$start_date, format="%Y") # ë…„ë„
 
 head(bike_data)
 bike_data$dummy <- 1
@@ -195,9 +195,9 @@ tapply(bike_data$dummy, bike_data$subs_type, sum)/sum(tapply(bike_data$dummy, bi
 ###############
 
 # Data Categorization / subset --- group_by / filter
-# º¯¼ö ¼±ÅÃ --- select
+# ë³€ìˆ˜ ì„ íƒ --- select
 # Data Sorting --- arrange
-# ¼öÄ¡°è»ê & ¿ä¾à --- summarize
+# ìˆ˜ì¹˜ê³„ì‚° & ìš”ì•½ --- summarize
 # Data Transformation --- 
 
 
@@ -207,7 +207,7 @@ bike_data[,-c(2:3)] %>%
 group_by(year, wday) %>%
 summarize(N=n())
 
-bike_data$wday <- factor(bike_data$wday, levels=c("¿ù","È­","¼ö","¸ñ","±İ","Åä","ÀÏ"), ordered=T) #¿ù ¼ıÀÚ
+bike_data$wday <- factor(bike_data$wday, levels=c("ì›”","í™”","ìˆ˜","ëª©","ê¸ˆ","í† ","ì¼"), ordered=T) #ì›” ìˆ«ì
 
 bike_data[,-c(2:3)] %>%
 group_by(year, wday) %>%

@@ -18,7 +18,7 @@ tail(Q1_16)
 Q1_16[300000,]
 
 
-# °¡Àå ¿À·£ ½Ã°£ ÀÌµ¿
+# ê°€ìž¥ ì˜¤ëžœ ì‹œê°„ ì´ë™
 x <- which.max(Q1_16$Duration..ms.)    
 Q1_16[x,]
 
@@ -45,7 +45,7 @@ Q1_16[Q1_16$Member.Type == "Registered",]
 write.csv(Q1_16[Q1_16$Member.Type == "Registered",], file = "registered_member.csv", row.names = F)
 
 
-# Áß¿ä.... !!!!!!!!
+# ì¤‘ìš”.... !!!!!!!!
 #------------------------------------------------------------
 aggregate(Duration..ms. ~ Member.Type, data=Q1_16, FUN=mean)
 
@@ -60,12 +60,12 @@ aggregate((Duration..ms./1000/60) ~ Member.Type, data=Q1_16, function(x) c(
 
 
 #------------------------------------------------------------
-# µ¥ÀÌÅÍ Á¤·Ä
+# ë°ì´í„° ì •ë ¬
 #------------------------------------------------------------
 
-# sort ¼ø¼­¸¦ ¹Ù²Þ
-# rank ¼øÀ§¸¦ ¹øÈ£·Î ÁöÁ¤ (1 ÃÖ»óÀ§)
-# order °¢ °ªÀÇ "À§Ä¡"¸¦ ¼øÀ§´ë·Î ¸®ÅÏ
+# sort ìˆœì„œë¥¼ ë°”ê¿ˆ
+# rank ìˆœìœ„ë¥¼ ë²ˆí˜¸ë¡œ ì§€ì • (1 ìµœìƒìœ„)
+# order ê° ê°’ì˜ "ìœ„ì¹˜"ë¥¼ ìˆœìœ„ëŒ€ë¡œ ë¦¬í„´
 
 sort(Q1_16$rideTime)
 sort(Q1_16$rideTime, decreasing = T)
@@ -85,7 +85,7 @@ order(age, decreasing = T)
 
 
 #------------------------------------------------------------
-# ³¯Â¥
+# ë‚ ì§œ
 #------------------------------------------------------------
 Q1_16 <- read.csv("data/2016-Q1-Trips-History-Data.csv", stringsAsFactor=F)
 head(Q1_16)
@@ -100,7 +100,7 @@ Q1_16$End.ptime <- strptime(Q1_16$End.date, format="%m/%d/%Y %H:%M")
 Q1_16$wday <- Q1_16$Start.ptime$wday
 
 Q1_16$wday <- factor(Q1_16$wday, 
-                     levels = c(1:6,0), labels = c("¿ù","È­","¼ö","¸ñ","±Ý","Åä","ÀÏ"), 
+                     levels = c(1:6,0), labels = c("ì›”","í™”","ìˆ˜","ëª©","ê¸ˆ","í† ","ì¼"), 
                      ordered = T)
 
 

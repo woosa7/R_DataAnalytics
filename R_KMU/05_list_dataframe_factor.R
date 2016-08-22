@@ -101,7 +101,7 @@ Sys.time() - start.time
 matrixdata
 
 
-# matrix¸¦ Çà/·ÄÀ» Àß ¸ÂÃç¼­ ÇÏ¸é dataframe º¸´Ù ºü¸£´Ù.
+# matrixë¥¼ í–‰/ë ¬ì„ ì˜ ë§ì¶°ì„œ í•˜ë©´ dataframe ë³´ë‹¤ ë¹ ë¥´ë‹¤.
 start.time <- Sys.time()
 N <- 9
 matrixdata <- matrix(rep(0,81), ncol=9) 

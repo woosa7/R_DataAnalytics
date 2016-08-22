@@ -1,9 +1,9 @@
 #-----------------------------------------------------------
 # apply, lapply, sapply, by, tapply, aggregate
 
-# apply     : °á°ú¸¦ vector·Î ¹İÈ¯ (1 Çà / 2 ¿­)
-# lapply    : °á°ú¸¦ list·Î ¹İÈ¯
-# sapply    : °á°ú¸¦ vector ¶Ç´Â matrix·Î ¹İÈ¯
+# apply     : ê²°ê³¼ë¥¼ vectorë¡œ ë°˜í™˜ (1 í–‰ / 2 ì—´)
+# lapply    : ê²°ê³¼ë¥¼ listë¡œ ë°˜í™˜
+# sapply    : ê²°ê³¼ë¥¼ vector ë˜ëŠ” matrixë¡œ ë°˜í™˜
 #-----------------------------------------------------------
 
 s1 <- c(91, 87, 95, 96, 89, 87, 86, 85, 92, 93)
@@ -40,7 +40,7 @@ data <- as.data.frame(score)
 data$name <- c("K", "L", "M")
 data
 
-apply(data, 1, mean)   # error : °¢ ¿­ÀÇ µ¥ÀÌÅÍÅ¸ÀÔÀÌ ´Ù¸§
+apply(data, 1, mean)   # error : ê° ì—´ì˜ ë°ì´í„°íƒ€ì…ì´ ë‹¤ë¦„
 
 df <- data[-11]
 df
@@ -66,11 +66,11 @@ aggregate(score ~ name, data = df2, mean)
 
 
 #------------------------------------------------------------
-# µ¥ÀÌÅÍ Á¤·Ä
+# ë°ì´í„° ì •ë ¬
 
-# sort ¼ø¼­¸¦ ¹Ù²Ş
-# rank ¼øÀ§¸¦ ¹øÈ£·Î ÁöÁ¤ (1 ÃÖ»óÀ§)
-# order °¢ °ªÀÇ "À§Ä¡"¸¦ ¼øÀ§´ë·Î ¸®ÅÏ
+# sort ìˆœì„œë¥¼ ë°”ê¿ˆ
+# rank ìˆœìœ„ë¥¼ ë²ˆí˜¸ë¡œ ì§€ì • (1 ìµœìƒìœ„)
+# order ê° ê°’ì˜ "ìœ„ì¹˜"ë¥¼ ìˆœìœ„ëŒ€ë¡œ ë¦¬í„´
 #------------------------------------------------------------
 
 mtcars
@@ -81,9 +81,9 @@ aggregate(mpg ~ cyl, data = mtcars, mean)
 
 mtcars[which(mtcars$cyl == 4), ]
 
-# Transmission (am) / Number of forward gears (gear) º° ¿¬ºñ Æò±ÕÀº?
+# Transmission (am) / Number of forward gears (gear) ë³„ ì—°ë¹„ í‰ê· ì€?
 
-# cyl == 4 ÀÎ °ÍµéÀ» mpg °¡ Å« °ÍºÎÅÍ Á¤·Ä
+# cyl == 4 ì¸ ê²ƒë“¤ì„ mpg ê°€ í° ê²ƒë¶€í„° ì •ë ¬
 selectCar <- mtcars[mtcars$cyl == 4, ]
 selectCar <- selectCar[order(selectCar$mpg, decreasing = T), ]
 selectCar
@@ -91,7 +91,7 @@ selectCar
 
 
 #------------------------------------------------------------
-# subset : dataframe ¿¡¼­ Á¶°Ç¿¡ ¸Â´Â µ¥ÀÌÅÍ¸¦¸¦ dataframeÀ¸·Î ÃßÃâ
+# subset : dataframe ì—ì„œ ì¡°ê±´ì— ë§ëŠ” ë°ì´í„°ë¥¼ë¥¼ dataframeìœ¼ë¡œ ì¶”ì¶œ
 #------------------------------------------------------------
 
 subset(mtcars, cyl == 4)
@@ -123,6 +123,6 @@ subset(Cars93, select = c(Manufacturer, Model, Type, Price, Make),
 #------------------------------------------------------------
 
 #------------------------------------------------------------
-# plot - R_JS Æú´õ ÂüÁ¶
+# plot - R_JS í´ë” ì°¸ì¡°
 #------------------------------------------------------------
 

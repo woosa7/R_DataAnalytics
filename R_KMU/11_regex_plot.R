@@ -6,7 +6,7 @@ myDirData
 
 #' 
 #' 
-#' Á¤±Ô Ç¥Çö½Ä (°£·«ÇÑ ¼Ò°³¿ë ½Ç½À)
+#' ì •ê·œ í‘œí˜„ì‹ (ê°„ëžµí•œ ì†Œê°œìš© ì‹¤ìŠµ)
 #' 
 #' 
 #' 
@@ -15,18 +15,18 @@ head(myDirData)
 str(myDirData)
 myDirData
 
-# ¸ÞÅ¸¹®ÀÚ : ^ (¹®ÀåÀÇ Ã¹±ÛÀÚ¸¦ ÀÇ¹ÌÇÔ)
+# ë©”íƒ€ë¬¸ìž : ^ (ë¬¸ìž¥ì˜ ì²«ê¸€ìžë¥¼ ì˜ë¯¸í•¨)
 grepIndex <- grep("^jan", x = myDirData)
 myDirData[grepIndex]
 length(myDirData[grepIndex])
 
-# ¸ÞÅ¸¹®ÀÚ : $ (¹®ÀåÀÇ ¸¶Áö¸·À» ÀÇ¹ÌÇÔ)
+# ë©”íƒ€ë¬¸ìž : $ (ë¬¸ìž¥ì˜ ë§ˆì§€ë§‰ì„ ì˜ë¯¸í•¨)
 grepIndex <- grep("pdf$", x = myDirData)
 myDirData[grepIndex]
 length(myDirData[grepIndex])
 
 
-# ¸ÞÅ¸¹®ÀÚ : ? (¼±Çà¹®ÀÚ ÆÐÅÏÀÌ 0°³ È¤Àº 1°³ ³ªÅ¸³³´Ï´Ù)
+# ë©”íƒ€ë¬¸ìž : ? (ì„ í–‰ë¬¸ìž íŒ¨í„´ì´ 0ê°œ í˜¹ì€ 1ê°œ ë‚˜íƒ€ë‚©ë‹ˆë‹¤)
 grepIndex <- grep("_?.png$", x = myDirData)
 myDirData[grepIndex]
 length(myDirData[grepIndex])
@@ -35,39 +35,39 @@ grepIndex <- grep("nd?.png$", x = myDirData)
 myDirData[grepIndex]
 length(myDirData[grepIndex])
 
-# ¸ÞÅ¸¹®ÀÚ : + (¼±Çà¹®ÀÚ ÆÐÅÏÀÌ 1°³ÀÌ»ó ³ªÅ¸³³´Ï´Ù)
+# ë©”íƒ€ë¬¸ìž : + (ì„ í–‰ë¬¸ìž íŒ¨í„´ì´ 1ê°œì´ìƒ ë‚˜íƒ€ë‚©ë‹ˆë‹¤)
 grepIndex <- grep("^jun[0-9a-zA-Z_]+.png$", x = myDirData)
 myDirData[grepIndex]
 length(myDirData[grepIndex])
 
-# ¸ÞÅ¸¹®ÀÚ : + (¼±Çà¹®ÀÚ ÆÐÅÏÀÌ 1°³ÀÌ»ó ³ªÅ¸³³´Ï´Ù)
-grepIndex <- grep("[°¡-ÆR]+\\.RData$", x = myDirData)
+# ë©”íƒ€ë¬¸ìž : + (ì„ í–‰ë¬¸ìž íŒ¨í„´ì´ 1ê°œì´ìƒ ë‚˜íƒ€ë‚©ë‹ˆë‹¤)
+grepIndex <- grep("[ê°€-íž£]+\\.RData$", x = myDirData)
 myDirData[grepIndex]
 length(myDirData[grepIndex])
 
-# ¸ÞÅ¸¹®ÀÚ + ¿Í * ÀÇ Â÷ÀÌ¸¦ ´À²¸º¸¼¼¿ä.  * : ÇÑ±ÛÀÌ ¾ø¾îµµ °Ë»öµÊ.
-grepIndex <- grep("[°¡-ÆR]*\\.RData$", x = myDirData)
+# ë©”íƒ€ë¬¸ìž + ì™€ * ì˜ ì°¨ì´ë¥¼ ëŠê»´ë³´ì„¸ìš”.  * : í•œê¸€ì´ ì—†ì–´ë„ ê²€ìƒ‰ë¨.
+grepIndex <- grep("[ê°€-íž£]*\\.RData$", x = myDirData)
 myDirData[grepIndex]
 length(myDirData[grepIndex])
 
 #'
 #'
-#' stringr ÆÐÅ°Áö¸¦ È°¿ë Á¤±Ô Ç¥Çö½Ä È°¿ë
-#' stringr ÆÐÅ°Áö´Â data º¤ÅÍ¸¦ Á¦ 1¾Æ±Ô¸ÕÆ®·Î ÁöÁ¤ÇÏ°í,
-#' Á¤±Ô Ç¥Çö½Ä ÆÐÅÏÀ» ³ªÁß¿¡ ÁöÁ¤ÇÑ´Ù.
-#' str_match() ÇÔ¼ö´Â ÆÐÅÏ¿¡ ¸Â´Â ¹®ÀÚ¿­À» Ã£¾Æ¼­ °ýÈ£·Î °¨½Ñ ºÎºÐÀ» ÃßÃâÇØÁØ´Ù.
+#' stringr íŒ¨í‚¤ì§€ë¥¼ í™œìš© ì •ê·œ í‘œí˜„ì‹ í™œìš©
+#' stringr íŒ¨í‚¤ì§€ëŠ” data ë²¡í„°ë¥¼ ì œ 1ì•„ê·œë¨¼íŠ¸ë¡œ ì§€ì •í•˜ê³ ,
+#' ì •ê·œ í‘œí˜„ì‹ íŒ¨í„´ì„ ë‚˜ì¤‘ì— ì§€ì •í•œë‹¤.
+#' str_match() í•¨ìˆ˜ëŠ” íŒ¨í„´ì— ë§žëŠ” ë¬¸ìžì—´ì„ ì°¾ì•„ì„œ ê´„í˜¸ë¡œ ê°ì‹¼ ë¶€ë¶„ì„ ì¶”ì¶œí•´ì¤€ë‹¤.
 #' 
 #' 
 
 
 library(stringr)
 
-# str_match : ÇØ´ç ¹®ÀÚ¿­À» ÃßÃâÇÔ
+# str_match : í•´ë‹¹ ë¬¸ìžì—´ì„ ì¶”ì¶œí•¨
 
 summary(myDirData)
 
-rmatch <- str_match(myDirData, "([°¡-ÆR]+)")
-rmatch2 <- str_match(myDirData, "([°¡-ÆR]+)")[,2]
+rmatch <- str_match(myDirData, "([ê°€-íž£]+)")
+rmatch2 <- str_match(myDirData, "([ê°€-íž£]+)")[,2]
 rlocate <- which(!is.na(rmatch2))
 rmatch[rlocate]
 
@@ -147,9 +147,9 @@ lines(as.numeric(bike_eda1_N[4,-1]), type="l", col="green")
 
 
 plot(as.numeric(bike_eda1_N[1,-1]), type="l", col="blue", ylim=c(0, max(bike_eda1_N[,-1])), 
-     xaxt="n", yaxt="n",xlab="", ylab="Number of bike riders", main="¿äÀÏº° Bike rider Trend by subs_type")
+     xaxt="n", yaxt="n",xlab="", ylab="Number of bike riders", main="ìš”ì¼ë³„ Bike rider Trend by subs_type")
 axis(1, at=1:7, labels=names(bike_eda1_N[-1]))
-axis(2, at=c(0,200000,400000,600000,800000,1000000), labels=c(0,"20¸¸","40¸¸","60¸¸","80¸¸","100¸¸"))
+axis(2, at=c(0,200000,400000,600000,800000,1000000), labels=c(0,"20ë§Œ","40ë§Œ","60ë§Œ","80ë§Œ","100ë§Œ"))
 lines(as.numeric(bike_eda1_N[2,-1]), type="l", col="red")
 lines(as.numeric(bike_eda1_N[3,-1]), type="l", col="black")
 lines(as.numeric(bike_eda1_N[4,-1]), type="l", col="green")

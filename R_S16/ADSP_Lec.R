@@ -456,6 +456,72 @@ dt[ , mean(survived), by = c("pclass", "sex")]
 
 
 
+#--------------------------------------------------------------
+# 데이터 가공
+#--------------------------------------------------------------
+
+#--------------------------------------------------------------
+# 변수의 중요도
+
+install.packages("klaR")
+library(klaR)
+
+data("B3")      # West German Business Cycles 1955-1994
+?B3
+
+head(B3)
+str(B3)
+
+# Wilks.lambda : 종속변수에 미치는 영향력에 따라 변수의 중요도를 정리 (작을수록 적합)
+
+greedy.wilks(PHASEN ~ ., data = B3, niveau = 0.1)
+
+    # 13개 변수 중에 8개 선택됨
+    # PHASEN ~ EWAJW + LSTKJW + ZINSK + CP91JW + IAU91JW + PBSPJW + ZINSLR + PCPJW
+
+
+
+#--------------------------------------------------------------
+# (연속형) 변수의 구간화
+
+# 한 변수를 기준으로 구간 분석
+
+data(iris)
+head(iris)
+
+iris2 <- iris[ , c(1,3,5)]
+head(iris2)
+
+plineplot(Species ~ ., data = iris2, method = "lda", x = iris[ , 4], xlab = "Petal.Width")
+plineplot(Species ~ ., data = iris, method = "lda", x = iris[ , 4], xlab = "Petal.Width")
+        # 0.6 / 1.8 지점에서 구간을 나누는 것이 좋다.
+
+
+# 모든 변수를 기준으로 구간 분석
+
+m <- NaiveBayes(Species ~ ., data = iris)
+plot(m)
+
+
+# 의사결정트리를 통해 구간 분석
+
+install.packages("party")
+library(party)
+
+m <- ctree(Species ~ ., data = iris)
+m
+plot(m)
+
+
+
+#--------------------------------------------------------------
+# 결측값 처리
+#--------------------------------------------------------------
+
+
+
+
+
 
 
 

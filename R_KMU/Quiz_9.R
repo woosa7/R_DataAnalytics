@@ -3,23 +3,23 @@ df <- smpl_lda_df
 head(df)
 str(df)
 
-# 1. È®·üÀÌ 0 º¸´Ù Å« ÅäÇÈÀÇ °¹¼ö ¸®ÅÏ
+# 1. í™•ë¥ ì´ 0 ë³´ë‹¤ í° í† í”½ì˜ ê°¯ìˆ˜ ë¦¬í„´
 fCountTopic <- function(x) {
-    tPositions <- which(x>0)          # È®·üÀÌ 0 ÀÌ»óÀÎ ÄÃ·³ÀÇ À§Ä¡
-    return( length(tPositions) )      # position °¹¼ö ¸®ÅÏ
+    tPositions <- which(x>0)          # í™•ë¥ ì´ 0 ì´ìƒì¸ ì»¬ëŸ¼ì˜ ìœ„ì¹˜
+    return( length(tPositions) )      # position ê°¯ìˆ˜ ë¦¬í„´
 }
 
 
-# 2. È®·üÀÌ 0 º¸´Ù Å« ÅäÇÈÀÇ ÅäÇÈ¸í ¸®ÅÏ
+# 2. í™•ë¥ ì´ 0 ë³´ë‹¤ í° í† í”½ì˜ í† í”½ëª… ë¦¬í„´
 fTopicNames <- function(x) {
-    tPositions <- which(x>0)                    # È®·üÀÌ 0 ÀÌ»óÀÎ ÄÃ·³ÀÇ À§Ä¡
-    tNames <- rownames(as.matrix(tPositions))   # ÇØ´ç postionÀÇ µ¥ÀÌÅÍ¸¦ matrix·Î º¯È¯ ÈÄ rowname(ÅäÇÈ¸í) È®ÀÎ
-    return( paste(tNames, collapse=" ") )       # ÅäÇÈ¸í ¿©·¯°³ÀÎ °æ¿ì ÇÕÄ¡±â
+    tPositions <- which(x>0)                    # í™•ë¥ ì´ 0 ì´ìƒì¸ ì»¬ëŸ¼ì˜ ìœ„ì¹˜
+    tNames <- rownames(as.matrix(tPositions))   # í•´ë‹¹ postionì˜ ë°ì´í„°ë¥¼ matrixë¡œ ë³€í™˜ í›„ rowname(í† í”½ëª…) í™•ì¸
+    return( paste(tNames, collapse=" ") )       # í† í”½ëª… ì—¬ëŸ¬ê°œì¸ ê²½ìš° í•©ì¹˜ê¸°
 }
 
 
-df$Ntopic <- apply(df[1:20], 1, fCountTopic) # ÅäÇÈ °¹¼ö ÀÏ°ý Àû¿ë
-df$Tname <- apply(df[1:20], 1, fTopicNames)  # ÅäÇÈ¸í ÀÏ°ý Àû¿ë
+df$Ntopic <- apply(df[1:20], 1, fCountTopic) # í† í”½ ê°¯ìˆ˜ ì¼ê´„ ì ìš©
+df$Tname <- apply(df[1:20], 1, fTopicNames)  # í† í”½ëª… ì¼ê´„ ì ìš©
 answer <- df[21:22]
 head(answer)
 

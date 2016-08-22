@@ -32,7 +32,7 @@ dcast(custAge, sex ~ ageGroup, value.var = "N", fun.aggregate = sum)
 
 #------------------------------------------------------------------
 
-### ±âº» EDA--------------
+### ê¸°ë³¸ EDA--------------
 
 #Who are top 10 in purchase amount?
 basket %>%
@@ -96,7 +96,7 @@ date_dum <- as.Date(basket$date_num, origin="1970-01-01")
 
 
 
-##RFMÀÇ ÀÇ¹Ì ÀÌÇØ ÇÊ¿ä
+##RFMì˜ ì˜ë¯¸ ì´í•´ í•„ìš”
 library(dplyr)
 
 rfm_dummy <- basket %>%
@@ -133,7 +133,7 @@ userRFM <- left_join(userRFM, userF)
 head(userRFM);tail(userRFM)
 
 
-##RFM¿¬½À ´Ù½Ã ½ÃÀÛ-------
+##RFMì—°ìŠµ ë‹¤ì‹œ ì‹œìž‘-------
 
 hist(userRFM$recency, breaks=10)
 
@@ -147,14 +147,14 @@ plot(table(userRFM$recency), main="Guests Recency")
 plot(table(userRFM$freq), main="Guests Frequency")
 
 
-# ºÐÀ§¼ö¸¦ µû·Î ±¸ÇÑ´Ù.
+# ë¶„ìœ„ìˆ˜ë¥¼ ë”°ë¡œ êµ¬í•œë‹¤.
 
 quantile(userRFM$monetary, c(0.2,0.4,0.6,0.8))
 
 quantile(as.numeric(userRFM$recency), c(0.2,0.4,0.6,0.8)) # be careful about as.numeric
 
 
-# RFMº°·Î »óÀ§ 20%°¡ Â÷ÁöÇÏ´Â ÃÑ ¸ÅÃâ¾× ´ëºñ ºñÁßÀ» ±¸ÇÑ´Ù.
+# RFMë³„ë¡œ ìƒìœ„ 20%ê°€ ì°¨ì§€í•˜ëŠ” ì´ ë§¤ì¶œì•¡ ëŒ€ë¹„ ë¹„ì¤‘ì„ êµ¬í•œë‹¤.
 
 sumM <- sum(userRFM$monetary[userRFM$monetary > quantile(userRFM$monetary, 0.8)])
 sumM/sum(userRFM$monetary) # 65%
@@ -173,7 +173,7 @@ sumR/sum(userRFM$monetary) # 42%
 (weightF <- sumF/(sumR + sumF + sumM))
 (weightM <- sumM/(sumR + sumF + sumM))
 
-# RFMÁö¼ö = weightR * Recency Á¡¼ö + weightF * FrequencyÁ¡¼ö + weightM * Monetary Á¡¼ö
+# RFMì§€ìˆ˜ = weightR * Recency ì ìˆ˜ + weightF * Frequencyì ìˆ˜ + weightM * Monetary ì ìˆ˜
 
 quantM <- quantile(userRFM$monetary,c(0,0.2,0.4,0.6,0.8,1))
 quantM
@@ -184,9 +184,9 @@ quantF
 
 
 
-# parse ÇÔ¼ö È°¿ë¹æ¹ý
+# parse í•¨ìˆ˜ í™œìš©ë°©ë²•
 columnName <- paste0("userRFM","$","frequency")
-eval(parse(text=columnName))[2] # ¹®ÀÚ¿­ Á¶ÇÕÀ¸·Î µ¥ÀÌÅÍÇÁ·¹ÀÓÀÇ ¿­À» Ã£´Â ¹æ¹ý
+eval(parse(text=columnName))[2] # ë¬¸ìžì—´ ì¡°í•©ìœ¼ë¡œ ë°ì´í„°í”„ë ˆìž„ì˜ ì—´ì„ ì°¾ëŠ” ë°©ë²•
 # ?parse
 
 

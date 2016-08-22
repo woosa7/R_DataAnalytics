@@ -6,7 +6,7 @@
 
 library(jpeg)
 
-# ÀÌ¹ÌÁö¸¦ array·Î º¯È¯
+# ì´ë¯¸ì§€ë¥¼ arrayë¡œ ë³€í™˜
 mtrushBMP <- readJPEG("data/mount-rushmore-national-memorial.jpg")
 
 str(mtrushBMP)
@@ -16,7 +16,7 @@ range(mtrushBMP[1, ,1])
 max(mtrushBMP)
 min(mtrushBMP)
 
-# row, column, Â÷¿ø
+# row, column, ì°¨ì›
 mtrushBMP[100:200,100:200,1] <- 1  # Red     1 = 255 (white)
 mtrushBMP[100:200,100:200,2] <- 1  # Green
 mtrushBMP[100:200,100:200,3] <- 1  # Blue
@@ -25,7 +25,7 @@ mtrushBMP[100:200,100:200,3] <- 1  # Blue
 writeJPEG(mtrushBMP, target="mtrushJPG.jpg")
 
 
-# 50¹øÂ° Çà¸¶´Ù Èò»ö °¡·ÎÁÙ ±ß±â
+# 50ë²ˆì§¸ í–‰ë§ˆë‹¤ í°ìƒ‰ ê°€ë¡œì¤„ ê¸‹ê¸°
 for (i in 1:dim(mtrushBMP)[1]) {
   if ( i %% 50 == 0) {
     mtrushBMP[i,,1] <- 1
@@ -37,7 +37,7 @@ for (i in 1:dim(mtrushBMP)[1]) {
 writeJPEG(mtrushBMP,target="mtrushJPG_x.jpg")
 
 
-# ¼¼·ÎÁÙ
+# ì„¸ë¡œì¤„
 for (y in 1:dim(mtrushBMP)[2]) {
   if ( y %% 50 == 0) {
     mtrushBMP[,y,1] <- 1

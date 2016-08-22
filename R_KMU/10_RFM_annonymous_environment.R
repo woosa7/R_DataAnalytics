@@ -79,7 +79,7 @@ sumR/sum(userRFM$monetary) # 42%
 (weightF <- sumF/(sumR + sumF + sumM))
 (weightM <- sumM/(sumR + sumF + sumM))
 
-# RFMÁö¼ö = weightR * Recency rating + weightF * Frequency rating + weightM * Monetary rating
+# RFMì§€ìˆ˜ = weightR * Recency rating + weightF * Frequency rating + weightM * Monetary rating
 
 quantM <- quantile(userRFM$monetary,c(0,0.2,0.4,0.6,0.8,1))
 quantM

@@ -16,7 +16,7 @@ simpleAvg(99, 88, 90)
 
 
 # default arguments
-showMoney <- function(kor, eng, math, pm, warn="´ÙÀ½±âÈ¸¿¡") {
+showMoney <- function(kor, eng, math, pm, warn="ë‹¤ìŒê¸°íšŒì—") {
     
     testAvg <- simpleAvg(kor, eng, math)
     
@@ -72,9 +72,9 @@ showMoneyWithWarning <- function(kor, eng, math, pm=10000, warn="please try hard
     return(pocketMoneyToBe)
 }
 
-showMoneyWithWarning(90, 80, 70, "this is your last chance.") # good. testAvg < 90 ÀÌ¹Ç·Î ¿¡·¯ ¹ß»ýÇÏÁö ¾ÊÀ½
+showMoneyWithWarning(90, 80, 70, "this is your last chance.") # good. testAvg < 90 ì´ë¯€ë¡œ ì—ëŸ¬ ë°œìƒí•˜ì§€ ì•ŠìŒ
 
-showMoneyWithWarning(90, 90, 90, "this is your last chance.") # error. pm °ªÀÌ ¾øÀ½
+showMoneyWithWarning(90, 90, 90, "this is your last chance.") # error. pm ê°’ì´ ì—†ìŒ
 
 showMoneyWithWarning(90, 90, 90, warn="this is your last chance.") # good
 
@@ -158,20 +158,20 @@ identical(x, z)
 identical(y, z)
 
 z
-append(z, 1000, after = 5)   # vector¿¡ data Ãß°¡
+append(z, 1000, after = 5)   # vectorì— data ì¶”ê°€
 
 
 # sequence & replicate ----------------------------------------------
 seq(1, 10, 2)                 # from, to, by
 seq(1, 10000, by = 5)
-seq(1, 10000, length.out = 100)  # length ¸¸Å­ ±Õµî ºÐÇÒ
+seq(1, 10000, length.out = 100)  # length ë§Œí¼ ê· ë“± ë¶„í• 
 
 rep(1:3, 3)
 rep(1:3, times=3)
 rep(1:3, times=3, each=2)
 
 # sample -----------------------------------------------------------
-sample(1:10, 10, replace=TRUE)           # Áßº¹ Çã¿ë
+sample(1:10, 10, replace=TRUE)           # ì¤‘ë³µ í—ˆìš©
 sample(1:10, 5, replace=FALSE)
 
 set.seed(1)
@@ -183,9 +183,9 @@ herVector <- sample(1:10, 5, replace=TRUE)
 myVector
 herVector
 
-setdiff(myVector, herVector)    # Â÷ÁýÇÕ
-intersect(myVector, herVector)  # ±³ÁýÇÕ
-union(myVector, herVector)      # ÇÕÁýÇÕ
+setdiff(myVector, herVector)    # ì°¨ì§‘í•©
+intersect(myVector, herVector)  # êµì§‘í•©
+union(myVector, herVector)      # í•©ì§‘í•©
 
 
 set.seed(123)

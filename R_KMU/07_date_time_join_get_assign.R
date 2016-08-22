@@ -11,7 +11,7 @@ thistime
 as.numeric(thistime)
 
 thistime$hour
-thistime$wday    # ¿äÀÏ
+thistime$wday    # ìš”ì¼
 
 
 # Time Intervals 1
@@ -43,13 +43,13 @@ difference      # 1 hour difference
 # assign / get
 ###########################
 
-# °è»êµÈ °á°ú¸¦ º¯¼ö¿¡ ³Ö´Â´Ù.
+# ê³„ì‚°ëœ ê²°ê³¼ë¥¼ ë³€ìˆ˜ì— ë„£ëŠ”ë‹¤.
 for (i in 1:10) {
   set.seed(i)
   assign(paste0("obj_",i), sample(1:10, 7, replace=F))
 }
 
-# º¯¼ö¿¡ ÀÖ´Â °á°ú°ªÀ» ÇÏ³ª·Î ÇÕÄ£´Ù.
+# ë³€ìˆ˜ì— ìˆëŠ” ê²°ê³¼ê°’ì„ í•˜ë‚˜ë¡œ í•©ì¹œë‹¤.
 objdf <- NULL
 for (i in 1:10) {
   objdf <- rbind(objdf, get(paste0("obj_",i)))
@@ -67,7 +67,7 @@ example(merge)
 example(match)
 
 #----------------------------------------------------
-# match : ¾Õ º¤ÅÍ ±âÁØÀ¸·Î µÚ º¤ÅÍ¿¡¼­ÀÇ ÀÎµ¦½º ¸®ÅÏ
+# match : ì• ë²¡í„° ê¸°ì¤€ìœ¼ë¡œ ë’¤ ë²¡í„°ì—ì„œì˜ ì¸ë±ìŠ¤ ë¦¬í„´
 #----------------------------------------------------
 
 match(c(255,11,22),c(255,11,33))
@@ -76,10 +76,10 @@ match(c(255,11,22),c(11,33,255))
 match(1:10, 7:20) # NA NA NA NA NA NA  1  2  3  4
 match(10:1, 7:20) # 4  3  2  1 NA NA NA NA NA NA
 
-match(1:10, 7:20, nomatch=0)       # NA´Â 0À¸·Î Ç¥±â
+match(1:10, 7:20, nomatch=0)       # NAëŠ” 0ìœ¼ë¡œ í‘œê¸°
 max(match(1:10, 7:20, nomatch=0))
 
-# match¸¦ »ç¿ëÇÑ ÇÔ¼ö »ı¼º. µÚÂÊ º¤ÅÍ¿¡¼­ ÀÏÄ¡ÇÏ´Â °ª¸¸ ¸®ÅÏ.
+# matchë¥¼ ì‚¬ìš©í•œ í•¨ìˆ˜ ìƒì„±. ë’¤ìª½ ë²¡í„°ì—ì„œ ì¼ì¹˜í•˜ëŠ” ê°’ë§Œ ë¦¬í„´.
 intersect <- function(x, y) y[match(x, y, nomatch = 0)]
 
 intersect(1:10, 7:20)
@@ -99,7 +99,7 @@ intersect_nomatch_asterisk(1:10, 7:20)
 
 
 #----------------------------------------------------
-# merge : ÀÌ¸§ÀÌ °°Àº ÄÃ·³À» ±âÁØÀ¸·Î join
+# merge : ì´ë¦„ì´ ê°™ì€ ì»¬ëŸ¼ì„ ê¸°ì¤€ìœ¼ë¡œ join
 #----------------------------------------------------
 
 df1 = data.frame(CustomerId = c(1:6), Product = c(rep("Toaster", 3), rep("Radio", 3)))
@@ -163,7 +163,7 @@ join(df2, df1, type="full")
 dummy <- dir("data/")
 dummy
 
-dumwhich <- which(substr(dummy, nchar(dummy)-2, nchar(dummy)) == "csv")   # csv ÆÄÀÏ Ã¼Å©
+dumwhich <- which(substr(dummy, nchar(dummy)-2, nchar(dummy)) == "csv")   # csv íŒŒì¼ ì²´í¬
 loadlist <- dummy[dumwhich]
 loadlist
 

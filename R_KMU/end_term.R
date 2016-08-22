@@ -1,5 +1,5 @@
-# ¿ì¸®³ª¶ó¸¦ ¹æ¹®ÇÑ ÇØ¿Ü °ü±¤°´ÀÇ ·Î¹ÖÅëÈ­ log µ¥ÀÌÅÍ(Call Data Records, Call Detail Records)
-# µ¥ÀÌÅÍÀÇ ÇÑÇàÀº ÅëÈ­³ª SMS°¡ ÇÑ ÅëÈ­ ¼ö½Å È¤Àº ¹ß½ÅµÇ¾úÀ½À» ÀÇ¹Ì.
+# ìš°ë¦¬ë‚˜ë¼ë¥¼ ë°©ë¬¸í•œ í•´ì™¸ ê´€ê´‘ê°ì˜ ë¡œë°í†µí™” log ë°ì´í„°(Call Data Records, Call Detail Records)
+# ë°ì´í„°ì˜ í•œí–‰ì€ í†µí™”ë‚˜ SMSê°€ í•œ í†µí™” ìˆ˜ì‹  í˜¹ì€ ë°œì‹ ë˜ì—ˆìŒì„ ì˜ë¯¸.
 
 #----------------------------------------------------------------
 # 0. load data
@@ -15,9 +15,9 @@ require(reshape2)
 
 
 #----------------------------------------------------------------
-# 1. ¿ì¸®³ª¶ó¸¦ °¡Àå ¸¹ÀÌ ¹æ¹®ÇÑ ³ª¶óÀÇ ÀÌ¸§Àº? 1µî°ú 2µî ±¹°¡ÀÇ ¹æ¹®°´¼ö Â÷ÀÌ´Â?
+# 1. ìš°ë¦¬ë‚˜ë¼ë¥¼ ê°€ì¥ ë§ì´ ë°©ë¬¸í•œ ë‚˜ë¼ì˜ ì´ë¦„ì€? 1ë“±ê³¼ 2ë“± êµ­ê°€ì˜ ë°©ë¬¸ê°ìˆ˜ ì°¨ì´ëŠ”?
 
-# touristID ¸¦ ±âÁØÀ¸·Î ¹­Àº ÈÄ, nation º°·Î Áı°è
+# touristID ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë¬¶ì€ í›„, nation ë³„ë¡œ ì§‘ê³„
 sumByNation <- cdrData %>%
     group_by(touristID, nation) %>%
     summarize(N=n()) %>%
@@ -26,14 +26,14 @@ sumByNation <- cdrData %>%
         arrange(desc(Total))
 
 # Answer
-sumByNation                                     # 1À§ China, 2À§ Japan
-sumByNation$Total[1] - sumByNation$Total[2]     # 1,2À§ ¹æ¹®°´¼ö Â÷ÀÌ = 9,312
+sumByNation                                     # 1ìœ„ China, 2ìœ„ Japan
+sumByNation$Total[1] - sumByNation$Total[2]     # 1,2ìœ„ ë°©ë¬¸ê°ìˆ˜ ì°¨ì´ = 9,312
 
 
 #----------------------------------------------------------------
-# 2.ÇØ¿Ü¿©Çà°´µéÀÇ ÅëÈ­°Ç¼ö°¡ °¡Àå ¸¹Àº ¿äÀÏÀº?
+# 2.í•´ì™¸ì—¬í–‰ê°ë“¤ì˜ í†µí™”ê±´ìˆ˜ê°€ ê°€ì¥ ë§ì€ ìš”ì¼ì€?
 
-# ***** ¹æ¹ı 1 *****
+# ***** ë°©ë²• 1 *****
 cdrData$weekDay <- weekdays.Date(strptime(cdrData$dateChar, format = "%Y/%m%d"))
 head(cdrData)
 
@@ -42,47 +42,47 @@ cdrData %>%
     summarize(Total=n())  %>%
     arrange(desc(Total))
 
-# Answer : ±İ¿äÀÏ 32,217°Ç
+# Answer : ê¸ˆìš”ì¼ 32,217ê±´
 
 
-# ***** ¹æ¹ı 2 *****
+# ***** ë°©ë²• 2 *****
 data_Q2 <- df_cdr
 head(data_Q2)
 
-# dateChar¸¦ date Çü½ÄÀ¸·Î º¯°æ. date Çü½ÄÀº dplyr Àû¿ë ¾ÈµÊ!!!
-# ÇØ´ç ³¯Â¥ÀÇ ¿äÀÏ. ¼ıÀÚ factor¸¦ ¹®ÀÚ·Î º¯°æ
+# dateCharë¥¼ date í˜•ì‹ìœ¼ë¡œ ë³€ê²½. date í˜•ì‹ì€ dplyr ì ìš© ì•ˆë¨!!!
+# í•´ë‹¹ ë‚ ì§œì˜ ìš”ì¼. ìˆ«ì factorë¥¼ ë¬¸ìë¡œ ë³€ê²½
 data_Q2$date <- strptime(data_Q2$dateChar, format = "%Y/%m%d")
 data_Q2$wday <- data_Q2$date$wday     # week : 0 = Sunday
 data_Q2$wday <- factor(data_Q2$wday, 
-                       levels = c(0:6), labels = c("ÀÏ","¿ù","È­","¼ö","¸ñ","±İ","Åä"), 
+                       levels = c(0:6), labels = c("ì¼","ì›”","í™”","ìˆ˜","ëª©","ê¸ˆ","í† "), 
                        ordered = T)
 
-# ¿äÀÏº° ÅëÈ­°Ç¼ö Áı°è ÈÄ Á¤·Ä
+# ìš”ì¼ë³„ í†µí™”ê±´ìˆ˜ ì§‘ê³„ í›„ ì •ë ¬
 sort(table(data_Q2$wday), decreasing = T) 
 
 
 #----------------------------------------------------------------
-# 3.ÇØ¿Ü¿©Çà°´µéÀÇ ÅëÈ­°Ç¼ö°¡ °¡Àå ¸¹Àº ½Ã°£´ë´Â? 
+# 3.í•´ì™¸ì—¬í–‰ê°ë“¤ì˜ í†µí™”ê±´ìˆ˜ê°€ ê°€ì¥ ë§ì€ ì‹œê°„ëŒ€ëŠ”? 
 
-# ***** ¹æ¹ı 1 *****
+# ***** ë°©ë²• 1 *****
 cdrData %>%
     group_by(Time=substr(timeChar,1,2)) %>%
     summarize(Total=n())  %>%
     arrange(desc(Total))
 
-# Answer : 17½Ã 18,248°Ç
+# Answer : 17ì‹œ 18,248ê±´
 
 
-# ***** ¹æ¹ı 2 *****
-# timeChar Ã¹ µÎ±ÛÀÚ°¡ ½Ã°£
+# ***** ë°©ë²• 2 *****
+# timeChar ì²« ë‘ê¸€ìê°€ ì‹œê°„
 data_Q2$callTime <- substr(data_Q2$timeChar, 1, 2)
 
-# ½Ã°£´ëº° Áı°è ÈÄ Á¤·Ä
+# ì‹œê°„ëŒ€ë³„ ì§‘ê³„ í›„ ì •ë ¬
 sort(table(data_Q2$callTime), decreasing = T) 
 
 
 #----------------------------------------------------------------
-# 4.±¹³»ÇàÁ¤±¸¿ªº°·Î ÇØ¿Ü¹æ¹®°´ÀÇ ±¹°¡º° ÅëÈ­°Ç¼ö ºñÁßÀ» µ¥ÀÌÅÍÇÁ·¹ÀÓÀ¸·Î ÀÛ¼º.
+# 4.êµ­ë‚´í–‰ì •êµ¬ì—­ë³„ë¡œ í•´ì™¸ë°©ë¬¸ê°ì˜ êµ­ê°€ë³„ í†µí™”ê±´ìˆ˜ ë¹„ì¤‘ì„ ë°ì´í„°í”„ë ˆì„ìœ¼ë¡œ ì‘ì„±.
 
 summary1 <-cdrData %>%
     group_by(city, nation) %>%
@@ -90,28 +90,28 @@ summary1 <-cdrData %>%
 
 summary1
 
-# ÇàÀº city, ¿­Àº nation
+# í–‰ì€ city, ì—´ì€ nation
 summary2 <- dcast(summary1, city ~ nation, fun.aggregate=sum, value.var="Total")
 
-# °¢ cityº°·Î ÇÕ°è¿Í ºñÁß. 
+# ê° cityë³„ë¡œ í•©ê³„ì™€ ë¹„ì¤‘. 
 summary2$Total <- apply(summary2[-1], 1, sum)
 totalCount <- sum(summary2$Total)
 summary2$Ratio <- round(summary2$Total / totalCount * 100,2)
 summary2
 
-# Answer : ºñÁßÀ» ±âÁØÀ¸·Î Á¤·Ä
+# Answer : ë¹„ì¤‘ì„ ê¸°ì¤€ìœ¼ë¡œ ì •ë ¬
 df_AreaNation <- summary2[order(-summary2$Total),]
 df_AreaNation
 
 
 #----------------------------------------------------------------
-# 5.±¹³»¸¦ ¹æ¹®ÇÑ ÇØ¿Ü °ü±¤°´ DB »ı¼º. ÇØ¿Ü ¹æ¹® °í°´ DB¸¦ ¸¸µå´Â ÄÚµå¿Í ±× °á°ú¹° Á¦Ãâ.
-# - touristID : ÇØ¿Ü¹æ¹®°´ÀÇ uniqueÇÑ touristID
-# - totalCall : ÃÑÅëÈ­°Ç¼ö
-# - callDays : ÃÑÅëÈ­¹ß»ıÀÏ¼ö (¿©·¯¹øÀÇ ÅëÈ­°¡ ÀÖ´õ¶óµµ °°Àº ³¯ÀÌ¸é ÇÏ·ç·Î È¯»ê)
-# - visitAreas : ±¹³» ¹æ¹®Áö¿ª ¼ö (ÇàÁ¤±¸¿ª ±âÁØ)
+# 5.êµ­ë‚´ë¥¼ ë°©ë¬¸í•œ í•´ì™¸ ê´€ê´‘ê° DB ìƒì„±. í•´ì™¸ ë°©ë¬¸ ê³ ê° DBë¥¼ ë§Œë“œëŠ” ì½”ë“œì™€ ê·¸ ê²°ê³¼ë¬¼ ì œì¶œ.
+# - touristID : í•´ì™¸ë°©ë¬¸ê°ì˜ uniqueí•œ touristID
+# - totalCall : ì´í†µí™”ê±´ìˆ˜
+# - callDays : ì´í†µí™”ë°œìƒì¼ìˆ˜ (ì—¬ëŸ¬ë²ˆì˜ í†µí™”ê°€ ìˆë”ë¼ë„ ê°™ì€ ë‚ ì´ë©´ í•˜ë£¨ë¡œ í™˜ì‚°)
+# - visitAreas : êµ­ë‚´ ë°©ë¬¸ì§€ì—­ ìˆ˜ (í–‰ì •êµ¬ì—­ ê¸°ì¤€)
 # 
-# dplyr ÆĞÅ°Áö¸¦ ÀûÀıÇÑ group_by¸¦ ÅëÇØ °¢°¢ÀÇ ÇÊµå¿¡ ÇØ´çÇÏ´Â µ¥ÀÌÅÍ¸¦ ÃßÃâÇÑ ÈÄ,  joinÀ¸·Î DB¸¦ ±¸¼º.
+# dplyr íŒ¨í‚¤ì§€ë¥¼ ì ì ˆí•œ group_byë¥¼ í†µí•´ ê°ê°ì˜ í•„ë“œì— í•´ë‹¹í•˜ëŠ” ë°ì´í„°ë¥¼ ì¶”ì¶œí•œ í›„,  joinìœ¼ë¡œ DBë¥¼ êµ¬ì„±.
 
 # 5-1. totalCall
 callCount <- cdrData %>%
@@ -138,7 +138,7 @@ areaCount <- cdrData %>%
 
 head(areaCount);nrow(areaCount)
 
-# 5-4. À§ µ¥ÀÌÅÍ join
+# 5-4. ìœ„ ë°ì´í„° join
 require(plyr)
 touristsData <- join(callCount, dayCount)
 touristsData <- join(touristsData, areaCount)
