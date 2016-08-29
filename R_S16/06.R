@@ -1,69 +1,69 @@
 ################################################################
 #
-# RÀ» È°¿ëÇÑ Åë°èºÐ¼® : Á¤¿©Áø ±³¼ö (2016 ¿©¸§Æ¯°­)
+# Rì„ í™œìš©í•œ í†µê³„ë¶„ì„ : ì •ì—¬ì§„ êµìˆ˜ (2016 ì—¬ë¦„íŠ¹ê°•)
 #
-# 6. ºÐ»êºÐ¼® (ANOVA)
+# 6. ë¶„ì‚°ë¶„ì„ (ANOVA)
 #
 ################################################################
 
-# ÇÑ ±×·ìÀÇ Æò±Õ°ú Æ¯Á¤ÇÑ ¼ö ºñ±³   : One Sample T-test
-# µÎ ±×·ìÀÇ Æò±Õ ºñ±³               : Two Sample T-test 
-# ¼¼ ±×·ì ÀÌ»óÀÇ Æò±Õ ºñ±³
-#   --- ¼³¸íº¯¼ö ¹üÁÖÇü             : ANOVA (ºÐ»êºÐ¼®)
-#   --- ¼³¸íº¯¼ö ¹üÁÖÇü + ¹üÁÖÇü    : Two-way ANOVA
-#   --- ¼³¸íº¯¼ö ¹üÁÖÇü + ¿¬¼ÓÇü    : ANCOVA (°øºÐ»êºÐ¼®)
+# í•œ ê·¸ë£¹ì˜ í‰ê· ê³¼ íŠ¹ì •í•œ ìˆ˜ ë¹„êµ   : One Sample T-test
+# ë‘ ê·¸ë£¹ì˜ í‰ê·  ë¹„êµ               : Two Sample T-test 
+# ì„¸ ê·¸ë£¹ ì´ìƒì˜ í‰ê·  ë¹„êµ
+#   --- ì„¤ëª…ë³€ìˆ˜ ë²”ì£¼í˜•             : ANOVA (ë¶„ì‚°ë¶„ì„)
+#   --- ì„¤ëª…ë³€ìˆ˜ ë²”ì£¼í˜• + ë²”ì£¼í˜•    : Two-way ANOVA
+#   --- ì„¤ëª…ë³€ìˆ˜ ë²”ì£¼í˜• + ì—°ì†í˜•    : ANCOVA (ê³µë¶„ì‚°ë¶„ì„)
 
 #---------------------------------------------------------------
-# ºÐ»êºÐ¼® (ANOVA) = ¼³¸íº¯¼ö°¡ "¹üÁÖÇü"ÀÎ È¸±ÍºÐ¼®
+# ë¶„ì‚°ë¶„ì„ (ANOVA) = ì„¤ëª…ë³€ìˆ˜ê°€ "ë²”ì£¼í˜•"ì¸ íšŒê·€ë¶„ì„
 #---------------------------------------------------------------
 
-# ºÐ»êºÐ¼® in R
-# --- È¸±ÍºÐ¼®°ú ¸¶Âù°¡Áö·Î lm ¸í·É¾î¸¦ »ç¿ë
-# --- ¼³¸í(µ¶¸³)º¯¼ö°¡ ±×·ìÀ» ÀÇ¹ÌÇÏ´Â ¹üÁÖÇü º¯¼ö (FactorÇÔ¼ö »ç¿ëÇÏ¿© Á¤ÀÇ)
+# ë¶„ì‚°ë¶„ì„ in R
+# --- íšŒê·€ë¶„ì„ê³¼ ë§ˆì°¬ê°€ì§€ë¡œ lm ëª…ë ¹ì–´ë¥¼ ì‚¬ìš©
+# --- ì„¤ëª…(ë…ë¦½)ë³€ìˆ˜ê°€ ê·¸ë£¹ì„ ì˜ë¯¸í•˜ëŠ” ë²”ì£¼í˜• ë³€ìˆ˜ (Factorí•¨ìˆ˜ ì‚¬ìš©í•˜ì—¬ ì •ì˜)
 
-# y = b0 + b1*x + e   :   x°¡ 0 ¶Ç´Â 1À» °¡Áö´Â ¹üÁÖÇü º¯¼ö¶ó¸é?
-# x = 0 ÀÌ¸é y = b0 + e
-# x = 1 ÀÌ¸é y = b0 + b1 + e
-# b1 = 0 ÀÌ¸é xÀÇ µÎ ±×·ìÀº Æò±ÕÀÌ °°´Ù.
-# Áï, H0 : mu1 = mu2  <-->  H0 : b1 = 0
+# y = b0 + b1*x + e   :   xê°€ 0 ë˜ëŠ” 1ì„ ê°€ì§€ëŠ” ë²”ì£¼í˜• ë³€ìˆ˜ë¼ë©´?
+# x = 0 ì´ë©´ y = b0 + e
+# x = 1 ì´ë©´ y = b0 + b1 + e
+# b1 = 0 ì´ë©´ xì˜ ë‘ ê·¸ë£¹ì€ í‰ê· ì´ ê°™ë‹¤.
+# ì¦‰, H0 : mu1 = mu2  <-->  H0 : b1 = 0
 
-# ±×·ìÀÌ 3°³ ÀÌ»óÀÌ¶ó¸é? x°¡ 3°³ ±×·ìÀ» Á¤ÀÇÇÏ´Â ÁúÀûº¯¼ö¶ó¸é? (¼­¿ï, ºÎ»ê, Á¦ÁÖ)
-# ´õ¹Ì º¯¼ö (k-1) °³¸¦ ¸¸µç´Ù.
+# ê·¸ë£¹ì´ 3ê°œ ì´ìƒì´ë¼ë©´? xê°€ 3ê°œ ê·¸ë£¹ì„ ì •ì˜í•˜ëŠ” ì§ˆì ë³€ìˆ˜ë¼ë©´? (ì„œìš¸, ë¶€ì‚°, ì œì£¼)
+# ë”ë¯¸ ë³€ìˆ˜ (k-1) ê°œë¥¼ ë§Œë“ ë‹¤.
 # y = b0 + b1*x1 + b2*x2 + e
 
 #           x1      x2  
-# ¼­¿ï      1       0
-# ºÎ»ê      0       1
-# Á¦ÁÖ      0       0
+# ì„œìš¸      1       0
+# ë¶€ì‚°      0       1
+# ì œì£¼      0       0
 
 #---------------------------------------------------------------
-# ¿µÈ­ µî±ÞÀÌ ÃÑ°ü°´¼ö¿¡ ¿µÇâÀ» ¹ÌÄ¡´Â°¡?
+# ì˜í™” ë“±ê¸‰ì´ ì´ê´€ê°ìˆ˜ì— ì˜í–¥ì„ ë¯¸ì¹˜ëŠ”ê°€?
 
 movie <- read.csv("movie_utf8.csv", header = T)
 summary(movie$rating)
 
-# µ¶¸³º¯¼ö = factor
+# ë…ë¦½ë³€ìˆ˜ = factor
 levels(movie$rating)
 levels(movie$rating) <- c("12years", "15years", "All", "AdultOnly")
 
 library(psych)
 describeBy(movie$total_seen, group = movie$rating, mat = T)
 
-# Á¾¼Óº¯¼ö
-hist(movie$total_seen)      # µ¥ÀÌÅÍ°¡ ÇÑÂÊÀ¸·Î ¸ô·ÁÀÖÀ¸¹Ç·Î log º¯È¯À» ÇØÁØ´Ù.
+# ì¢…ì†ë³€ìˆ˜
+hist(movie$total_seen)      # ë°ì´í„°ê°€ í•œìª½ìœ¼ë¡œ ëª°ë ¤ìžˆìœ¼ë¯€ë¡œ log ë³€í™˜ì„ í•´ì¤€ë‹¤.
 hist(log(movie$total_seen))
 
 with(movie, tapply(log(total_seen), rating, mean))
 boxplot(log(total_seen) ~ rating, col = "red", data = movie)
 
-# È¸±ÍºÐ¼®
+# íšŒê·€ë¶„ì„
 par(mfcol=c(2,2))
 
 out0 <- lm(total_seen ~ rating, movie)
 plot(out0)
 
 out <- lm(log(total_seen) ~ rating, movie)
-plot(out)                   # Á¾¼Óº¯¼ö º¯È¯ Àüº¸´Ù ÈÄ¿¡ ÀÜÂ÷µµ°¡ ¾ÈÁ¤µÊ
+plot(out)                   # ì¢…ì†ë³€ìˆ˜ ë³€í™˜ ì „ë³´ë‹¤ í›„ì— ìž”ì°¨ë„ê°€ ì•ˆì •ë¨
 
 summary(out)
 
@@ -71,25 +71,25 @@ par(mfcol=c(1,1))
 
 # Result
 
-# F-°ËÁ¤ (H0 : mu1 = mu2 = mu3 = mu4, ¸ðµç ±×·ìÀÇ Æò±ÕÀÌ °°´Ù)
-# p-value: 0.001601 < 0.05 : µî±Þº° ÃÑ°ü°´¼ö´Â ¼­·Î À¯ÀÇ¹ÌÇÑ 'Â÷ÀÌ'°¡ ÀÖ´Ù.
+# F-ê²€ì • (H0 : mu1 = mu2 = mu3 = mu4, ëª¨ë“  ê·¸ë£¹ì˜ í‰ê· ì´ ê°™ë‹¤)
+# p-value: 0.001601 < 0.05 : ë“±ê¸‰ë³„ ì´ê´€ê°ìˆ˜ëŠ” ì„œë¡œ ìœ ì˜ë¯¸í•œ 'ì°¨ì´'ê°€ ìžˆë‹¤.
 
-# (Intercept)                   --- (b0) 12years Æò±Õ
-# rating15years     0.75375     --- (b1) 15years Æò±Õ - 12years Æò±Õ : Â÷ÀÌ ¾øÀ½
-# ratingAll         0.00628 **  --- (b2) All Æò±Õ - 12years Æò±Õ : ÀüÃ¼°ü¶÷°¡¿Í 12¼¼°ü¶÷°¡´Â À¯ÀÇÇÑ Â÷ÀÌ°¡ ÀÖ´Ù.
+# (Intercept)                   --- (b0) 12years í‰ê· 
+# rating15years     0.75375     --- (b1) 15years í‰ê·  - 12years í‰ê·  : ì°¨ì´ ì—†ìŒ
+# ratingAll         0.00628 **  --- (b2) All í‰ê·  - 12years í‰ê·  : ì „ì²´ê´€ëžŒê°€ì™€ 12ì„¸ê´€ëžŒê°€ëŠ” ìœ ì˜í•œ ì°¨ì´ê°€ ìžˆë‹¤.
 # ratingAdultOnly   0.09320     --- (b3) Adult - 12 years
 
-# But, ¾î¶² µî±Þ³¢¸® Â÷ÀÌ°¡ ÀÖ´ÂÁö ¾Ë ¼ö ¾ø´Ù.
-# °¢ º¯¼ö 95% ½Å·Ú±¸°£ ---> 0.95 * 0.95 * 0.95 : ½Å·Ú±¸°£ÀÌ ÀÛ¾ÆÁø´Ù.
-# ½ÇÁ¦·Î À¯ÀÇÇÏÁö ¾ÊÀºµ¥ À¯ÀÇÇÏ°Ô °á·ÐÀÌ ³ª¿Ã ¼ö ÀÖ´Ù.
-# ±×·¡¼­ t-test ´ë½Å¿¡ Dunnett ¶Ç´Â Tukey ¹æ¹ý·Ð »ç¿ë !!!
+# But, ì–´ë–¤ ë“±ê¸‰ë¼ë¦¬ ì°¨ì´ê°€ ìžˆëŠ”ì§€ ì•Œ ìˆ˜ ì—†ë‹¤.
+# ê° ë³€ìˆ˜ 95% ì‹ ë¢°êµ¬ê°„ ---> 0.95 * 0.95 * 0.95 : ì‹ ë¢°êµ¬ê°„ì´ ìž‘ì•„ì§„ë‹¤.
+# ì‹¤ì œë¡œ ìœ ì˜í•˜ì§€ ì•Šì€ë° ìœ ì˜í•˜ê²Œ ê²°ë¡ ì´ ë‚˜ì˜¬ ìˆ˜ ìžˆë‹¤.
+# ê·¸ëž˜ì„œ t-test ëŒ€ì‹ ì— Dunnett ë˜ëŠ” Tukey ë°©ë²•ë¡  ì‚¬ìš© !!!
 
 
 #---------------------------------------------------------------
-# ´ÙÁßºñ±³
+# ë‹¤ì¤‘ë¹„êµ
 
-# Dunnett Method : reference level(±âÁØ)°ú °¢ ¹üÁÖÀÇ Æò±Õ Â÷ÀÌ °ËÁ¤ 
-# Tukey Method : °¡´ÉÇÑ ¸ðµç ¹üÁÖ ½ÖÀÇ Æò±Õ Â÷ÀÌ °ËÁ¤
+# Dunnett Method : reference level(ê¸°ì¤€)ê³¼ ê° ë²”ì£¼ì˜ í‰ê·  ì°¨ì´ ê²€ì • 
+# Tukey Method : ê°€ëŠ¥í•œ ëª¨ë“  ë²”ì£¼ ìŒì˜ í‰ê·  ì°¨ì´ ê²€ì •
 #---------------------------------------------------------------
 
 install.packages("multcomp")
@@ -101,91 +101,91 @@ out <- lm(log(total_seen) ~ rating, movie)
 dunnet <- glht(out, linfct = mcp(rating = "Dunnett"))
 summary(dunnet)
 plot(dunnet)
-    # All vs 12years : À¯ÀÇÇÑ Â÷ÀÌ°¡ ÀÖ´Ù.
-    # ³ª¸ÓÁö´Â p-value > 0.05 ÀÌ°í, 95% ½Å·Ú±¸°£ÀÌ 0À» Æ÷ÇÔÇÏ¹Ç·Î À¯ÀÇÇÑ Â÷ÀÌ°¡ ¾ø´Ù.
+    # All vs 12years : ìœ ì˜í•œ ì°¨ì´ê°€ ìžˆë‹¤.
+    # ë‚˜ë¨¸ì§€ëŠ” p-value > 0.05 ì´ê³ , 95% ì‹ ë¢°êµ¬ê°„ì´ 0ì„ í¬í•¨í•˜ë¯€ë¡œ ìœ ì˜í•œ ì°¨ì´ê°€ ì—†ë‹¤.
 
 # Tukey Method
 tukey <- glht(out, linfct = mcp(rating = "Tukey"))
 summary(tukey)
 plot(tukey)
-    # All vs 15years »çÀÌ¿¡µµ À¯ÀÇÇÑ Â÷ÀÌ°¡ ÀÖÀ½À» ¾Ë ¼ö ÀÖ´Ù.
+    # All vs 15years ì‚¬ì´ì—ë„ ìœ ì˜í•œ ì°¨ì´ê°€ ìžˆìŒì„ ì•Œ ìˆ˜ ìžˆë‹¤.
 
-# ÃßÁ¤µÈ È¸±Í½Ä
+# ì¶”ì •ëœ íšŒê·€ì‹
 # y = 13.70 + 0.068*x1 - 0.682*x2 - 0.431*x3
-# 13.70 : 12¼¼°ü¶÷°¡ ¿µÈ­ÀÇ Æò±Õ log(ÃÑ°ü°´¼ö)
-# 13.70 + 0.068 : 15¼¼ °ü¶÷°¡ ¿µÈ­ÀÇ Æò±Õ log(ÃÑ°ü°´¼ö)
+# 13.70 : 12ì„¸ê´€ëžŒê°€ ì˜í™”ì˜ í‰ê·  log(ì´ê´€ê°ìˆ˜)
+# 13.70 + 0.068 : 15ì„¸ ê´€ëžŒê°€ ì˜í™”ì˜ í‰ê·  log(ì´ê´€ê°ìˆ˜)
 
 #---------------------------------------------------------------
-# Æ¯Á¤ ¹üÁÖ¸¦ ÇÏ³ª·Î ÇÕÃÄ¼­ ºÐ¼®ÇÏ°íÀÚ ÇÒ °æ¿ì
+# íŠ¹ì • ë²”ì£¼ë¥¼ í•˜ë‚˜ë¡œ í•©ì³ì„œ ë¶„ì„í•˜ê³ ìž í•  ê²½ìš°
 
 movie$rating2 <- movie$rating
 levels(movie$rating2)
 
-levels(movie$rating2) <- c(2,2,1,3)     # 12¼¼ + 15¼¼
+levels(movie$rating2) <- c(2,2,1,3)     # 12ì„¸ + 15ì„¸
 summary(movie$rating2)
 
-# °¡Àå ¾Õ¿¡ ÀÖ´Â level "2"°¡ reference level·Î ÀÚµ¿ ¼³Á¤
+# ê°€ìž¥ ì•žì— ìžˆëŠ” level "2"ê°€ reference levelë¡œ ìžë™ ì„¤ì •
 out2 <- lm(log(total_seen) ~ rating2, movie)
 summary(out2)
 
-# reference levelÀ» 1 (All)·Î ¼³Á¤
+# reference levelì„ 1 (All)ë¡œ ì„¤ì •
 movie$rating2 <- relevel(movie$rating2, ref = "1")
 out2 <- lm(log(total_seen) ~ rating2, movie)
 summary(out2)
 
-# 1 (All)°ú 2 (12¼¼+15¼¼)´Â Æò±Õ ÃÑ°ü°´¼ö¿¡ À¯ÀÇÇÑ Â÷ÀÌ°¡ ÀÖ´Ù.
-# 1 (All)°ú 3 (AdultOnly)Àº Â÷ÀÌ°¡ ¾ø´Ù.
+# 1 (All)ê³¼ 2 (12ì„¸+15ì„¸)ëŠ” í‰ê·  ì´ê´€ê°ìˆ˜ì— ìœ ì˜í•œ ì°¨ì´ê°€ ìžˆë‹¤.
+# 1 (All)ê³¼ 3 (AdultOnly)ì€ ì°¨ì´ê°€ ì—†ë‹¤.
 
 
 
 #---------------------------------------------------------------
-# °øºÐ»êºÐ¼® (ANCOVA)
+# ê³µë¶„ì‚°ë¶„ì„ (ANCOVA)
 #---------------------------------------------------------------
 
-# °øºÐ»êºÐ¼® = ºÐ»êºÐ¼® + È¸±ÍºÐ¼®
-# Á¾¼Óº¯¼öÀÇ º¯µ¿À» ¼³¸íÇÏ´Âµ¥ ±×·ìº¯¼ö ÀÌ¿ÜÀÇ ´Ù¸¥ º¯ÀÎÀÌ ÀÖÀ»¶§ ±× È¿°ú¸¦ ÅëÁ¦
-# ¼³¸í(µ¶¸³)º¯¼ö°¡ ÁúÀûº¯¼ö¿Í ¾çÀûº¯¼ö°¡ ÇÔ²² ÀÖ´Â °æ¿ì
+# ê³µë¶„ì‚°ë¶„ì„ = ë¶„ì‚°ë¶„ì„ + íšŒê·€ë¶„ì„
+# ì¢…ì†ë³€ìˆ˜ì˜ ë³€ë™ì„ ì„¤ëª…í•˜ëŠ”ë° ê·¸ë£¹ë³€ìˆ˜ ì´ì™¸ì˜ ë‹¤ë¥¸ ë³€ì¸ì´ ìžˆì„ë•Œ ê·¸ íš¨ê³¼ë¥¼ í†µì œ
+# ì„¤ëª…(ë…ë¦½)ë³€ìˆ˜ê°€ ì§ˆì ë³€ìˆ˜ì™€ ì–‘ì ë³€ìˆ˜ê°€ í•¨ê»˜ ìžˆëŠ” ê²½ìš°
 
 #---------------------------------------------------------------
 # Case.
-# °Å½ÄÁõ Ä¡·áÁ¦ : CBT, FT, Control 3°¡Áö Ä¡·á¹æ¹ý
-# Á¾¼Óº¯¼ö : Ä¡·á Àü/ÈÄ ¸ö¹«°Ô Â÷ÀÌ (postwt - prewt)
-# ¼³¸íº¯¼ö : Ä¡·á Àü ¸ö¹«°Ô (°øº¯·®, ÅëÁ¦ÇÒ º¯¼ö), Ä¡·á¹æ¹ý (ÁÖ¿ä °ü½É ¼³¸íº¯¼ö)
+# ê±°ì‹ì¦ ì¹˜ë£Œì œ : CBT, FT, Control 3ê°€ì§€ ì¹˜ë£Œë°©ë²•
+# ì¢…ì†ë³€ìˆ˜ : ì¹˜ë£Œ ì „/í›„ ëª¸ë¬´ê²Œ ì°¨ì´ (postwt - prewt)
+# ì„¤ëª…ë³€ìˆ˜ : ì¹˜ë£Œ ì „ ëª¸ë¬´ê²Œ (ê³µë³€ëŸ‰, í†µì œí•  ë³€ìˆ˜), ì¹˜ë£Œë°©ë²• (ì£¼ìš” ê´€ì‹¬ ì„¤ëª…ë³€ìˆ˜)
 
-# ºÐ»êºÐ¼® : Ä¡·áÀüÈÄ ¸ö¹«°Ô º¯È­°¡ Ä¡·á¹æ¹ý °£¿¡ Â÷ÀÌ°¡ ÀÖ´Â°¡ °ËÁõ
-# °øºÐ»êºÐ¼® : Ä¡·á Àü ¸ö¹«°Ô°¡ ¹«°Å¿ï¼ö·Ï Ä¡·á ÈÄ ¸ö¹«°Ô º¯È­°¡ Å©Áö ¾ÊÀ»±î? 
-#              ÀÌ°ÍÀÌ Ä¡·á¹æ¹ý °£ Â÷ÀÌ¸¦ º¸´Âµ¥ ¹æÇØ°¡ µÉ ¼ö ÀÖ´ÂÁö °ËÁõ
+# ë¶„ì‚°ë¶„ì„ : ì¹˜ë£Œì „í›„ ëª¸ë¬´ê²Œ ë³€í™”ê°€ ì¹˜ë£Œë°©ë²• ê°„ì— ì°¨ì´ê°€ ìžˆëŠ”ê°€ ê²€ì¦
+# ê³µë¶„ì‚°ë¶„ì„ : ì¹˜ë£Œ ì „ ëª¸ë¬´ê²Œê°€ ë¬´ê±°ìš¸ìˆ˜ë¡ ì¹˜ë£Œ í›„ ëª¸ë¬´ê²Œ ë³€í™”ê°€ í¬ì§€ ì•Šì„ê¹Œ? 
+#              ì´ê²ƒì´ ì¹˜ë£Œë°©ë²• ê°„ ì°¨ì´ë¥¼ ë³´ëŠ”ë° ë°©í•´ê°€ ë  ìˆ˜ ìžˆëŠ”ì§€ ê²€ì¦
 
 df <- read.csv("anorexia.csv")
 str(df)
 summary(df)
 
-# dummy º¯¼ö »ý¼º½Ã Control ±×·ìÀ» ·¹ÆÛ·±½º·Î ÁöÁ¤ÇÏ±â À§ÇØ relevel
+# dummy ë³€ìˆ˜ ìƒì„±ì‹œ Control ê·¸ë£¹ì„ ë ˆí¼ëŸ°ìŠ¤ë¡œ ì§€ì •í•˜ê¸° ìœ„í•´ relevel
 df$Treat <- relevel(df$Treat, ref = "Cont")
 summary(df)
 
 boxplot(Prewt ~ Treat, df)
 boxplot(Postwt - Prewt ~ Treat, df)
 
-# ºÐ»êºÐ¼® : ÀÌÀü ¸ö¹«°Ô °ü½É ¾øÀ½
+# ë¶„ì‚°ë¶„ì„ : ì´ì „ ëª¸ë¬´ê²Œ ê´€ì‹¬ ì—†ìŒ
 out <- lm(Postwt - Prewt ~ Treat, df)
 summary(out)
 
-# °øºÐ»ê ºÐ¼® : ÀÌÀü ¸ö¹«°Ô°¡ µ¿ÀÏÇÑ »ç¶÷µéÀ» ±âÁØÀ¸·Î ºÐ¼®
-# ¼³¸íº¯¼ö = ¹üÁÖÇü(Treat) + ¿¬¼ÓÇü(Prewt)
+# ê³µë¶„ì‚° ë¶„ì„ : ì´ì „ ëª¸ë¬´ê²Œê°€ ë™ì¼í•œ ì‚¬ëžŒë“¤ì„ ê¸°ì¤€ìœ¼ë¡œ ë¶„ì„
+# ì„¤ëª…ë³€ìˆ˜ = ë²”ì£¼í˜•(Treat) + ì—°ì†í˜•(Prewt)
 out <- lm(Postwt - Prewt ~ Prewt + Treat, df)
 anova(out)
-    # Prewt ÅëÁ¦½Ã Treat º¯¼ö°¡ ¼³¸íÇØ ÁÖ´Â yÀÇ º¯µ¿¼º¿¡ ´ëÇÑ F-test. 
-    # p-value < 0.05 --> Treat 3°³ ±×·ì°£ Æò±ÕÀÇ Â÷ÀÌ°¡ À¯ÀÇÇÏ´Ù.
+    # Prewt í†µì œì‹œ Treat ë³€ìˆ˜ê°€ ì„¤ëª…í•´ ì£¼ëŠ” yì˜ ë³€ë™ì„±ì— ëŒ€í•œ F-test. 
+    # p-value < 0.05 --> Treat 3ê°œ ê·¸ë£¹ê°„ í‰ê· ì˜ ì°¨ì´ê°€ ìœ ì˜í•˜ë‹¤.
 summary(out)
-    # Prewt°¡ Å¬¼ö·Ï Postwt-Prewt º¯È­À²ÀÌ Àû´Ù (À½ÀÇ »ó°ü°ü°è)
-    # TreatCBT & TreatFT ¸ðµÎ À¯ÀÇÇÑ Â÷ÀÌ¸¦ °¡Áü
-    # °¢ ¹üÁÖ°£ Æò±ÕÀÇ Â÷ÀÌ °ËÁõ --> Dunnett Method
+    # Prewtê°€ í´ìˆ˜ë¡ Postwt-Prewt ë³€í™”ìœ¨ì´ ì ë‹¤ (ìŒì˜ ìƒê´€ê´€ê³„)
+    # TreatCBT & TreatFT ëª¨ë‘ ìœ ì˜í•œ ì°¨ì´ë¥¼ ê°€ì§
+    # ê° ë²”ì£¼ê°„ í‰ê· ì˜ ì°¨ì´ ê²€ì¦ --> Dunnett Method
 plot(out)
 
 dunnet <- glht(out, linfct = mcp(Treat = "Dunnett"))
 summary(dunnet)
-    # CBTº¸´Ù´Â FT°¡ ´õ À¯ÀÇ¹ÌÇÑ Â÷ÀÌ¸¦ º¸¿©ÁØ´Ù.
+    # CBTë³´ë‹¤ëŠ” FTê°€ ë” ìœ ì˜ë¯¸í•œ ì°¨ì´ë¥¼ ë³´ì—¬ì¤€ë‹¤.
 
 
 # Result
@@ -193,9 +193,9 @@ summary(dunnet)
 # y = 45.674 - 0.565 * prewt + 4.097 * CBT + 8.660 * FT
 # --- control : y = 45.674 - 0.565 * prewt
 # --- CBT     : y = 45.674 + 4.097 - 0.565 * prewt
-#               Prewt°¡ Æò±ÕÀÌ¾ú´ø »ç¶÷¿¡ ´ëÇØ CBT´Â control ±×·ìº¸´Ù 4.097¸¸Å­ ´õ ¸ö¹«°Ô º¯È­¸¦ ÁÖ¾ú´Ù.
+#               Prewtê°€ í‰ê· ì´ì—ˆë˜ ì‚¬ëžŒì— ëŒ€í•´ CBTëŠ” control ê·¸ë£¹ë³´ë‹¤ 4.097ë§Œí¼ ë” ëª¸ë¬´ê²Œ ë³€í™”ë¥¼ ì£¼ì—ˆë‹¤.
 # --- FT      : y = 45.674 + 8.660 - 0.565 * prewt
-#               Prewt°¡ Æò±ÕÀÌ¾ú´ø »ç¶÷¿¡ ´ëÇØ FT´Â control ±×·ìº¸´Ù 8.66¸¸Å­ ´õ ¸ö¹«°Ô º¯È­¸¦ ÁÖ¾ú´Ù.
+#               Prewtê°€ í‰ê· ì´ì—ˆë˜ ì‚¬ëžŒì— ëŒ€í•´ FTëŠ” control ê·¸ë£¹ë³´ë‹¤ 8.66ë§Œí¼ ë” ëª¸ë¬´ê²Œ ë³€í™”ë¥¼ ì£¼ì—ˆë‹¤.
 #---------------------------
 
 gubun <- as.numeric(df$Treat)
@@ -208,12 +208,12 @@ abline(45.674 + 8.660, - 0.565, col = 3)
 
 
 #---------------------------------------------------------------
-# ´õ¹Ìº¯¼ö Æ÷ÇÔÇÑ È¸±ÍºÐ¼®
+# ë”ë¯¸ë³€ìˆ˜ í¬í•¨í•œ íšŒê·€ë¶„ì„
 #---------------------------------------------------------------
 
 # Case.
-# ¼öÃà±âÇ÷¾Ð(Systolic blood pressure; SBP)°ú ¿¬·É (age)À» ³²ÀÚ 40¸í, ¿©ÀÚ 29¸íÀ¸·ÎºÎÅÍ ±â·Ï
-# ¿¬·ÉÀÌ ³ôÀ»¼ö·Ï ¼öÃà±âÇ÷¾ÐÀÌ ³ôÀº °æÇâ. ¿¬·É°ú Ç÷¾Ð »çÀÌÀÇ °ü°è°¡ ³²³à°£¿¡ Â÷ÀÌ°¡ ÀÖ´Â°¡?
+# ìˆ˜ì¶•ê¸°í˜ˆì••(Systolic blood pressure; SBP)ê³¼ ì—°ë ¹ (age)ì„ ë‚¨ìž 40ëª…, ì—¬ìž 29ëª…ìœ¼ë¡œë¶€í„° ê¸°ë¡
+# ì—°ë ¹ì´ ë†’ì„ìˆ˜ë¡ ìˆ˜ì¶•ê¸°í˜ˆì••ì´ ë†’ì€ ê²½í–¥. ì—°ë ¹ê³¼ í˜ˆì•• ì‚¬ì´ì˜ ê´€ê³„ê°€ ë‚¨ë…€ê°„ì— ì°¨ì´ê°€ ìžˆëŠ”ê°€?
 
 # y = b0 + b1*x + b2*z + b3*x*z + e : x = age, z = sex (1 female, 0 male)
 
@@ -224,43 +224,43 @@ summary(sbp)
 model <- lm(SBP ~ AGE + SEX, sbp)
 summary(model)
 
-# µÎ È¸±Í¼±Àº ÆòÇàÇÑ°¡? --> H0 : b3 = 0
+# ë‘ íšŒê·€ì„ ì€ í‰í–‰í•œê°€? --> H0 : b3 = 0
 model1 <- lm(SBP ~ AGE + SEX + AGE*SEX, sbp)
 summary(model1)
 anova(model1)
-    # AGE:SEXÀÇ p-value 0.9342 > 0.05 ÀÌ¹Ç·Î ¼­·Î interactionÀÌ ¾ø´Ù.
+    # AGE:SEXì˜ p-value 0.9342 > 0.05 ì´ë¯€ë¡œ ì„œë¡œ interactionì´ ì—†ë‹¤.
 
-# µÎ È¸±Í¼±ÀÌ µ¿ÀÏÇÑ°¡? --> H0 : b2 = b3 = 0
+# ë‘ íšŒê·€ì„ ì´ ë™ì¼í•œê°€? --> H0 : b2 = b3 = 0
 model2 <- lm(SBP ~ AGE, sbp)
 summary(model2)
 anova(model2)
 
-anova(model2, model1)   # model1°ú model2 ºñ±³. ±Í¹«°¡¼³ ±â°¢ = µ¿ÀÏÇÏÁö ¾Ê´Ù.
+anova(model2, model1)   # model1ê³¼ model2 ë¹„êµ. ê·€ë¬´ê°€ì„¤ ê¸°ê° = ë™ì¼í•˜ì§€ ì•Šë‹¤.
 
 
 
 #---------------------------------------------------------------
-# Two-way ANOVA = ¹üÁÖÇü ¼³¸íº¯¼ö°¡ 2°³ÀÎ È¸±ÍºÐ¼®
+# Two-way ANOVA = ë²”ì£¼í˜• ì„¤ëª…ë³€ìˆ˜ê°€ 2ê°œì¸ íšŒê·€ë¶„ì„
 #---------------------------------------------------------------
 
-# µÎ ¹üÁÖÇü º¯¼ö°¡ ¼­·Î interactionÀ» ÇÏ´Â °æ¿ì
+# ë‘ ë²”ì£¼í˜• ë³€ìˆ˜ê°€ ì„œë¡œ interactionì„ í•˜ëŠ” ê²½ìš°
 
 attach(warpbreaks)  
 summary(warpbreaks)
-# breaks : º£Æ²¿¡¼­ ½ÇÀÌ ²÷¾îÁö´Â È½¼ö
-# wool : ¿ïÀÇ Å¸ÀÔ
-# tension : ½ÇÀÇ Àå·Â ¼öÁØ
+# breaks : ë² í‹€ì—ì„œ ì‹¤ì´ ëŠì–´ì§€ëŠ” íšŸìˆ˜
+# wool : ìš¸ì˜ íƒ€ìž…
+# tension : ì‹¤ì˜ ìž¥ë ¥ ìˆ˜ì¤€
 
 boxplot(breaks ~ wool + tension, col = "red", data = warpbreaks, xlab = "wool+tension")
 
 interaction.plot(tension, wool, breaks, col = c("red", "blue"))
-    # µÎ º¯¼ö°¡ interactionÀÌ ¾øÀ¸¸é ºñ½ÁÇÑ °Å¸®¸¦ À¯ÁöÇÏ¸é¼­ ÆòÇàÇÏ´Ù
-    # µÎ º¯¼ö°¡ interactionÀÌ ÀÖÀ¸¸é ¼­·Î ¸¸³­´Ù
+    # ë‘ ë³€ìˆ˜ê°€ interactionì´ ì—†ìœ¼ë©´ ë¹„ìŠ·í•œ ê±°ë¦¬ë¥¼ ìœ ì§€í•˜ë©´ì„œ í‰í–‰í•˜ë‹¤
+    # ë‘ ë³€ìˆ˜ê°€ interactionì´ ìžˆìœ¼ë©´ ì„œë¡œ ë§Œë‚œë‹¤
 
 model <- lm(breaks ~ wool + tension + wool*tension, warpbreaks)
 anova(model)
-    # wool:tensionÀÇ p-value < 0.05 ·Î ¼­·Î interactionÀÌ ÀÖ´Ù.
-    # interactionÀÌ ÀÖÀ¸¸é µÎ º¯¼öÀÌ È¿°ú¸¦ °¢°¢ ºÐ¸®ÇØ¼­ ÇØ¼®ÇÒ ¼ö ¾ø´Ù.
+    # wool:tensionì˜ p-value < 0.05 ë¡œ ì„œë¡œ interactionì´ ìžˆë‹¤.
+    # interactionì´ ìžˆìœ¼ë©´ ë‘ ë³€ìˆ˜ì´ íš¨ê³¼ë¥¼ ê°ê° ë¶„ë¦¬í•´ì„œ í•´ì„í•  ìˆ˜ ì—†ë‹¤.
 
 summary(model)
 plot(model)
@@ -268,20 +268,20 @@ plot(model)
 
 
 #---------------------------------------------------------------
-# °øºÐ»êºÐ¼® (ANCOVA)  vs.  ´õ¹Ìº¯¼ö Æ÷ÇÔÇÑ È¸±ÍºÐ¼®
+# ê³µë¶„ì‚°ë¶„ì„ (ANCOVA)  vs.  ë”ë¯¸ë³€ìˆ˜ í¬í•¨í•œ íšŒê·€ë¶„ì„
 #---------------------------------------------------------------
 
 # ANCOVA
-# --- ÁÖ¿ä °ü½É»ç´Â Áý´Ü°£ Á¾¼Óº¯¼öÀÇ Æò±Õ Â÷ÀÌ
-# --- °øº¯·®ÀÇ È¿°ú¸¦ ÅëÁ¦ÇÑ ÈÄ Áý´Ü°£ Â÷ÀÌ¸¦ ÆÄ¾ÇÇÏ´Â °ÍÀÌ ¸ñÀû
-# --- °øº¯·®ÀÌ ÀüÃ¼ Æò±ÕÀÎ ¼öÁØ¿¡¼­ Á¾¼Óº¯¼öÀÇ Æò±ÕÄ¡¸¦ ºñ±³
-# --- °¢ Áý´ÜÀÇ È¸±Í½ÄÀÌ ÆòÇàÇÏÁö ¾ÊÀ¸¸é ÀÇ¹Ì ¾øÀ½
-# --- È¸±Í¼±µéÀÌ ÆòÇàÇÑÁö °ËÁ¤ ÈÄ ±Í¹«°¡¼³(È¸±Í¼±ÀÌ ÆòÇàÇÏ´Ù)ÀÌ ±â°¢µÇÁö ¾ÊÀ¸¸é ANCOVA ½Ç½Ã
+# --- ì£¼ìš” ê´€ì‹¬ì‚¬ëŠ” ì§‘ë‹¨ê°„ ì¢…ì†ë³€ìˆ˜ì˜ í‰ê·  ì°¨ì´
+# --- ê³µë³€ëŸ‰ì˜ íš¨ê³¼ë¥¼ í†µì œí•œ í›„ ì§‘ë‹¨ê°„ ì°¨ì´ë¥¼ íŒŒì•…í•˜ëŠ” ê²ƒì´ ëª©ì 
+# --- ê³µë³€ëŸ‰ì´ ì „ì²´ í‰ê· ì¸ ìˆ˜ì¤€ì—ì„œ ì¢…ì†ë³€ìˆ˜ì˜ í‰ê· ì¹˜ë¥¼ ë¹„êµ
+# --- ê° ì§‘ë‹¨ì˜ íšŒê·€ì‹ì´ í‰í–‰í•˜ì§€ ì•Šìœ¼ë©´ ì˜ë¯¸ ì—†ìŒ
+# --- íšŒê·€ì„ ë“¤ì´ í‰í–‰í•œì§€ ê²€ì • í›„ ê·€ë¬´ê°€ì„¤(íšŒê·€ì„ ì´ í‰í–‰í•˜ë‹¤)ì´ ê¸°ê°ë˜ì§€ ì•Šìœ¼ë©´ ANCOVA ì‹¤ì‹œ
 
-# ´õ¹Ìº¯¼ö¸¦ Æ÷ÇÔÇÑ È¸±ÍºÐ¼®
-# --- ¹üÁÖÇü º¯¼ö »Ó¸¸ ¾Æ´Ï¶ó °øº¯·®µµ °ü½É´ë»ó
-# --- ¸¸ÀÏ È¸±Í¼±ÀÌ ÆòÇàÇÏÁö ¾Ê´Ù¸é ÇØ´ç ¼³¸íº¯¼öµé °£¿¡ interaction effect Á¸Àç
-# --- ¿¹) ³ªÀÌ°¡ ¾î¸±¶§´Â ¿©ÀÚÀÇ Ç÷¾ÐÀÌ ´õ ³ôÁö¸¸ ³ªÀÌ°¡ µé¸é ³²ÀÚÀÇ Ç÷¾ÐÀÌ ³ô´Ù.
+# ë”ë¯¸ë³€ìˆ˜ë¥¼ í¬í•¨í•œ íšŒê·€ë¶„ì„
+# --- ë²”ì£¼í˜• ë³€ìˆ˜ ë¿ë§Œ ì•„ë‹ˆë¼ ê³µë³€ëŸ‰ë„ ê´€ì‹¬ëŒ€ìƒ
+# --- ë§Œì¼ íšŒê·€ì„ ì´ í‰í–‰í•˜ì§€ ì•Šë‹¤ë©´ í•´ë‹¹ ì„¤ëª…ë³€ìˆ˜ë“¤ ê°„ì— interaction effect ì¡´ìž¬
+# --- ì˜ˆ) ë‚˜ì´ê°€ ì–´ë¦´ë•ŒëŠ” ì—¬ìžì˜ í˜ˆì••ì´ ë” ë†’ì§€ë§Œ ë‚˜ì´ê°€ ë“¤ë©´ ë‚¨ìžì˜ í˜ˆì••ì´ ë†’ë‹¤.
 
 
 
@@ -297,40 +297,40 @@ summary(df$sector)
 df$sector <- relevel(df$sector, ref = "HiTech")
 
 #-----------------------------------
-# Case 1. Sales ~ sector : ºÐ»êºÐ¼®
+# Case 1. Sales ~ sector : ë¶„ì‚°ë¶„ì„
 
-# boxplotÀ» ÅëÇØ sector°£ ºñ±³.
+# boxplotì„ í†µí•´ sectorê°„ ë¹„êµ.
 boxplot(Sales ~ sector, df)
-boxplot(log(Sales) ~ sector, df)   # logº¯È¯ÇÑ µ¥ÀÌÅÍ°¡ ºÐ¼®¿¡ ´õ ÀûÇÕ
+boxplot(log(Sales) ~ sector, df)   # logë³€í™˜í•œ ë°ì´í„°ê°€ ë¶„ì„ì— ë” ì í•©
 
-# Sales°¡ sector °£¿¡ ¼­·Î ´Ù¸¥Áö ÆÇ´ÜÇÏ±â À§ÇÑ ºÐ»êºÐ¼®
-# ±¸Ã¼ÀûÀ¸·Î ¾î´À sector°£ Åë°èÀûÀ¸·Î À¯ÀÇÇÑ Â÷ÀÌ°¡ ÀÖ´ÂÁö Dunnett test
+# Salesê°€ sector ê°„ì— ì„œë¡œ ë‹¤ë¥¸ì§€ íŒë‹¨í•˜ê¸° ìœ„í•œ ë¶„ì‚°ë¶„ì„
+# êµ¬ì²´ì ìœ¼ë¡œ ì–´ëŠ sectorê°„ í†µê³„ì ìœ¼ë¡œ ìœ ì˜í•œ ì°¨ì´ê°€ ìžˆëŠ”ì§€ Dunnett test
 model <- lm(log(Sales) ~ sector, df)
 summary(model)
-    # F-statistic: 5.288 on 8 and 70 DF, p-value: 3.387e-05 < 0.05 : sector°£ Â÷ÀÌ°¡ ÀÖ´Ù.
+    # F-statistic: 5.288 on 8 and 70 DF, p-value: 3.387e-05 < 0.05 : sectorê°„ ì°¨ì´ê°€ ìžˆë‹¤.
 
 dunnet <- glht(model, linfct = mcp(sector = "Dunnett"))
 summary(dunnet)
-    # Hi-tech¸¦ ±âÁØÀ¸·Î, Energy, Finance, Medical°¡ À¯ÀÇÇÑ Â÷ÀÌ¸¦ º¸ÀÎ´Ù.
+    # Hi-techë¥¼ ê¸°ì¤€ìœ¼ë¡œ, Energy, Finance, Medicalê°€ ìœ ì˜í•œ ì°¨ì´ë¥¼ ë³´ì¸ë‹¤.
 
 
 #-----------------------------------
-# Case 2. Sales ~ Assets + sector : °øºÐ»êºÐ¼®
+# Case 2. Sales ~ Assets + sector : ê³µë¶„ì‚°ë¶„ì„
 
-# »êÁ¡µµ
+# ì‚°ì ë„
 plot(df$Assets, log(df$Sales))
-plot(log(df$Assets), log(df$Sales))   # Sales¿Í Assets ¸ðµÎ log º¯È¯ ÈÄ ºÐ¼®
+plot(log(df$Assets), log(df$Sales))   # Salesì™€ Assets ëª¨ë‘ log ë³€í™˜ í›„ ë¶„ì„
 
-# °øºÐ»êºÐ¼®
+# ê³µë¶„ì‚°ë¶„ì„
 model <- lm(log(Sales) ~ log(Assets) + sector, df)
 summary(model)
 dunnet <- glht(model, linfct = mcp(sector = "Dunnett"))
 summary(dunnet)
 
-# --> log(Assets) ÀÌ Æò±Õ¼öÁØÀ¸·Î µ¿ÀÏÇÒ ¶§ HiTech¿Í Energy, HiTech¿Í Finance sector °£¿¡´Â log(Sales)¿¡ À¯ÀÇÇÑ Â÷ÀÌ°¡ ÀÖ´Ù.
+# --> log(Assets) ì´ í‰ê· ìˆ˜ì¤€ìœ¼ë¡œ ë™ì¼í•  ë•Œ HiTechì™€ Energy, HiTechì™€ Finance sector ê°„ì—ëŠ” log(Sales)ì— ìœ ì˜í•œ ì°¨ì´ê°€ ìžˆë‹¤.
 
 
-# AssetÀÌ 3000 millionÀÌ°í finance sector¿¡ ÀÖ´Â È¸»çÀÇ sales¸¦ ¿¹Ãø.
+# Assetì´ 3000 millionì´ê³  finance sectorì— ìžˆëŠ” íšŒì‚¬ì˜ salesë¥¼ ì˜ˆì¸¡.
 # log(Sales) = 2.184 - 2.146 + 0.767 * log(Assets)
 
 y = exp(2.184 - 2.146 + 0.767 * log(3000))

@@ -1,101 +1,101 @@
 ################################################################
 #
-# RÀ» È°¿ëÇÑ Åë°èºÐ¼® : Á¤¿©Áø ±³¼ö (2016 ¿©¸§Æ¯°­)
+# Rì„ í™œìš©í•œ í†µê³„ë¶„ì„ : ì •ì—¬ì§„ êµìˆ˜ (2016 ì—¬ë¦„íŠ¹ê°•)
 #
-# 5. ´ÙÁßÈ¸±ÍºÐ¼®
+# 5. ë‹¤ì¤‘íšŒê·€ë¶„ì„
 #
 ################################################################
 
 #---------------------------------------------------------------
-# ´ÙÁßÈ¸±ÍºÐ¼® (Multiple Regression Model)
+# ë‹¤ì¤‘íšŒê·€ë¶„ì„ (Multiple Regression Model)
 #---------------------------------------------------------------
 
-# programmer 20¸í
-# salary°¡ experience(°æ·Â³â¼ö), score (Á÷¹«Àû¼º°Ë»ç¼ºÀû)°ú ¿¬°ü¼ºÀ» °®´ÂÁö °ËÁõ.
+# programmer 20ëª…
+# salaryê°€ experience(ê²½ë ¥ë…„ìˆ˜), score (ì§ë¬´ì ì„±ê²€ì‚¬ì„±ì )ê³¼ ì—°ê´€ì„±ì„ ê°–ëŠ”ì§€ ê²€ì¦.
 df <- read.csv("salary.csv")
 head(df)
 summary(df)
 
 library(psych)
-pairs.panels(df)    # salary ~ experience »ó°ü°è¼ö 0.86
+pairs.panels(df)    # salary ~ experience ìƒê´€ê³„ìˆ˜ 0.86
 
-# ´Ü¼øÈ¸±Í : °æ·Â Áõ°¡½Ã ¿¬ºÀ Áõ°¡ »ó°ü°ü°è
+# ë‹¨ìˆœíšŒê·€ : ê²½ë ¥ ì¦ê°€ì‹œ ì—°ë´‰ ì¦ê°€ ìƒê´€ê´€ê³„
 model <- lm(salary ~ experience, data = df)
 summary(model)
 
-# ´ÙÁßÈ¸±Í : °æ·Â Áõ°¡½Ã Àû¼º°Ë»ç Á¡¼ö Áõ°¡·Î ÀÎÇÑ ¿¬ºÀ Áõ°¡±îÁö Æ÷ÇÔµÈ °ü°è
-# experience ~ score ÀÇ cor() = 0.34
+# ë‹¤ì¤‘íšŒê·€ : ê²½ë ¥ ì¦ê°€ì‹œ ì ì„±ê²€ì‚¬ ì ìˆ˜ ì¦ê°€ë¡œ ì¸í•œ ì—°ë´‰ ì¦ê°€ê¹Œì§€ í¬í•¨ëœ ê´€ê³„
+# experience ~ score ì˜ cor() = 0.34
 # model <- lm(salary ~ ., data = df) 
 model <- lm(salary ~ experience + score, data = df)
 summary(model)
 
-# ÃßÁ¤µÈ È¸±Í½Ä
+# ì¶”ì •ëœ íšŒê·€ì‹
 # salary = 3.174 + 1.404 * experience + 0.251 * score
 
-# b1 : b2(score)°¡ ÀÏÁ¤ÇÏ´Ù°í ÇÒ ¶§, experience°¡ 1³â Áõ°¡ÇÏ¸é salary°¡ $1,404 Áõ°¡ÇÒ °ÍÀ¸·Î ±â´ëµÈ´Ù.
-# b2 : b1(experience)°¡ ÀÏÁ¤ÇÏ´Ù°í ÇÒ ¶§, score°¡ 1Á¡ Áõ°¡ÇÏ¸é salary°¡ $251 Áõ°¡ÇÒ °ÍÀ¸·Î ±â´ëµÈ´Ù.
+# b1 : b2(score)ê°€ ì¼ì •í•˜ë‹¤ê³  í•  ë•Œ, experienceê°€ 1ë…„ ì¦ê°€í•˜ë©´ salaryê°€ $1,404 ì¦ê°€í•  ê²ƒìœ¼ë¡œ ê¸°ëŒ€ëœë‹¤.
+# b2 : b1(experience)ê°€ ì¼ì •í•˜ë‹¤ê³  í•  ë•Œ, scoreê°€ 1ì  ì¦ê°€í•˜ë©´ salaryê°€ $251 ì¦ê°€í•  ê²ƒìœ¼ë¡œ ê¸°ëŒ€ëœë‹¤.
 
 
 #---------------------------------------------------------------
-# ´ÙÁßÈ¸±ÍºÐ¼® °á°ú ÇØ¼®
+# ë‹¤ì¤‘íšŒê·€ë¶„ì„ ê²°ê³¼ í•´ì„
 
 # (1) Adjusted R-squared
-# R-squared: 0.83 --> experience¿Í score°¡ salary º¯µ¿·®ÀÇ 83%¸¦ ¼³¸íÇÑ´Ù.
-# But, ¼³¸íº¯¼ö °¹¼ö°¡ Áõ°¡ÇÏ¸é °áÁ¤°è¼öµµ Áõ°¡
-# --> ¼³¸íº¯¼ö °¹¼ö¿¡ ´ëÇÑ ÆÐ³ÎÆ¼ Àû¿ëÇÑ °áÁ¤°è¼ö = Adjusted R-squared
+# R-squared: 0.83 --> experienceì™€ scoreê°€ salary ë³€ë™ëŸ‰ì˜ 83%ë¥¼ ì„¤ëª…í•œë‹¤.
+# But, ì„¤ëª…ë³€ìˆ˜ ê°¯ìˆ˜ê°€ ì¦ê°€í•˜ë©´ ê²°ì •ê³„ìˆ˜ë„ ì¦ê°€
+# --> ì„¤ëª…ë³€ìˆ˜ ê°¯ìˆ˜ì— ëŒ€í•œ íŒ¨ë„í‹° ì ìš©í•œ ê²°ì •ê³„ìˆ˜ = Adjusted R-squared
 
 # (2) F-test
 # H0 : b1 = b2 = ...... = bk = 0
-# Á¾¼Óº¯¼ö¿Í ¸ðµç µ¶¸³(¼³¸í)º¯¼ö ÁýÇÕ°£¿¡ À¯ÀÇÇÑ °ü°è°¡ Á¸ÀçÇÏ´ÂÁö °ËÁ¤
-# b0 ´Â Å« ÀÇ¹Ì°¡ ¾ø´Ù.
+# ì¢…ì†ë³€ìˆ˜ì™€ ëª¨ë“  ë…ë¦½(ì„¤ëª…)ë³€ìˆ˜ ì§‘í•©ê°„ì— ìœ ì˜í•œ ê´€ê³„ê°€ ì¡´ìž¬í•˜ëŠ”ì§€ ê²€ì •
+# b0 ëŠ” í° ì˜ë¯¸ê°€ ì—†ë‹¤.
 
 # (3) T-test
 # H0 : bi = 0
-# °¢ °³º° µ¶¸³º¯¼öÀÇ À¯ÀÇ¼º °ËÁ¤
+# ê° ê°œë³„ ë…ë¦½ë³€ìˆ˜ì˜ ìœ ì˜ì„± ê²€ì •
 
-# (4) ÀÜÂ÷ºÐ¼® --> Residuals plot / Normal Q-Q plot / Leverage plot
+# (4) ìž”ì°¨ë¶„ì„ --> Residuals plot / Normal Q-Q plot / Leverage plot
 
 
 #---------------------------------------------------------------
-# ¿µÇâÁ¡ÀÌ ÀÖ´Â °æ¿ì
+# ì˜í–¥ì ì´ ìžˆëŠ” ê²½ìš°
 
-plot(model)   # --> Leverage plot¿¡¼­ 2¹øÂ° ÀÚ·á°¡ ÀÌ»óÄ¡ & ¿µÇâÁ¡
+plot(model)   # --> Leverage plotì—ì„œ 2ë²ˆì§¸ ìžë£Œê°€ ì´ìƒì¹˜ & ì˜í–¥ì 
 
 dcolor <- rep(1, length(df$salary))
 dcolor[2] = 2
-pairs(df, col = dcolor, pch = dcolor)     # 2¹ø ÀÚ·á¸¸ ´Ù¸£°Ô Ç¥½Ã
+pairs(df, col = dcolor, pch = dcolor)     # 2ë²ˆ ìžë£Œë§Œ ë‹¤ë¥´ê²Œ í‘œì‹œ
 
-# ¿µÇâÁ¡ Á¦°Å´Â ÁÖ°üÀûÀ¸·Î ÆÇ´ÜÇÏ´Â ¼ö¹Û¿¡ ¾ø´Ù.
+# ì˜í–¥ì  ì œê±°ëŠ” ì£¼ê´€ì ìœ¼ë¡œ íŒë‹¨í•˜ëŠ” ìˆ˜ë°–ì— ì—†ë‹¤.
 
-df2 <- df[-2, ]         # ¿µÇâÁ¡ Á¦°ÅÇÒ °æ¿ì
-pairs.panels(df2)       # salary ~ experience »ó°ü°è¼ö ³ô¾ÆÁü(0.91). ´Ù¸¥ »ó°ü°è¼ö´Â ³·¾ÆÁü.
+df2 <- df[-2, ]         # ì˜í–¥ì  ì œê±°í•  ê²½ìš°
+pairs.panels(df2)       # salary ~ experience ìƒê´€ê³„ìˆ˜ ë†’ì•„ì§(0.91). ë‹¤ë¥¸ ìƒê´€ê³„ìˆ˜ëŠ” ë‚®ì•„ì§.
 model2 <- lm(salary ~ experience + score, data = df2)
-summary(model2)         # score È¸±Í°è¼ö°¡ À¯ÀÇÇÏÁö ¾Ê´Ù.
+summary(model2)         # score íšŒê·€ê³„ìˆ˜ê°€ ìœ ì˜í•˜ì§€ ì•Šë‹¤.
 
 
 #---------------------------------------------------------------
-# ÃßÁ¤°ú ¿¹Ãø
+# ì¶”ì •ê³¼ ì˜ˆì¸¡
 
-# °æ·Â 5³â, Àû¼º°Ë»ç¼ºÀû 80Á¡ÀÎ »ç¶÷°ú °æ·Â 10³â, ¼ºÀû 70Á¡ÀÎ »ç¶÷ÀÇ ¿¬ºÀ ¿¹Ãø
+# ê²½ë ¥ 5ë…„, ì ì„±ê²€ì‚¬ì„±ì  80ì ì¸ ì‚¬ëžŒê³¼ ê²½ë ¥ 10ë…„, ì„±ì  70ì ì¸ ì‚¬ëžŒì˜ ì—°ë´‰ ì˜ˆì¸¡
 
-# Æò±Õ ¿¬ºÀÀÇ 95% ½Å·Ú±¸°£
+# í‰ê·  ì—°ë´‰ì˜ 95% ì‹ ë¢°êµ¬ê°„
 predict(model, data.frame("experience" = c(5,10), "score" = c(80,70)), 
         interval = "confidence")
 
-# »õ·Î¿î ÇÑ ¸í¿¡ ´ëÇÑ 95% ¿¹Ãø±¸°£
+# ìƒˆë¡œìš´ í•œ ëª…ì— ëŒ€í•œ 95% ì˜ˆì¸¡êµ¬ê°„
 predict(model, data.frame("experience" = c(5,10), "score" = c(80,70)), 
         interval = "prediction")
 
 
 #---------------------------------------------------------------
-# ´ÙÁß°ø¼±¼º (Multicollinearity)
+# ë‹¤ì¤‘ê³µì„ ì„± (Multicollinearity)
 #---------------------------------------------------------------
 
-# µ¶¸³º¯¼öµéÀÌ ¼­·Î ³ôÀº »ó°ü°ü°è¸¦ °¡Áö¸é È¸±Í°è¼öÀÇ Á¤È®ÇÑ ÃßÁ¤ÀÌ ¾î·Æ´Ù.
-# ---> ¸ðÇü ¼±ÅÃ ¹æ¹ý·ÐÀ» Àû¿ëÇÏ¿© °¡Àå ÀûÀýÇÑ º¯¼ö¸¦ ¼±ÅÃÇÒ ¼ö ÀÖ´Ù.
+# ë…ë¦½ë³€ìˆ˜ë“¤ì´ ì„œë¡œ ë†’ì€ ìƒê´€ê´€ê³„ë¥¼ ê°€ì§€ë©´ íšŒê·€ê³„ìˆ˜ì˜ ì •í™•í•œ ì¶”ì •ì´ ì–´ë µë‹¤.
+# ---> ëª¨í˜• ì„ íƒ ë°©ë²•ë¡ ì„ ì ìš©í•˜ì—¬ ê°€ìž¥ ì ì ˆí•œ ë³€ìˆ˜ë¥¼ ì„ íƒí•  ìˆ˜ ìžˆë‹¤.
 
-# 30°³ ºÎ¼­¿¡¼­ ºÎ¼­´ç 35¸íÀÇ Á÷¿ø ¼³¹®Á¶»ç
-# µ¥ÀÌÅÍ ¼ýÀÚ´Â ÇØ´ç Áú¹®¿¡ ±àÁ¤ÇÑ Á÷¿øÀÇ ºñÀ²
+# 30ê°œ ë¶€ì„œì—ì„œ ë¶€ì„œë‹¹ 35ëª…ì˜ ì§ì› ì„¤ë¬¸ì¡°ì‚¬
+# ë°ì´í„° ìˆ«ìžëŠ” í•´ë‹¹ ì§ˆë¬¸ì— ê¸ì •í•œ ì§ì›ì˜ ë¹„ìœ¨
 attitude
 round(cor(attitude),3)
 
@@ -109,33 +109,33 @@ plot(attitude[ , c("rating", "complaints", "learning")])
 a <- lm(rating ~ complaints + learning, data = attitude)
 summary(a)
 
-# learningÀÇ t-test p-value °ªÀ» º¸¸é À¯ÀÇÇÏÁö ¾Ê´Ù. 
-# ÇÏÁö¸¸ rating°ú »ó°ü°ü°è°¡ ¾ø´Â °ÍÀÌ ¾Æ´Ï´Ù. 
-# complaints ¿ÍÀÇ »ó°ü°ü°èµµ ÀÖ±â ¶§¹®¿¡ rating º¯¼ö¿¡ ´ëÇÑ ¿ªÇÒÀÌ ÀÛ¾Æº¸ÀÏ »ÓÀÌ´Ù.
+# learningì˜ t-test p-value ê°’ì„ ë³´ë©´ ìœ ì˜í•˜ì§€ ì•Šë‹¤. 
+# í•˜ì§€ë§Œ ratingê³¼ ìƒê´€ê´€ê³„ê°€ ì—†ëŠ” ê²ƒì´ ì•„ë‹ˆë‹¤. 
+# complaints ì™€ì˜ ìƒê´€ê´€ê³„ë„ ìžˆê¸° ë•Œë¬¸ì— rating ë³€ìˆ˜ì— ëŒ€í•œ ì—­í• ì´ ìž‘ì•„ë³´ì¼ ë¿ì´ë‹¤.
 
 
 #---------------------------------------------------------------
-# ¸ðÇü ¼±ÅÃ¹ý (Model Selection) = ¼³¸íº¯¼ö ¼±ÅÃ
+# ëª¨í˜• ì„ íƒë²• (Model Selection) = ì„¤ëª…ë³€ìˆ˜ ì„ íƒ
 #---------------------------------------------------------------
 
-# *** ÇØ´ç ¾÷¹«ºÐ¾ß¿¡¼­ ¹Ýµå½Ã µé¾î°¡¾ß ÇÏ´Â º¯¼ö´Â °íÁ¤ !!!
+# *** í•´ë‹¹ ì—…ë¬´ë¶„ì•¼ì—ì„œ ë°˜ë“œì‹œ ë“¤ì–´ê°€ì•¼ í•˜ëŠ” ë³€ìˆ˜ëŠ” ê³ ì • !!!
 # (1) Forward selection
-# --- °¡Àå À¯ÀÇÇÑ º¯¼öºÎÅÍ ÇÏ³ª¾¿ Ãß°¡ (R-sq ±âÁØ)
-# --- º¯¼ö°ªÀÇ ÀÛÀº º¯µ¿¿¡µµ °á°ú°¡ Å©°Ô ´Þ¶óÁ® ¾ÈÁ¤¼º ºÎÁ·
+# --- ê°€ìž¥ ìœ ì˜í•œ ë³€ìˆ˜ë¶€í„° í•˜ë‚˜ì”© ì¶”ê°€ (R-sq ê¸°ì¤€)
+# --- ë³€ìˆ˜ê°’ì˜ ìž‘ì€ ë³€ë™ì—ë„ ê²°ê³¼ê°€ í¬ê²Œ ë‹¬ë¼ì ¸ ì•ˆì •ì„± ë¶€ì¡±
 
 # (2) Backward selection
-# --- ¸ðµç º¯¼ö¸¦ ³Ö°í °¡Àå ±â¿©µµ°¡ ³·Àº °ÍºÎÅÍ ÇÏ³ª¾¿ Á¦°Å
-# --- ÀüÃ¼ º¯¼ö Á¤º¸¸¦ ÀÌ¿ëÇÏ´Â ÀåÁ¡
-# --- º¯¼öÀÇ °¹¼ö°¡ ¸¹Àº °æ¿ì »ç¿ë ¾î·Á¿ò. ¾ÈÁ¤¼º ºÎÁ·.
+# --- ëª¨ë“  ë³€ìˆ˜ë¥¼ ë„£ê³  ê°€ìž¥ ê¸°ì—¬ë„ê°€ ë‚®ì€ ê²ƒë¶€í„° í•˜ë‚˜ì”© ì œê±°
+# --- ì „ì²´ ë³€ìˆ˜ ì •ë³´ë¥¼ ì´ìš©í•˜ëŠ” ìž¥ì 
+# --- ë³€ìˆ˜ì˜ ê°¯ìˆ˜ê°€ ë§Žì€ ê²½ìš° ì‚¬ìš© ì–´ë ¤ì›€. ì•ˆì •ì„± ë¶€ì¡±.
 
 # (3) Stepwise selection
-# --- Forward selection°ú backward selectionÀ» Á¶ÇÕ
-# --- »õ·Î¿î º¯¼ö Ãß°¡ ÈÄ¿¡ ±âÁ¸ º¯¼öÀÇ Áß¿äµµ°¡ ¾àÈ­µÇ¸é ±× º¯¼ö Á¦°Å
+# --- Forward selectionê³¼ backward selectionì„ ì¡°í•©
+# --- ìƒˆë¡œìš´ ë³€ìˆ˜ ì¶”ê°€ í›„ì— ê¸°ì¡´ ë³€ìˆ˜ì˜ ì¤‘ìš”ë„ê°€ ì•½í™”ë˜ë©´ ê·¸ ë³€ìˆ˜ ì œê±°
 
 # (4) All Subsets Regression
-# --- ¸ðµç °¡´ÉÇÑ ¸ðÇüÀ» ºñ±³ÇÏ¿© ÃÖÀûÀÇ ¸ðÇü¼±ÅÃ
-# --- ¿©·¯ ¸ðÇü Áß ÃÖ¼Ò AIC, BIC, Mallow¡¯s Cp ¶Ç´Â ÃÖ´ë adjusted R-sq¸¦ °®´Â ¸ðÇüÀ» ¼±ÅÃ
-# --- ¸ðÇüÀÇ º¹Àâµµ¿¡ ¹úÁ¡À» ÁÖ´Â ¹æ¹ý. AIC (Akaike information criterion), BIC (Bayesian ...)
+# --- ëª¨ë“  ê°€ëŠ¥í•œ ëª¨í˜•ì„ ë¹„êµí•˜ì—¬ ìµœì ì˜ ëª¨í˜•ì„ íƒ
+# --- ì—¬ëŸ¬ ëª¨í˜• ì¤‘ ìµœì†Œ AIC, BIC, Mallowâ€™s Cp ë˜ëŠ” ìµœëŒ€ adjusted R-sqë¥¼ ê°–ëŠ” ëª¨í˜•ì„ ì„ íƒ
+# --- ëª¨í˜•ì˜ ë³µìž¡ë„ì— ë²Œì ì„ ì£¼ëŠ” ë°©ë²•. AIC (Akaike information criterion), BIC (Bayesian ...)
 
 
 #---------------------------------------------------------------
@@ -143,18 +143,18 @@ summary(a)
 
 out <- lm(rating ~ ., attitude)
 summary(out) 
-anova(out)      # °¢ È¸±Í°è¼ö t°ËÁ¤ p-value ±âÁØ ¼±º°. critical Á¦°Å.
+anova(out)      # ê° íšŒê·€ê³„ìˆ˜ tê²€ì • p-value ê¸°ì¤€ ì„ ë³„. critical ì œê±°.
 
 out2 <- lm(rating ~ . - critical, data = attitude)
 summary(out2)
-anova(out2)     # raises Á¦°Å
+anova(out2)     # raises ì œê±°
 
-# Backward selection ÀÚµ¿È­
+# Backward selection ìžë™í™”
 backward <- step(out, direction = "backward", trace = T)
 
 backward <- step(out, direction = "backward", trace = F)
-backward        # ÃÖÁ¾ ¼±ÅÃµÈ È¸±Í¸ðÇü : rating ~ complaints + learning
-backward$anova  # critical, raises, privileges, advance ¼øÀ¸·Î Á¦°ÅµÊ
+backward        # ìµœì¢… ì„ íƒëœ íšŒê·€ëª¨í˜• : rating ~ complaints + learning
+backward$anova  # critical, raises, privileges, advance ìˆœìœ¼ë¡œ ì œê±°ë¨
 
 
 #---------------------------------------------------------------
@@ -170,11 +170,11 @@ both$anova
 
 library(leaps)
 
-leap <- regsubsets(rating ~ ., attitude, nbest = 5)   # size´ç 5°³ÀÇ ÃÖÀû ¸ðÇü ÀúÀå
+leap <- regsubsets(rating ~ ., attitude, nbest = 5)   # sizeë‹¹ 5ê°œì˜ ìµœì  ëª¨í˜• ì €ìž¥
 summary(leap)
 
 plot(leap)
-plot(leap, scale = "adjr2") # adjusted r-squred ±âÁØ
+plot(leap, scale = "adjr2") # adjusted r-squred ê¸°ì¤€
 
 
 
@@ -188,14 +188,14 @@ data <- read.csv("laquinta.csv")
 summary(data)
 str(data)
 
-# ÀÚ·áÀÇ »êÁ¡µµ È®ÀÎ
+# ìžë£Œì˜ ì‚°ì ë„ í™•ì¸
 round( cor(data), 3)
-pairs.panels(data)   # ¼³¸íº¯¼ö°£ÀÇ correlationµµ ³·´Ù. Á¾¼Óº¯¼ö¿Íµµ ³·´Ù.
+pairs.panels(data)   # ì„¤ëª…ë³€ìˆ˜ê°„ì˜ correlationë„ ë‚®ë‹¤. ì¢…ì†ë³€ìˆ˜ì™€ë„ ë‚®ë‹¤.
 
-# È¸±Í¸ðÇü
+# íšŒê·€ëª¨í˜•
 model <- lm(Margin ~ ., data)
-summary(model)      # F-test À¯ÀÇÇÔ. R-squared: 0.525. Distance, Enrollment Á¦¿ÜÇÑ È¸±Í°è¼ö À¯ÀÇÇÔ.
-plot(model)         # ÀÜÂ÷µµ ÀÌ»ó ¾øÀ½
+summary(model)      # F-test ìœ ì˜í•¨. R-squared: 0.525. Distance, Enrollment ì œì™¸í•œ íšŒê·€ê³„ìˆ˜ ìœ ì˜í•¨.
+plot(model)         # ìž”ì°¨ë„ ì´ìƒ ì—†ìŒ
 
 backward <- step(model, direction = "backward", trace = F)
 backward
@@ -203,21 +203,21 @@ backward
 both <- step(model, direction = "both", trace = F)
 both
 
-# ÃÖÁ¾ È¸±Í¸ðÇü : Margin ~ Number + Nearest + Office.Space + Enrollment + Income
+# ìµœì¢… íšŒê·€ëª¨í˜• : Margin ~ Number + Nearest + Office.Space + Enrollment + Income
 # Coefficients:
 #     (Intercept)        Number       Nearest  Office.Space    Enrollment        Income  
 #       37.128891     -0.007742      1.586923      0.019576      0.196385      0.421411 
 
 
-# ´ÙÀ½ Á¶°ÇÀ» °¡Áø ÇÑ Áö¿ªÀÇ MarginÀ» 95% ½Å·Ú±¸°£À¸·Î ¿¹Ãø
+# ë‹¤ìŒ ì¡°ê±´ì„ ê°€ì§„ í•œ ì§€ì—­ì˜ Marginì„ 95% ì‹ ë¢°êµ¬ê°„ìœ¼ë¡œ ì˜ˆì¸¡
 new <- data.frame("Number" = 3815, "Nearest" = 0.9, "Office.Space" = 476, 
                   "Enrollment" = 24.5, "Income" = 35, "Distance" = 11.2)
 new
 predict(model, new, interval = "prediction")
 
 
-# BIC °ªÀ» ÃÖ¼Ò·Î ÇÏ´Â ¼³¸íº¯¼öÀÇ Á¶ÇÕÀ» Ã£¾Æ È¸±Í½ÄÀ» ÃßÁ¤
+# BIC ê°’ì„ ìµœì†Œë¡œ í•˜ëŠ” ì„¤ëª…ë³€ìˆ˜ì˜ ì¡°í•©ì„ ì°¾ì•„ íšŒê·€ì‹ì„ ì¶”ì •
 regsub <- regsubsets(Margin ~ ., data, nbest = 5)
-plot(regsub)   # ÃÖÁ¾ È¸±Í¸ðÇü : Margin ~ Number + Nearest + Office.Space + Income
+plot(regsub)   # ìµœì¢… íšŒê·€ëª¨í˜• : Margin ~ Number + Nearest + Office.Space + Income
 plot(regsub, scale="adjr2")
 

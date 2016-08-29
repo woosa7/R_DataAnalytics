@@ -1,48 +1,48 @@
 ################################################################
 #
-# RÀ» È°¿ëÇÑ Åë°èºÐ¼® : Á¤¿©Áø ±³¼ö (2016 ¿©¸§Æ¯°­)
+# Rì„ í™œìš©í•œ í†µê³„ë¶„ì„ : ì •ì—¬ì§„ êµìˆ˜ (2016 ì—¬ë¦„íŠ¹ê°•)
 #
-# 4. »ó°üºÐ¼® / ´Ü¼øÈ¸±ÍºÐ¼®
+# 4. ìƒê´€ë¶„ì„ / ë‹¨ìˆœíšŒê·€ë¶„ì„
 #
 ################################################################
 
 #---------------------------------------------------------------
-# »ó°ü°è¼ö
+# ìƒê´€ê³„ìˆ˜
 #---------------------------------------------------------------
 
-# °øºÐ»ê : µÎ º¯¼ö°¡ °°Àº ¹æÇâÀ¸·Î ¿òÁ÷ÀÌ´Â Á¤µµ. ÃøÁ¤´ÜÀ§¿¡ ¿µÇâÀ» ¹Þ´Â ´ÜÁ¡.
-# »ó°ü°è¼ö : °øºÐ»êÀ» Ç¥ÁØÆíÂ÷·Î ³ª´© °ª
+# ê³µë¶„ì‚° : ë‘ ë³€ìˆ˜ê°€ ê°™ì€ ë°©í–¥ìœ¼ë¡œ ì›€ì§ì´ëŠ” ì •ë„. ì¸¡ì •ë‹¨ìœ„ì— ì˜í–¥ì„ ë°›ëŠ” ë‹¨ì .
+# ìƒê´€ê³„ìˆ˜ : ê³µë¶„ì‚°ì„ í‘œì¤€íŽ¸ì°¨ë¡œ ë‚˜ëˆ„ ê°’
 
 # cov(x,y) = SUM(x - x_bar)(y - y_bar) / n - 1
 # corr(x,y) = cov(x,y) / sd(x)sd(y)
 
-# Pearson »ó°ü°è¼ö
-# --- Á÷¼±°ü°èÀÇ Á¤µµ¸¦ ³ªÅ¸³¿
-# --- -1 ~ 1 »çÀÌÀÇ °ª. 1¿¡ °¡±î¿ï¼ö·Ï °­ÇÑ »ó°ü°ü°è / 0¿¡ °¡±î¿ï¼ö·Ï °ü°è ¾øÀ½
+# Pearson ìƒê´€ê³„ìˆ˜
+# --- ì§ì„ ê´€ê³„ì˜ ì •ë„ë¥¼ ë‚˜íƒ€ëƒ„
+# --- -1 ~ 1 ì‚¬ì´ì˜ ê°’. 1ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ê°•í•œ ìƒê´€ê´€ê³„ / 0ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ê´€ê³„ ì—†ìŒ
 
-# Spearman »ó°ü°è¼ö
-# --- ¼­¿­Ã´µµÀÏ °æ¿ì »ç¿ëÇÏ´Â ºñ¸ð¼öÀû ¹æ¹ý
-# --- Á÷¼±°ü°è°¡ ¾Æ´Ï¾îµµ »ó°ü°ü°è°¡ ÀÖÀ¸¸é 1¿¡ °¡±î¿î °ªÀ» °®´Â´Ù.
+# Spearman ìƒê´€ê³„ìˆ˜
+# --- ì„œì—´ì²™ë„ì¼ ê²½ìš° ì‚¬ìš©í•˜ëŠ” ë¹„ëª¨ìˆ˜ì  ë°©ë²•
+# --- ì§ì„ ê´€ê³„ê°€ ì•„ë‹ˆì–´ë„ ìƒê´€ê´€ê³„ê°€ ìžˆìœ¼ë©´ 1ì— ê°€ê¹Œìš´ ê°’ì„ ê°–ëŠ”ë‹¤.
 
 x <- 1:10
 y <- x^2
 plot(x, y)
 
-# »ó°ü°è¼ö
+# ìƒê´€ê³„ìˆ˜
 cor(x, y)
 
-# ÀÚ·á°¡ ¼ø¼­Çü/¼øÀ§ÀÚ·áÀÏ °æ¿ì.
+# ìžë£Œê°€ ìˆœì„œí˜•/ìˆœìœ„ìžë£Œì¼ ê²½ìš°.
 cor(x, y, method = "kendall")
 cor(x, y, method = "spearman")
 
-# »ó°ü°è¼ö°¡ À¯ÀÇÇÑÁö °ËÁ¤
-# H0 : cor = 0 (»ó°ü°ü°è°¡ ¾ø´Ù) : p-value < 0.05 ÀÌ¸é H0 ±â°¢ = À¯ÀÇÇÑ »ó°ü°ü°è°¡ ÀÖ´Ù
+# ìƒê´€ê³„ìˆ˜ê°€ ìœ ì˜í•œì§€ ê²€ì •
+# H0 : cor = 0 (ìƒê´€ê´€ê³„ê°€ ì—†ë‹¤) : p-value < 0.05 ì´ë©´ H0 ê¸°ê° = ìœ ì˜í•œ ìƒê´€ê´€ê³„ê°€ ìžˆë‹¤
 cor.test(x, y)
 
 
 #---------------------------------------------------------------
-# 30°³ ºÎ¼­¿¡¼­ ºÎ¼­´ç 35¸íÀÇ Á÷¿ø ¼³¹®Á¶»ç
-# µ¥ÀÌÅÍ ¼ýÀÚ´Â ÇØ´ç Áú¹®¿¡ ±àÁ¤ÇÑ Á÷¿øÀÇ ºñÀ²
+# 30ê°œ ë¶€ì„œì—ì„œ ë¶€ì„œë‹¹ 35ëª…ì˜ ì§ì› ì„¤ë¬¸ì¡°ì‚¬
+# ë°ì´í„° ìˆ«ìžëŠ” í•´ë‹¹ ì§ˆë¬¸ì— ê¸ì •í•œ ì§ì›ì˜ ë¹„ìœ¨
 
 attitude
 cov(attitude)
@@ -53,85 +53,85 @@ attach(attitude)
 library(psych)
 pairs.panels(attitude)
 
-# complaints & rating »ó°ü°è¼ö°¡ °¡Àå ³ôÀ½
+# complaints & rating ìƒê´€ê³„ìˆ˜ê°€ ê°€ìž¥ ë†’ìŒ
 plot(rating, complaints)
 cor.test(rating, complaints)
 
 
 
 #---------------------------------------------------------------
-# ´Ü¼øÈ¸±ÍºÐ¼® (Simple Linear Regression)
+# ë‹¨ìˆœíšŒê·€ë¶„ì„ (Simple Linear Regression)
 #---------------------------------------------------------------
 
-# ÇÏ³ªÀÇ Á¾¼Óº¯¼ö(y)¿Í ÇÏ³ªÀÇ ¼³¸íº¯¼ö(x) °£ÀÇ °ü°è¸¦ Á÷¼±À¸·Î Ç¥ÇöÇÏ´Â ¹æ¹ý
-# ÀÎ°ú°ü°è°¡ ¾Æ´Ñ »ó°ü°ü°è!
+# í•˜ë‚˜ì˜ ì¢…ì†ë³€ìˆ˜(y)ì™€ í•˜ë‚˜ì˜ ì„¤ëª…ë³€ìˆ˜(x) ê°„ì˜ ê´€ê³„ë¥¼ ì§ì„ ìœ¼ë¡œ í‘œí˜„í•˜ëŠ” ë°©ë²•
+# ì¸ê³¼ê´€ê³„ê°€ ì•„ë‹Œ ìƒê´€ê´€ê³„!
 
 # y = b0 + b1x + e
 
-# b0 : y ÀýÆí
-# b1 : ±â¿ï±â
-# e (epsilon) : ¿ÀÂ÷. È®·üº¯¼ö. Æò±Õ 0, Ç¥ÁØÆíÂ÷ sigmaÀÎ Á¤±ÔºÐÆ÷¸¦ µû¸¥´Ù.
+# b0 : y ì ˆíŽ¸
+# b1 : ê¸°ìš¸ê¸°
+# e (epsilon) : ì˜¤ì°¨. í™•ë¥ ë³€ìˆ˜. í‰ê·  0, í‘œì¤€íŽ¸ì°¨ sigmaì¸ ì •ê·œë¶„í¬ë¥¼ ë”°ë¥¸ë‹¤.
 
-# ÃÖ¼ÒÀÚ½Â¹ý (Least Squares Method)
-# ¼±(y ÃßÁ¤°ª)À¸·ÎºÎÅÍ °¢ Á¡(y °üÂû°ª)ÀÌ ¾ó¸¶³ª ¶³¾îÁ® ÀÖ´ÂÁö ¼öÄ¡È­
-# ¿ÀÂ÷Á¦°öÇÕÀ» ÃÖ¼Ò·Î ÇÏ´Â ÃßÁ¤¹æ¹ý
-# °¢ Á¡ÀÌ ¼±¿¡ °¡±îÀÌ ºÙ¾îÀÖÀ»¼ö·Ï ÃßÁ¤µÈ È¸±Í½ÄÀÌ À¯ÀÇ¹ÌÇÏ´Ù.
+# ìµœì†ŒìžìŠ¹ë²• (Least Squares Method)
+# ì„ (y ì¶”ì •ê°’)ìœ¼ë¡œë¶€í„° ê° ì (y ê´€ì°°ê°’)ì´ ì–¼ë§ˆë‚˜ ë–¨ì–´ì ¸ ìžˆëŠ”ì§€ ìˆ˜ì¹˜í™”
+# ì˜¤ì°¨ì œê³±í•©ì„ ìµœì†Œë¡œ í•˜ëŠ” ì¶”ì •ë°©ë²•
+# ê° ì ì´ ì„ ì— ê°€ê¹Œì´ ë¶™ì–´ìžˆì„ìˆ˜ë¡ ì¶”ì •ëœ íšŒê·€ì‹ì´ ìœ ì˜ë¯¸í•˜ë‹¤.
 
 
 #---------------------------------------------------------------
-# È¸±ÍºÐ¼® in R
+# íšŒê·€ë¶„ì„ in R
 
-# model <- lm(y ~ x, data)  : È¸±ÍºÐ¼®
-# plot(model)               : È¸±ÍºÐ¼® °ü·Ã ±×·¡ÇÁ Ãâ·Â
+# model <- lm(y ~ x, data)  : íšŒê·€ë¶„ì„
+# plot(model)               : íšŒê·€ë¶„ì„ ê´€ë ¨ ê·¸ëž˜í”„ ì¶œë ¥
 #                           (plot, residuals vs fitted, Normal QQ, scale-location, residuals vs leverage)
-# summary(model)            : È¸±ÍºÐ¼® °á°ú Ãâ·Â
-# abline(model)             : ±×·¡ÇÁ¿¡ Á÷¼± Ãß°¡
+# summary(model)            : íšŒê·€ë¶„ì„ ê²°ê³¼ ì¶œë ¥
+# abline(model)             : ê·¸ëž˜í”„ì— ì§ì„  ì¶”ê°€
 # abline(intercept, slope)
 #---------------------------------------------------------------
 
-# Â÷ÀÇ ¼Óµµ¿Í ºê·¹ÀÌÅ© Á¦µ¿°Å¸®
+# ì°¨ì˜ ì†ë„ì™€ ë¸Œë ˆì´í¬ ì œë™ê±°ë¦¬
 cars
 summary(cars)
 
 plot(cars)
 
-out <- lm(dist ~ speed, data = cars)    # È¸±ÍºÐ¼®(Á¾¼Óº¯¼ö~¼³¸íº¯¼ö)
+out <- lm(dist ~ speed, data = cars)    # íšŒê·€ë¶„ì„(ì¢…ì†ë³€ìˆ˜~ì„¤ëª…ë³€ìˆ˜)
 plot(out)
 summary(out)
 
 #---------------------------------------------------------------
-# È¸±Í°è¼ö ÃßÁ¤°ú ÇØ¼®
+# íšŒê·€ê³„ìˆ˜ ì¶”ì •ê³¼ í•´ì„
 # 
-# (1) F-°ËÁ¤
+# (1) F-ê²€ì •
 #
 # F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12
-# --- È¸±Í¸ðÇü¿¡ ´ëÇÑ À¯ÀÇ¼º °ËÁ¤
-# --- H0 : È¸±Í¸ðÇüÀÌ À¯ÀÇÇÏÁö ¾Ê´Ù.
-# --- p-value < 0.05 ÀÌ¹Ç·Î H0 ±â°¡. È¸±Í¸ðÇüÀÌ À¯ÀÇÇÏ´Ù.
-# --- ´Ü¼øÈ¸±ÍºÐ¼®¿¡¼­´Â b1 = 0 (È¸±Í°è¼ö)¸¦ °ËÁ¤ÇÏ´Â t-test¿Í µ¿ÀÏ
+# --- íšŒê·€ëª¨í˜•ì— ëŒ€í•œ ìœ ì˜ì„± ê²€ì •
+# --- H0 : íšŒê·€ëª¨í˜•ì´ ìœ ì˜í•˜ì§€ ì•Šë‹¤.
+# --- p-value < 0.05 ì´ë¯€ë¡œ H0 ê¸°ê°€. íšŒê·€ëª¨í˜•ì´ ìœ ì˜í•˜ë‹¤.
+# --- ë‹¨ìˆœíšŒê·€ë¶„ì„ì—ì„œëŠ” b1 = 0 (íšŒê·€ê³„ìˆ˜)ë¥¼ ê²€ì •í•˜ëŠ” t-testì™€ ë™ì¼
 #
-# (2) t-°ËÁ¤
+# (2) t-ê²€ì •
 #
 # Coefficients: Est Std.    Error       t value     Pr(>|t|)    
 # (Intercept)   -17.5791    6.7584      -2.601      0.0123 *        --> b0
 #     speed     3.9324      0.4155      9.464       1.49e-12 ***    --> b1
 # 
-# --- È¸±Í°è¼ö¿¡ ´ëÇÑ t-test. H0 : b1 = 0. p-value < 0.05 ÀÌ¸é À¯ÀÇ¹Ì
+# --- íšŒê·€ê³„ìˆ˜ì— ëŒ€í•œ t-test. H0 : b1 = 0. p-value < 0.05 ì´ë©´ ìœ ì˜ë¯¸
 # --- y = -17.5791 + 3.9324 * x
-# --- ¼Ó·ÂÀÌ 0 ÀÏ¶§ Á¦µ¿°Å¸®°¡ 
+# --- ì†ë ¥ì´ 0 ì¼ë•Œ ì œë™ê±°ë¦¬ê°€ 
 #
-# (3) °áÁ¤°è¼ö (R-squared)
+# (3) ê²°ì •ê³„ìˆ˜ (R-squared)
 #
 # Multiple R-squared:  0.6511,	Adjusted R-squared:  0.6438 
-# --- °áÁ¤°è¼ö = SSR / SST
-# --- 1¿¡ °¡±î¿ï¼ö·Ï ¸ðÇüÀÌ º¯µ¿·®¿¡ ´ëÇØ ¼³¸í·ÂÀ» °®´Â´Ù. 
+# --- ê²°ì •ê³„ìˆ˜ = SSR / SST
+# --- 1ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ëª¨í˜•ì´ ë³€ë™ëŸ‰ì— ëŒ€í•´ ì„¤ëª…ë ¥ì„ ê°–ëŠ”ë‹¤. 
 #---------------------------------------------------------------
 
-# ANOVA table (Residuals:ÀÜÂ÷. Æò±Õ = 0)
+# ANOVA table (Residuals:ìž”ì°¨. í‰ê·  = 0)
 
-# Regression    SSR (È¸±Í½Ä¿¡ ÀÇÇØ ¼³¸íµÇ´Â º¯µ¿·®)
-# Residual      SSE (È¸±Í½Ä¿¡ ÀÇÇØ ¼³¸íµÇÁö ¾Ê´Â º¯µ¿·®)
-# Total         SST (ÃÑº¯µ¿·®)
+# Regression    SSR (íšŒê·€ì‹ì— ì˜í•´ ì„¤ëª…ë˜ëŠ” ë³€ë™ëŸ‰)
+# Residual      SSE (íšŒê·€ì‹ì— ì˜í•´ ì„¤ëª…ë˜ì§€ ì•ŠëŠ” ë³€ë™ëŸ‰)
+# Total         SST (ì´ë³€ë™ëŸ‰)
 
 anova(out)
 
@@ -141,43 +141,43 @@ abline(out, col = "red")
 
 
 #---------------------------------------------------------------
-# È¸±ÍÁø´Ü
+# íšŒê·€ì§„ë‹¨
 #---------------------------------------------------------------
 
 # No Intercept Model
-# ¼Óµµ°¡ 0ÀÌ¸é Á¦µ¿°Å¸®°¡ 0 ÀÎ °ÍÀÌ ´ç¿¬ÇÏ´Ù. b0 = 0 À¸·Î °íÁ¤.
+# ì†ë„ê°€ 0ì´ë©´ ì œë™ê±°ë¦¬ê°€ 0 ì¸ ê²ƒì´ ë‹¹ì—°í•˜ë‹¤. b0 = 0 ìœ¼ë¡œ ê³ ì •.
 
 out <- lm(dist ~ speed + 0, data = cars)
 out
 summary(out)    # y = 2.909 * x
 
-# ¿ÀÂ÷Ç×(e, ÀÜÂ÷)ÀÌ Ãß¼¼¸¦ º¸ÀÎ´Ù¸é ¹«¾ð°¡ Áß¿ä Á¤º¸°¡ ¸ðÇü¿¡ Æ÷ÇÔµÇÁö ¾Ê¾Ò´Ù´Â ÀÇ¹Ì
-# e´Â Æò±Õ 0, Ç¥ÁØÆíÂ÷ sigmaÀÎ Á¤±ÔºÐÆ÷¸¦ µû¸£´Â È®·üº¯¼öÀÌ´Ù.
-# --> ÀÜÂ÷µµ(residual plot)ÀÇ ÆÐÅÏ È®ÀÎ ÇÊ¿ä!
-# --> ÀÜÂ÷°¡ 0°ú °¡±î¿ï¼ö·Ï ÁÁ´Ù.
+# ì˜¤ì°¨í•­(e, ìž”ì°¨)ì´ ì¶”ì„¸ë¥¼ ë³´ì¸ë‹¤ë©´ ë¬´ì–¸ê°€ ì¤‘ìš” ì •ë³´ê°€ ëª¨í˜•ì— í¬í•¨ë˜ì§€ ì•Šì•˜ë‹¤ëŠ” ì˜ë¯¸
+# eëŠ” í‰ê·  0, í‘œì¤€íŽ¸ì°¨ sigmaì¸ ì •ê·œë¶„í¬ë¥¼ ë”°ë¥´ëŠ” í™•ë¥ ë³€ìˆ˜ì´ë‹¤.
+# --> ìž”ì°¨ë„(residual plot)ì˜ íŒ¨í„´ í™•ì¸ í•„ìš”!
+# --> ìž”ì°¨ê°€ 0ê³¼ ê°€ê¹Œìš¸ìˆ˜ë¡ ì¢‹ë‹¤.
 
 par(mfcol=c(2,2))
 plot(out)
 par(mfcol=c(1,1))
-# Residuals vs Fitted plot (ÀÜÂ÷µµ) / Normal Q-Q plot (Á¤±Ô¼º °ËÁ¤)
-# --> ¼±Çü ÆÐÅÏÀÌ ¾Æ´Ï°í, ºÐ»êÀÌ Áõ°¡ÇÏ´Â °æÇâ --> Á¾¼Óº¯¼öÀÇ log ¶Ç´Â sqrt º¯È¯ ½Ãµµ
+# Residuals vs Fitted plot (ìž”ì°¨ë„) / Normal Q-Q plot (ì •ê·œì„± ê²€ì •)
+# --> ì„ í˜• íŒ¨í„´ì´ ì•„ë‹ˆê³ , ë¶„ì‚°ì´ ì¦ê°€í•˜ëŠ” ê²½í–¥ --> ì¢…ì†ë³€ìˆ˜ì˜ log ë˜ëŠ” sqrt ë³€í™˜ ì‹œë„
 
 par(mfcol=c(1,2))
 plot(log(dist) ~ speed + 0, data = cars)
-plot(sqrt(dist) ~ speed + 0, data = cars)  # sqrt (root) º¯È¯ÀÌ ÀûÀýÇÑ ÆÐÅÏÀ» º¸ÀÓ
+plot(sqrt(dist) ~ speed + 0, data = cars)  # sqrt (root) ë³€í™˜ì´ ì ì ˆí•œ íŒ¨í„´ì„ ë³´ìž„
 par(mfcol=c(1,1))
 
 out2 <- lm(sqrt(dist) ~ speed + 0, data = cars)
 str(out2)
-summary(out2)   # sqrt º¯È¯ÈÄ È¸±ÍºÐ¼® --> R-squared °ª ³ô¾ÆÁü
+summary(out2)   # sqrt ë³€í™˜í›„ íšŒê·€ë¶„ì„ --> R-squared ê°’ ë†’ì•„ì§
 
 par(mfcol=c(2,2))
-plot(out2)      # Residuals vs Fitted plot / Normal Q-Q plot ÁÁÀº ÆÐÅÏÀ» º¸ÀÓ
+plot(out2)      # Residuals vs Fitted plot / Normal Q-Q plot ì¢‹ì€ íŒ¨í„´ì„ ë³´ìž„
 par(mfcol=c(1,1))
 
-shapiro.test(out2$residuals)    # ÀÜÂ÷°¡ Á¤±ÔºÐÆ÷¸¦ µû¸¥´Ù (p-value > 0.05)
+shapiro.test(out2$residuals)    # ìž”ì°¨ê°€ ì •ê·œë¶„í¬ë¥¼ ë”°ë¥¸ë‹¤ (p-value > 0.05)
 
-# ÃÖÁ¾ ¸ðÇüÀ¸·Î ÃßÁ¤µÈ È¸±Í½Ä
+# ìµœì¢… ëª¨í˜•ìœ¼ë¡œ ì¶”ì •ëœ íšŒê·€ì‹
 sqrt(dist) =  0.397 * speed
 
 dist = (0.397 * speed)^2
@@ -185,43 +185,43 @@ dist = (0.397 * speed)^2
 
 
 #---------------------------------------------------------------
-# ÃßÁ¤°ú ¿¹Ãø
+# ì¶”ì •ê³¼ ì˜ˆì¸¡
 #---------------------------------------------------------------
 
-# ¼Óµµ°¡ 10 ¶Ç´Â 30ÀÏ¶§ÀÇ Á¦µ¿°Å¸® ¿¹Ãø
+# ì†ë„ê°€ 10 ë˜ëŠ” 30ì¼ë•Œì˜ ì œë™ê±°ë¦¬ ì˜ˆì¸¡
 nspeed <- data.frame("speed" = c(10,30))
 nspeed
 
 predict(out2, nspeed)
-# predict(out2, nspeed) ^ 2   # °á°ú°ªÀº sqrt(dist) ÀÌ¹Ç·Î ½ÇÁ¦°ªÀº º¯È¯ ÇÊ¿ä
+# predict(out2, nspeed) ^ 2   # ê²°ê³¼ê°’ì€ sqrt(dist) ì´ë¯€ë¡œ ì‹¤ì œê°’ì€ ë³€í™˜ í•„ìš”
 
-# "Æò±Õ" Á¦µ¿°Å¸®ÀÇ 95% ½Å·Ú±¸°£
+# "í‰ê· " ì œë™ê±°ë¦¬ì˜ 95% ì‹ ë¢°êµ¬ê°„
 predict(out2, nspeed, interval = "confidence")
 
-# »õ·Î¿î ÇÑ Â÷·®¿¡ ´ëÇÑ 95% ¿¹Ãø±¸°£
+# ìƒˆë¡œìš´ í•œ ì°¨ëŸ‰ì— ëŒ€í•œ 95% ì˜ˆì¸¡êµ¬ê°„
 predict(out2, nspeed, interval = "prediction")
 
-# ¸ðµç °üÃøÄ¡¿¡ ´ëÇÑ ÃßÁ¤Ä¡
+# ëª¨ë“  ê´€ì¸¡ì¹˜ì— ëŒ€í•œ ì¶”ì •ì¹˜
 pred_dist <- fitted(out2)^2
 cbind(cars, pred_dist)
 plot(cars$speed, pred_dist)
 
-# °üÃøÄ¡ ¼ÓµµÀÇ ÃÖ´ë°ª 25 --> µ¥ÀÌÅÍ ¹üÀ§ ¹Û¿¡¼­ ¿¹ÃøÇÏ´Â °ÍÀº ÁÖÀÇ ÇØ¾ßÇÑ´Ù!
+# ê´€ì¸¡ì¹˜ ì†ë„ì˜ ìµœëŒ€ê°’ 25 --> ë°ì´í„° ë²”ìœ„ ë°–ì—ì„œ ì˜ˆì¸¡í•˜ëŠ” ê²ƒì€ ì£¼ì˜ í•´ì•¼í•œë‹¤!
 newspeed2 <- data.frame("speed"= c(50, 70))
 predict(out2, newspeed2)^2
 
 
 #---------------------------------------------------------------
-# Outlier (ÀÌ»óÁ¡) / Influential Points (¿µÇâÁ¡)
+# Outlier (ì´ìƒì ) / Influential Points (ì˜í–¥ì )
 #---------------------------------------------------------------
 
 # Outlier
-# - ÃøÁ¤»ó/½ÇÇè»óÀÇ °ú¿À·Î ¸ðÁý´Ü¿¡ ¼ÓÇÏÁö ¾Ê´Â´Ù°í ÀÇ½ÉÀÌ µÉ Á¤µµ·Î Á¤»ó¹üÀ§ ¹Û¿¡ ¶³¾îÁø Á¡
-# - ´ë°³ Å« ÀÜÂ÷¸¦ °¡Áü
+# - ì¸¡ì •ìƒ/ì‹¤í—˜ìƒì˜ ê³¼ì˜¤ë¡œ ëª¨ì§‘ë‹¨ì— ì†í•˜ì§€ ì•ŠëŠ”ë‹¤ê³  ì˜ì‹¬ì´ ë  ì •ë„ë¡œ ì •ìƒë²”ìœ„ ë°–ì— ë–¨ì–´ì§„ ì 
+# - ëŒ€ê°œ í° ìž”ì°¨ë¥¼ ê°€ì§
 
 # Influential Points
-# ¼Ò¼öÀÇ °üÃøÄ¡ÀÌÁö¸¸ Åë°è·®¿¡ Å« ¿µÇâÀ» ¹ÌÄ§
-# Leverage plot ¿¡¼­ Á¡¼± ¿µ¿ª ¹Û¿¡ À§Ä¡ (Cook' distance)
+# ì†Œìˆ˜ì˜ ê´€ì¸¡ì¹˜ì´ì§€ë§Œ í†µê³„ëŸ‰ì— í° ì˜í–¥ì„ ë¯¸ì¹¨
+# Leverage plot ì—ì„œ ì ì„  ì˜ì—­ ë°–ì— ìœ„ì¹˜ (Cook' distance)
 
 
 
@@ -229,7 +229,7 @@ predict(out2, newspeed2)^2
 # practice 4
 #---------------------------------------------------------------
 
-# Áß°íÂ÷. Odometer (ÁÖÇà°Å¸® / 100 mile)¿¡ µû¸¥ Price (°¡°Ý / $1000)
+# ì¤‘ê³ ì°¨. Odometer (ì£¼í–‰ê±°ë¦¬ / 100 mile)ì— ë”°ë¥¸ Price (ê°€ê²© / $1000)
 
 ucar <- read.csv("sonata.csv")
 head(ucar)
@@ -238,25 +238,25 @@ summary(ucar)
 ucar <- ucar[-3]
 attach(ucar)
 
-# »êÁ¡µµ¿Í »ó°ü°è¼ö¸¦ ÅëÇØ ¼±Çü°ü°è¸¦ ÆÇ´Ü
+# ì‚°ì ë„ì™€ ìƒê´€ê³„ìˆ˜ë¥¼ í†µí•´ ì„ í˜•ê´€ê³„ë¥¼ íŒë‹¨
 plot(Price ~ Odometer, ucar)
 cor(Price, Odometer)
 pairs.panels(ucar)    # cor = -0.81
 
-# È¸±Í½Ä ÃßÁ¤
+# íšŒê·€ì‹ ì¶”ì •
 model <- lm(Price ~ Odometer, data = ucar)
 summary(model)
 
 # price = 17.249 - 0.067 * Odometer
-# F-test : È¸±Í¸ðÇü À¯ÀÇÇÔ
-# t-test : È¸±Í°è¼ö À¯ÀÇÇÔ
+# F-test : íšŒê·€ëª¨í˜• ìœ ì˜í•¨
+# t-test : íšŒê·€ê³„ìˆ˜ ìœ ì˜í•¨
 # R-squared : 0.648
 
-plot(model)     # ÀÜÂ÷µµ ÀûÀý
+plot(model)     # ìž”ì°¨ë„ ì ì ˆ
 
 
-# ÁÖÇà°Å¸® 3600 ¸¶ÀÏÀÎ ¼Ò³ªÅ¸
+# ì£¼í–‰ê±°ë¦¬ 3600 ë§ˆì¼ì¸ ì†Œë‚˜íƒ€
 nOdometer <- data.frame("Odometer" = c(36, 46))
-predict(model, nOdometer, interval = "confidence") # Æò±Õ°¡°Ý
-predict(model, nOdometer, interval = "prediction") # Æ¯Á¤ÇÑ Â÷¸¦ ÆÈ¶§ ¿¹Ãø°¡°Ý
+predict(model, nOdometer, interval = "confidence") # í‰ê· ê°€ê²©
+predict(model, nOdometer, interval = "prediction") # íŠ¹ì •í•œ ì°¨ë¥¼ íŒ”ë•Œ ì˜ˆì¸¡ê°€ê²©
 

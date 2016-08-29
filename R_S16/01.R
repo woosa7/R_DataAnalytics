@@ -1,71 +1,71 @@
 ################################################################
 #
-# RÀ» È°¿ëÇÑ Åë°èºĞ¼® : Á¤¿©Áø ±³¼ö (2016 ¿©¸§Æ¯°­)
+# Rì„ í™œìš©í•œ í†µê³„ë¶„ì„ : ì •ì—¬ì§„ êµìˆ˜ (2016 ì—¬ë¦„íŠ¹ê°•)
 #
-# 1. °æ¿µÅë°è ¿ä¾àÁ¤¸®
+# 1. ê²½ì˜í†µê³„ ìš”ì•½ì •ë¦¬
 #
 ################################################################
 
 #---------------------------------------------------------------
-# ÁúÀû ÀÚ·á (¹üÁÖÇü) : ¸í¸ñÃ´µµ / ¼­¿­Ã´µµ
-# ¾çÀû ÀÚ·á : ±¸°£Ã´µµ (¿øÁ¡ ¾øÀ½) / ºñÀ²Ã´µµ (¿øÁ¡ Á¸Àç)
+# ì§ˆì  ìë£Œ (ë²”ì£¼í˜•) : ëª…ëª©ì²™ë„ / ì„œì—´ì²™ë„
+# ì–‘ì  ìë£Œ : êµ¬ê°„ì²™ë„ (ì›ì  ì—†ìŒ) / ë¹„ìœ¨ì²™ë„ (ì›ì  ì¡´ì¬)
 #---------------------------------------------------------------
 
 #---------------------------------------------------------------
-# ¾çÀû ÀÚ·áÀÇ ¿ä¾à
+# ì–‘ì  ìë£Œì˜ ìš”ì•½
 #---------------------------------------------------------------
 
 library(reshape)
 
-attach(tips)    # dataframe name È£ÃâÇÏÁö ¾Ê¾Æµµ µÊ.
+attach(tips)    # dataframe name í˜¸ì¶œí•˜ì§€ ì•Šì•„ë„ ë¨.
 summary(tips)
 
 library(psych)
 describe(tips)
 headTail(tips)
 
-# ¾çÀûÀÚ·áÀÎ size¸¦ ¹üÁÖÇü ÀÚ·á·Î Ã³¸®ÇÏ±æ ¿øÇÏ´Â °æ¿ì.
+# ì–‘ì ìë£Œì¸ sizeë¥¼ ë²”ì£¼í˜• ìë£Œë¡œ ì²˜ë¦¬í•˜ê¸¸ ì›í•˜ëŠ” ê²½ìš°.
 tips2 <- tips
 tips2$size = factor(tips2$size)
 summary(tips2)
 
-# median : ±Ø´Ü°ªÀÌ ÀÖ´Â °æ¿ì Áß½ÉÀ§Ä¡ ÃøÁ¤¿¡ ¼±È£
+# median : ê·¹ë‹¨ê°’ì´ ìˆëŠ” ê²½ìš° ì¤‘ì‹¬ìœ„ì¹˜ ì¸¡ì •ì— ì„ í˜¸
 tips2$tip[1] = 100
 quantile(tips$tip)
 quantile(tips2$tip)
 
-# ºĞ»ê / Ç¥ÁØÆíÂ÷
+# ë¶„ì‚° / í‘œì¤€í¸ì°¨
 var(tip)
 sd(tip)
 
-# º¯µ¿°è¼ö(Coefficient of Variation) = Ç¥ÁØÆíÂ÷ / Æò±Õ
-# Ç¥ÁØÆíÂ÷°¡ Æò±Õ¿¡ ºñÇÏ¿© ¾ó¸¶³ª Å«Áö ³ªÅ¸³¿. µÎ Áı´ÜÀÇ º¯µ¿¼º ºñ±³½Ã »ç¿ë.
-# Æò±ÕÀÌ Å¬¼ö·Ï Ç¥ÁØÆíÂ÷°¡ Å« °æÇâÀÌ ÀÖ±â ¶§¹®¿¡ Ç¥ÁØÆíÂ÷·Î º¯µ¿¼º ºñ±³ÇÒ ¼ö ¾øÀ½.
+# ë³€ë™ê³„ìˆ˜(Coefficient of Variation) = í‘œì¤€í¸ì°¨ / í‰ê· 
+# í‘œì¤€í¸ì°¨ê°€ í‰ê· ì— ë¹„í•˜ì—¬ ì–¼ë§ˆë‚˜ í°ì§€ ë‚˜íƒ€ëƒ„. ë‘ ì§‘ë‹¨ì˜ ë³€ë™ì„± ë¹„êµì‹œ ì‚¬ìš©.
+# í‰ê· ì´ í´ìˆ˜ë¡ í‘œì¤€í¸ì°¨ê°€ í° ê²½í–¥ì´ ìˆê¸° ë•Œë¬¸ì— í‘œì¤€í¸ì°¨ë¡œ ë³€ë™ì„± ë¹„êµí•  ìˆ˜ ì—†ìŒ.
 sd(tip) / mean(tip)
 
-# »çºĞÀ§¼ö ¹üÀ§ (interquartile range, IQR)
-# Q1°ú Q3ÀÇ Â÷ÀÌ. ÀÚ·áÀÇ Áß°£ 50%ÀÇ ¹üÀ§. ±Ø´Ü°ª¿¡ »ó´ëÀûÀ¸·Î ´ú ¹Î°¨.
+# ì‚¬ë¶„ìœ„ìˆ˜ ë²”ìœ„ (interquartile range, IQR)
+# Q1ê³¼ Q3ì˜ ì°¨ì´. ìë£Œì˜ ì¤‘ê°„ 50%ì˜ ë²”ìœ„. ê·¹ë‹¨ê°’ì— ìƒëŒ€ì ìœ¼ë¡œ ëœ ë¯¼ê°.
 IQR(tip)
 
 # plot
 boxplot(tip, col = "red", horizontal = T, xlab = "Tip")
 
 hist(tip)
-hist(tip, 20, probability = T, xlim = c(0,10), ylim = c(0,0.5))   # break : 20 / probability : °¹¼ö°¡ ¾Æ´Ñ È®·ü·Î Ç¥½Ã
+hist(tip, 20, probability = T, xlim = c(0,10), ylim = c(0,0.5))   # break : 20 / probability : ê°¯ìˆ˜ê°€ ì•„ë‹Œ í™•ë¥ ë¡œ í‘œì‹œ
 lines(density(tip), col = "blue")
 
-# Q-Q Normality Plot : ÀÚ·á°¡ Á¤±ÔºĞÆ÷¿¡ ¾ó¸¶³ª ±ÙÁ¢ÇÑÁö ÆÇ´Ü
+# Q-Q Normality Plot : ìë£Œê°€ ì •ê·œë¶„í¬ì— ì–¼ë§ˆë‚˜ ê·¼ì ‘í•œì§€ íŒë‹¨
 qqnorm(tip)
-qqline(tip)     # Á¡µéÀÌ ¼±À§¿¡ °¡±îÀÌ ÀÖÀ»¼ö·Î Á¤±ÔºĞÆ÷¸¦ µû¸§.
+qqline(tip)     # ì ë“¤ì´ ì„ ìœ„ì— ê°€ê¹Œì´ ìˆì„ìˆ˜ë¡œ ì •ê·œë¶„í¬ë¥¼ ë”°ë¦„.
 
 detach(tips)
 
 
 #---------------------------------------------------------------
-# ÁúÀûÀÚ·áÀÇ ¿ä¾à
+# ì§ˆì ìë£Œì˜ ìš”ì•½
 #---------------------------------------------------------------
 
-# table() : µµ¼öºĞÆ÷Ç¥
+# table() : ë„ìˆ˜ë¶„í¬í‘œ
 # barplot()
 # pie()
 
@@ -73,7 +73,7 @@ tips
 summary(tips$day)
 barplot(table(tips$day))
 
-tips$day <- factor(tips$day, levels = c("Thur","Fri","Sat","Sun"))   # ¿äÀÏ ¼ø¼­´ë·Î ³ª¿Àµµ·Ï factor levels º¯°æ
+tips$day <- factor(tips$day, levels = c("Thur","Fri","Sat","Sun"))   # ìš”ì¼ ìˆœì„œëŒ€ë¡œ ë‚˜ì˜¤ë„ë¡ factor levels ë³€ê²½
 summary(tips$day)
 
 mytable <- table(tips$day)
@@ -89,13 +89,13 @@ pie(mytable, labels = lbl, col = rainbow(length(mytable)), main = "Day of Tips")
 
 
 #---------------------------------------------------------------
-# µÎ º¯¼öÀÇ ¿ä¾à
+# ë‘ ë³€ìˆ˜ì˜ ìš”ì•½
 #---------------------------------------------------------------
 
-# µÎ ¹üÁÖÇü º¯¼öÀÇ ¿ä¾à
-# xtabs(~±×·ìº¯¼ö1 + ±×·ìº¯¼ö2, data) = ºĞÇÒÇ¥
+# ë‘ ë²”ì£¼í˜• ë³€ìˆ˜ì˜ ìš”ì•½
+# xtabs(~ê·¸ë£¹ë³€ìˆ˜1 + ê·¸ë£¹ë³€ìˆ˜2, data) = ë¶„í• í‘œ
 
-# ¼ºº°~¿äÀÏº°
+# ì„±ë³„~ìš”ì¼ë³„
 mytable2 <- xtabs(~ sex + day, tips)
 mytable2
 
@@ -105,13 +105,13 @@ barplot(mytable2, legend.text = c("Female", "Male"), ylim = c(0,80), beside = T)
 barplot(xtabs(~ sex + smoker, tips), legend.text = c("Female", "Male"), ylim = c(0,100), beside = T, xlab = "smoker")
 barplot(xtabs(~ size + time, tips), legend.text = c(1,2,3,4,5,6), beside = T, xlab = "size - time")
 
-mosaicplot(mytable2)     # ¼ºº° ±âÁØÀ¸·Î ¿äÀÏº° ºñ±³
-mosaicplot(t(mytable2))  # ¿äÀÏ ±âÁØÀ¸·Î ¼ºº° ºñ±³
+mosaicplot(mytable2)     # ì„±ë³„ ê¸°ì¤€ìœ¼ë¡œ ìš”ì¼ë³„ ë¹„êµ
+mosaicplot(t(mytable2))  # ìš”ì¼ ê¸°ì¤€ìœ¼ë¡œ ì„±ë³„ ë¹„êµ
 
-# ¹üÁÖÇü º¯¼ö¿Í ¾çÀû º¯¼öÀÇ ¿ä¾à 
+# ë²”ì£¼í˜• ë³€ìˆ˜ì™€ ì–‘ì  ë³€ìˆ˜ì˜ ìš”ì•½ 
 boxplot(tip ~ day, data = tips, ylab = "tips", xlab = "day")
 
-# µÎ ¾çÀûº¯¼öÀÇ ¿ä¾à (ÁÖ¹®±İ¾× ´ëºñ ÆÁ)
+# ë‘ ì–‘ì ë³€ìˆ˜ì˜ ìš”ì•½ (ì£¼ë¬¸ê¸ˆì•¡ ëŒ€ë¹„ íŒ)
 plot(tip ~ total_bill, tips)
 
 
@@ -119,9 +119,9 @@ plot(tip ~ total_bill, tips)
 # practice
 #--------------------------------------------
 
-# 2012 - 2013 ³â ±¹³» °³ºÀ ¿µÈ­
+# 2012 - 2013 ë…„ êµ­ë‚´ ê°œë´‰ ì˜í™”
 
-kmovie <- read.csv("movie_MBA.csv", stringsAsFactors = F)
+kmovie <- read.csv("movie_utf8.csv", stringsAsFactors = F)
 View(kmovie)
 str(kmovie)
 
@@ -134,7 +134,7 @@ kmovie$total_sales <- kmovie$total_sales/1000000
 attach(kmovie)
 
 #--------------------------------------------
-# 1. ÃÑ°ü°´¼ö(total_seen)¿¡ ´ëÇØ Åë°è·®
+# 1. ì´ê´€ê°ìˆ˜(total_seen)ì— ëŒ€í•´ í†µê³„ëŸ‰
 
 mean(total_seen)
 median(total_seen)
@@ -145,10 +145,10 @@ summary(total_seen)
 IQR(total_seen)
 
 boxplot(total_seen, horizontal=T)
-hist(total_seen, 20)   # ---> ¿ìÃø¿¡ outlier°¡ ³Ê¹« ¸¹´Ù. Àû´çÈ÷ º¯È¯ ÈÄ ºĞ¼® ÁøÇà ÇÊ¿ä 
+hist(total_seen, 20)   # ---> ìš°ì¸¡ì— outlierê°€ ë„ˆë¬´ ë§ë‹¤. ì ë‹¹íˆ ë³€í™˜ í›„ ë¶„ì„ ì§„í–‰ í•„ìš” 
 
 #--------------------------------------------
-# 2. µî±Şº° Æò±Õ ¸ÅÃâ¾×
+# 2. ë“±ê¸‰ë³„ í‰ê·  ë§¤ì¶œì•¡
 
 unique(rating)
 aggregate(total_sales ~ rating, data = kmovie, mean)
@@ -158,57 +158,57 @@ boxplot(total_sales ~ rating, data = kmovie, ylab = "sales (x1,000,000)", xlab =
 boxplot(log(total_sales) ~ rating, data = kmovie, ylab = "sales : log(x1,000,000)", xlab = "rating")
 
 library(plyr)
-msales <- ddply(kmovie, ~rating, summarise, mean_sales=mean(total_sales))
+msales <- ddply(kmovie, ~rating, summarise, mean_sales = mean(total_sales))
 msales
 barplot(msales[,2], names.arg = msales[,1])
 
 #--------------------------------------------
-# 3. µî±Şº° °³ºÀ ¿µÈ­ ¼ö : barplot & pie chart
+# 3. ë“±ê¸‰ë³„ ê°œë´‰ ì˜í™” ìˆ˜ : barplot & pie chart
 tableOfRating <- table(rating)
 tableOfRating
 
 # las : style of axis labels. mar : plot margin, c(bottom, left, top, right)
-bp <- barplot(tableOfRating, ylab="Count", xlab="Rating", ylim = c(0,100), las = 2, mar = c(10,5,5,5))
+bp <- barplot(tableOfRating, ylab="Count", xlab="Rating", ylim = c(0,100), las = 1, mar = c(10,5,5,5))
 text(x = bp, y = tableOfRating*0.9, labels = tableOfRating, col = "red", cex = 0.9)
 
 lbl2 <- paste(names(tableOfRating), "\n", round(prop.table(tableOfRating)* 100,2), "%", sep="")
 pie(tableOfRating, labels = lbl2, col = rainbow(4))
 
 #--------------------------------------------
-# 4. µî±Ş°ú Àå¸£ »ç¿ëÇØ ºĞÇÒÇ¥ »ı¼º. bar plot°ú mosaic plot ±×¸®±â.
+# 4. ë“±ê¸‰ê³¼ ì¥ë¥´ ì‚¬ìš©í•´ ë¶„í• í‘œ ìƒì„±. bar plotê³¼ mosaic plot ê·¸ë¦¬ê¸°.
 
-tab = xtabs(~genre+rating, kmovie)
+tab = xtabs(~ genre + rating, kmovie)
 tab
 
 barplot(tab, legend.text=row.names(tab), col = rainbow(9), beside = T, ylim = c(0,40))
 
-mosaicplot(tab)
-mosaicplot(t(tab))
+mosaicplot(tab, las = 2)
+mosaicplot(t(tab), las = 2)
 
 
 
 #---------------------------------------------------------------
-# À¯Çü¿¡ µû¸¥ ºĞ¼®±â¹ı
+# ìœ í˜•ì— ë”°ë¥¸ ë¶„ì„ê¸°ë²•
 
-# Æò±Õ¿¡ ´ëÇÑ ±¸°£ ÃßÁ¤     : T-test                t.test(x)
-# ÇÑ ±×·ìÀÇ Æò±Õ            : One Sample T-test     t.test(x, mu = , alternative = )
-# ÇÑ ±×·ìÀÇ µÎ º¯¼ö 
-# ¿¬°ü¼º ³ôÀº µÎ ±×·ì       : Paired T-test         t.test(x2 - x1)
-# µÎ ±×·ìÀÇ Æò±Õ            : Two Sample T-test     t.test(y ~ x, var.equal = , data = )
-# ¼¼ ±×·ì ÀÌ»óÀÇ Æò±Õ       : ANOVA / ANCOVA        lm / anova / glht("Dunnett") / interaction.plot
-# ÇÏ³ªÀÇ ºñÀ²               : Binomial test         binom.test
-# ÇÑ ±×·ìÀÇ ºñÀ² ±¸°£ ÃßÁ¤
-# µÎ ±×·ì ÀÌ»óÀÇ ºñÀ²       : Proportions test      prop.test(x, n, p)
-# Á¤±Ô¼º °ËÁ¤               : Shapiro-Wilk test     shapiro.test(x)
-# µîºĞ»ê °ËÁ¤               : Variance test         var.test(y ~ x, data = )
-# µ¶¸³¼º °ËÁ¤               : Chi-squard test       chisq.test(x)
-# »ó°ü°è¼ö                  : Correlation test      cor.test
-# ¿¹Ãø°ú ÃßÁ¤               :                       predict
-# È¸±ÍºĞ¼® ¸ğµ¨ ¼±ÅÃ        :                       step / regsubsets
+# í‰ê· ì— ëŒ€í•œ êµ¬ê°„ ì¶”ì •     : T-test                t.test(x)
+# í•œ ê·¸ë£¹ì˜ í‰ê·             : One Sample T-test     t.test(x, mu = , alternative = )
+# í•œ ê·¸ë£¹ì˜ ë‘ ë³€ìˆ˜ 
+# ì—°ê´€ì„± ë†’ì€ ë‘ ê·¸ë£¹       : Paired T-test         t.test(x2 - x1)
+# ë‘ ê·¸ë£¹ì˜ í‰ê·             : Two Sample T-test     t.test(y ~ x, var.equal = , data = )
+# ì„¸ ê·¸ë£¹ ì´ìƒì˜ í‰ê·        : ANOVA / ANCOVA        lm / anova / glht("Dunnett") / interaction.plot
+# í•˜ë‚˜ì˜ ë¹„ìœ¨               : Binomial test         binom.test
+# í•œ ê·¸ë£¹ì˜ ë¹„ìœ¨ êµ¬ê°„ ì¶”ì •
+# ë‘ ê·¸ë£¹ ì´ìƒì˜ ë¹„ìœ¨       : Proportions test      prop.test(x, n, p)
+# ì •ê·œì„± ê²€ì •               : Shapiro-Wilk test     shapiro.test(x)
+# ë“±ë¶„ì‚° ê²€ì •               : Variance test         var.test(y ~ x, data = )
+# ë…ë¦½ì„± ê²€ì •               : Chi-squard test       chisq.test(x)
+# ìƒê´€ê³„ìˆ˜                  : Correlation test      cor.test
+# ì˜ˆì¸¡ê³¼ ì¶”ì •               :                       predict
+# íšŒê·€ë¶„ì„ ëª¨ë¸ ì„ íƒ        :                       step / regsubsets
 
-# ºñ¸ğ¼öÀû ¹æ¹ı (Á¤±ÔºĞÆ÷¸¦ µû¸£Áö ¾Ê´Â °æ¿ì)
-# One Sample / Paired T-test ÀÏ °æ¿ì    : Wilcoxon Signed-Rank Test     wilcox.test(x)
-# Two Sample T-test ÀÏ °æ¿ì             : Wilcoxon Rank-Sum Test        wilcox.test(y ~ x, data = )
-# ANOVAÀÏ °æ¿ì                          : Kurskal-Wallis Test           kruskal.test
+# ë¹„ëª¨ìˆ˜ì  ë°©ë²• (ì •ê·œë¶„í¬ë¥¼ ë”°ë¥´ì§€ ì•ŠëŠ” ê²½ìš°)
+# One Sample / Paired T-test ì¼ ê²½ìš°    : Wilcoxon Signed-Rank Test     wilcox.test(x)
+# Two Sample T-test ì¼ ê²½ìš°             : Wilcoxon Rank-Sum Test        wilcox.test(y ~ x, data = )
+# ANOVAì¼ ê²½ìš°                          : Kurskal-Wallis Test           kruskal.test
 
 #---------------------------------------------------------------
