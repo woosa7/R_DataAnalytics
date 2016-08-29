@@ -4,12 +4,12 @@
 #
 ################################################################
 
-#--------------------------------------------------------------
-# È¸±ÍºĞ¼®
-#--------------------------------------------------------------
+################################################################
+# íšŒê·€ë¶„ì„
+################################################################
 
 #--------------------------------------------------------------
-# »ó°ü°è¼ö correlation coefficient
+# ìƒê´€ê³„ìˆ˜ correlation coefficient
 
 data("mtcars")
 mtcars
@@ -17,34 +17,35 @@ str(mtcars)
 
 attach(mtcars)
 
-# disp ¹è±â·® / drat ÈÄ¹æÂ÷ÃàºñÀ² / wt Â÷·® ¹«°Ô
+# disp ë°°ê¸°ëŸ‰ / drat í›„ë°©ì°¨ì¶•ë¹„ìœ¨ / wt ì°¨ëŸ‰ ë¬´ê²Œ
 plot(disp, drat)
 plot(disp, wt)
 
-cov(disp, wt)   # °øºĞ»ê
-cor(disp, wt)   # »ó°ü°è¼ö
+cov(disp, wt)   # ê³µë¶„ì‚°
+cor(disp, wt)   # ìƒê´€ê³„ìˆ˜
 
 cov(mtcars)
-cor(mtcars)  # ¸ğµç º¯¼ö°£ÀÇ »ó°ü°è¼ö Å×ÀÌºí Ç¥½Ã
+cor(mtcars)  # ëª¨ë“  ë³€ìˆ˜ê°„ì˜ ìƒê´€ê³„ìˆ˜ í…Œì´ë¸” í‘œì‹œ
 
 library(psych)
-pairs.panels(mtcars[, c("disp", "wt", "drat")])
+pairs.panels(mtcars[ , c("disp", "wt", "drat")])
 
-# ÇÇ¾î½¼ »ó°ü°è¼ö - ÀÏ¹İÀûÀÎ °æ¿ì. ¿¬¼ÓÇü º¯¼ö.
-# ½ºÇÇ¾î¸¸ »ó°ü°è¼ö - ¼­¿­Ã´µµ(¼ø¼­Çü º¯¼ö)ÀÎ °æ¿ì »ç¿ë.
+# í”¼ì–´ìŠ¨ ìƒê´€ê³„ìˆ˜ - ì¼ë°˜ì ì¸ ê²½ìš°. ì—°ì†í˜• ë³€ìˆ˜.
+# ìŠ¤í”¼ì–´ë§Œ ìƒê´€ê³„ìˆ˜ - ì„œì—´ì²™ë„(ìˆœì„œí˜• ë³€ìˆ˜)ì¸ ê²½ìš° ì‚¬ìš©.
 
 install.packages("Hmisc")
 library(Hmisc)
 
 rcorr(as.matrix(mtcars), type = "pearson")$r
 
-rcorr(disp, wt, type = "pearson")   # P : À¯ÀÇÈ®·ü. 0.05 ÀÌÇÏ °ª À¯ÀÇ¹Ì 
+rcorr(disp, wt, type = "pearson")   # P : ìœ ì˜í™•ë¥ . 0.05 ì´í•˜ ê°’ ìœ ì˜ë¯¸ 
 rcorr(disp, wt, type = "spearman")  
 
 
-# ¼ø¼­Çüº¯¼ö »ùÇÃ µ¥ÀÌÅÍ
+# ìˆœì„œí˜•ë³€ìˆ˜ ìƒ˜í”Œ ë°ì´í„°
 
-sno <- seq(1001,1050)
+set.seed(9)
+sno <- seq(1001, 1050)
 Korean <- sample(1:50, replace = F)
 English <- sample(1:50, replace = F)
 Math <- sample(1:50, replace = F)
@@ -57,7 +58,7 @@ rcorr(as.matrix(rank), type = "spearman")
 
 
 #--------------------------------------------------------------
-# ¸ğµ¨ ¼±ÅÃ¹ı
+# ëª¨ë¸ ì„ íƒë²•
 
 x1 <- c(7, 1, 11, 11, 7, 11, 3, 1, 2, 21, 1, 11, 10)
 x2 <- c(26, 29, 56, 31, 52, 55, 71, 31, 54, 47, 40, 66, 68)
@@ -73,20 +74,20 @@ df
 model <- lm(y ~ x1 + x2 + x3 + x4, data = df)
 summary(model)
 
-# È¸±Í°è¼ö Áß p-value °¡Àå ³ôÀº x3 Á¦°Å
+# íšŒê·€ê³„ìˆ˜ ì¤‘ p-value ê°€ì¥ ë†’ì€ x3 ì œê±°
 model <- lm(y ~ x1 + x2 + x4, data = df)
 summary(model)
 
-# È¸±Í°è¼ö Áß p-value °¡Àå ³ôÀº x4 Á¦°Å
+# íšŒê·€ê³„ìˆ˜ ì¤‘ p-value ê°€ì¥ ë†’ì€ x4 ì œê±°
 model <- lm(y ~ x1 + x2, data = df)
 summary(model)
 
 
-# (2) ¸ğµ¨ ¼±ÅÃ ÀÚµ¿È­
+# (2) ëª¨ë¸ ì„ íƒ ìë™í™”
 
 model <- lm(y ~ x1 + x2 + x3 + x4, data = df)
 
-# ÀüÃ¼ AIC º¸´Ù ³·Àº AIC¸¦ °¡Áø È¸±Í°è¼ö Á¦°Å
+# ì „ì²´ AIC ë³´ë‹¤ ë‚®ì€ AICë¥¼ ê°€ì§„ íšŒê·€ê³„ìˆ˜ ì œê±°
 step(model, direction = "backward")
 step(model, direction = "both")
 
@@ -102,61 +103,61 @@ step(lm(time ~ 1, data = hills),
 
 
 #--------------------------------------------------------------
-# ½Ã°è¿­ºĞ¼®
+# ì‹œê³„ì—´ë¶„ì„
 #--------------------------------------------------------------
 
-# ÀÚ±âÈ¸±Í¸ğÇü(AR, Autoregressive model)
-# ÀÌµ¿Æò±Õ¸ğÇü(MA, Moving average model)
-# ÀÚ±âÈ¸±Í ´©Àû ÀÌµ¿Æò±Õ ¸ğÇü (ARIMA)
+# ìê¸°íšŒê·€ëª¨í˜•(AR, Autoregressive model)
+# ì´ë™í‰ê· ëª¨í˜•(MA, Moving average model)
+# ìê¸°íšŒê·€ ëˆ„ì  ì´ë™í‰ê·  ëª¨í˜• (ARIMA)
 
-# ºñÁ¤»ó½Ã°è¿­ ¸ğÇüÀÎ ARIMA¸¦ Â÷ºĞÀÌ³ª º¯È¯À» ÅëÇØ AR, MA, ARMA ¸ğÇüÀ¸·Î Á¤»óÈ­
-# Æò±Õ ºñÁ¤»ó : Â÷ºĞ / ºĞ»ê ºñÁ¤»ó : º¯È¯
-# d : Â÷ºĞ, p : AR¸ğÇü Â÷¼ö, q : MA ¸ğÇü Â÷¼ö
+# ë¹„ì •ìƒì‹œê³„ì—´ ëª¨í˜•ì¸ ARIMAë¥¼ ì°¨ë¶„ì´ë‚˜ ë³€í™˜ì„ í†µí•´ AR, MA, ARMA ëª¨í˜•ìœ¼ë¡œ ì •ìƒí™”
+# í‰ê·  ë¹„ì •ìƒ : ì°¨ë¶„ / ë¶„ì‚° ë¹„ì •ìƒ : ë³€í™˜
+# d : ì°¨ë¶„, p : ARëª¨í˜• ì°¨ìˆ˜, q : MA ëª¨í˜• ì°¨ìˆ˜
 
-# ÀÚ±â»ó°ü°è¼ö ÇÔ¼ö(ACF, Autocorrelation Function)
-# ºÎºĞ ÀÚ±â»ó°ü°è¼ö ÇÔ¼ö(PACF, Partial ACF)
+# ìê¸°ìƒê´€ê³„ìˆ˜ í•¨ìˆ˜(ACF, Autocorrelation Function)
+# ë¶€ë¶„ ìê¸°ìƒê´€ê³„ìˆ˜ í•¨ìˆ˜(PACF, Partial ACF)
 
 #--------------------------------------------------------------
 # R functions for TimeSeries
 
-# 1) ¼Ò½º µ¥ÀÌÅÍ¸¦ ½Ã°è¿­ µ¥ÀÌÅÍ·Î º¯È¯  
-ts(data, frequency = n, start = c(½ÃÀÛ³âµµ, ¿ù))
+# 1) ì†ŒìŠ¤ ë°ì´í„°ë¥¼ ì‹œê³„ì—´ ë°ì´í„°ë¡œ ë³€í™˜  
+ts(data, frequency = n, start = c(ì‹œì‘ë…„ë„, ì›”))
 
-# 2) ½Ã°è¿­ µ¥ÀÌÅÍ¸¦ x, trend, seasonal, random °ªÀ¸·Î ºĞÇØ
+# 2) ì‹œê³„ì—´ ë°ì´í„°ë¥¼ x, trend, seasonal, random ê°’ìœ¼ë¡œ ë¶„í•´
 decompose(data)
 
-# 3) ½Ã°è¿­ µ¥ÀÌÅÍ¸¦ ÀÌµ¿Æò±ÕÇÑ °ª »ı¼º
-SMA(data, n = ÀÌµ¿Æò±Õ¼ö)
+# 3) ì‹œê³„ì—´ ë°ì´í„°ë¥¼ ì´ë™í‰ê· í•œ ê°’ ìƒì„±
+SMA(data, n = ì´ë™í‰ê· ìˆ˜)
 
-# 4) ½Ã°è¿­ µ¥ÀÌÅÍ¸¦ Â÷ºĞ
-diff(data, differences = Â÷ºĞÈ½¼ö)
+# 4) ì‹œê³„ì—´ ë°ì´í„°ë¥¼ ì°¨ë¶„
+diff(data, differences = ì°¨ë¶„íšŸìˆ˜)
 
-# 5) ACF °ª°ú ±×·¡ÇÁ¸¦ ÅëÇØ ·¡±× Àı´Ü°ªÀ» È®ÀÎ
-acf(data, lag.max = ·¡±×¼ö)
+# 5) ACF ê°’ê³¼ ê·¸ë˜í”„ë¥¼ í†µí•´ ë˜ê·¸ ì ˆë‹¨ê°’ì„ í™•ì¸
+acf(data, lag.max = ë˜ê·¸ìˆ˜)
 
-# 6) PACF °ª°ú ±×·¡ÇÁ¸¦ ÅëÇØ ·¡±× Àı´Ü°ªÀ» È®ÀÎ
-pacf(data, lag.max = ·¡±×¼ö)
+# 6) PACF ê°’ê³¼ ê·¸ë˜í”„ë¥¼ í†µí•´ ë˜ê·¸ ì ˆë‹¨ê°’ì„ í™•ì¸
+pacf(data, lag.max = ë˜ê·¸ìˆ˜)
 
-# 7) µ¥ÀÌÅÍ¸¦ È°¿ëÇÏ¿© ÃÖÀûÀÇ ARIMA ¸ğÇüÀ» ¼±ÅÃ
+# 7) ë°ì´í„°ë¥¼ í™œìš©í•˜ì—¬ ìµœì ì˜ ARIMA ëª¨í˜•ì„ ì„ íƒ
 auto.arima(data)
 
-# 8) ¼±Á¤µÈ ARIMA ¸ğÇüÀ¸·Î µ¥ÀÌÅÍ¸¦ º¸Á¤(fitting)
+# 8) ì„ ì •ëœ ARIMA ëª¨í˜•ìœ¼ë¡œ ë°ì´í„°ë¥¼ ë³´ì •(fitting)
 arima(data, order = c(p, d, q))
 
-# 9) ARIMA ¸ğÇü¿¡ ÀÇÇØ º¸Á¤µÈ µ¥ÀÌÅÍ¸¦ ÅëÇØ ¹Ì·¡°ªÀ» ¿¹Ãø
-forecast.Arima(fittedData, h = ¹Ì·¡¿¹Ãø¼ö)
+# 9) ARIMA ëª¨í˜•ì— ì˜í•´ ë³´ì •ëœ ë°ì´í„°ë¥¼ í†µí•´ ë¯¸ë˜ê°’ì„ ì˜ˆì¸¡
+forecast.Arima(fittedData, h = ë¯¸ë˜ì˜ˆì¸¡ìˆ˜)
 
-# 10) ½Ã°è¿­ µ¥ÀÌÅÍ¸¦ ±×·¡ÇÁ·Î Ç¥Çö
-plot.ts(½Ã°è¿­µ¥ÀÌÅÍ)
+# 10) ì‹œê³„ì—´ ë°ì´í„°ë¥¼ ê·¸ë˜í”„ë¡œ í‘œí˜„
+plot.ts(ì‹œê³„ì—´ë°ì´í„°)
 
-# 11) ¿¹ÃøµÈ ½Ã°è¿­ µ¥ÀÌÅÍ¸¦ ±×·¡ÇÁ·Î Ç¥Çö
-plot.forecast(¿¹ÃøµÈ½Ã°è¿­µ¥ÀÌÅÍ)
+# 11) ì˜ˆì¸¡ëœ ì‹œê³„ì—´ ë°ì´í„°ë¥¼ ê·¸ë˜í”„ë¡œ í‘œí˜„
+plot.forecast(ì˜ˆì¸¡ëœì‹œê³„ì—´ë°ì´í„°)
 
 
 
 #--------------------------------------------------------------
 # Decompose non-seasonal data
-# ¿µ±¹¿ÕµéÀÇ »ç¸Á½Ã ³ªÀÌ
+# ì˜êµ­ì™•ë“¤ì˜ ì‚¬ë§ì‹œ ë‚˜ì´
 #--------------------------------------------------------------
 
 install.packages("TTR")
@@ -168,12 +169,12 @@ library(forecast)
 kings <- scan("http://robjhyndman.com/tsdldata/misc/kings.dat", skip = 3)
 kings
 
-# ½Ã°è¿­ µ¥ÀÌÅÍ·Î º¯È¯
+# ì‹œê³„ì—´ ë°ì´í„°ë¡œ ë³€í™˜
 kings_ts <- ts(kings)
 kings_ts
 plot.ts(kings_ts)
 
-# ÀÌµ¿Æò±Õ
+# ì´ë™í‰ê· 
 kings_sma3 <- SMA(kings_ts, n = 3)
 kings_sma8 <- SMA(kings_ts, n = 8)
 kings_sma12 <- SMA(kings_ts, n = 12)
@@ -184,7 +185,7 @@ plot.ts(kings_sma3)
 plot.ts(kings_sma8)
 plot.ts(kings_sma12)
 
-# Â÷ºĞÀ» ÅëÇØ µ¥ÀÌÅÍ Á¤»óÈ­
+# ì°¨ë¶„ì„ í†µí•´ ë°ì´í„° ì •ìƒí™”
 kings_diff1 <- diff(kings_ts, differences = 1)
 kings_diff2 <- diff(kings_ts, differences = 2)
 kings_diff3 <- diff(kings_ts, differences = 3)
@@ -198,22 +199,22 @@ par(mfrow = c(1,1))
 
 mean(kings_diff1); sd(kings_diff1)
 
-# 1Â÷ Â÷ºĞÇÑ µ¥ÀÌÅÍ·Î ARIMA ¸ğÇü È®ÀÎ
-acf(kings_diff1, lag.max = 20)      # lag 2ºÎÅÍ Á¡¼± ¾È¿¡ Á¸Àç. lag Àı´Ü°ª = 2. --> MA(1)
-pacf(kings_diff1, lag.max = 20)     # lag 4¿¡¼­ Àı´Ü°ª --> AR(3)
+# 1ì°¨ ì°¨ë¶„í•œ ë°ì´í„°ë¡œ ARIMA ëª¨í˜• í™•ì¸
+acf(kings_diff1, lag.max = 20)      # lag 2ë¶€í„° ì ì„  ì•ˆì— ì¡´ì¬. lag ì ˆë‹¨ê°’ = 2. --> MA(1)
+pacf(kings_diff1, lag.max = 20)     # lag 4ì—ì„œ ì ˆë‹¨ê°’ --> AR(3)
 # --> ARIMA(3,1,1)
 
-# ÀÚµ¿À¸·Î ARIMA ¸ğÇü È®ÀÎ
+# ìë™ìœ¼ë¡œ ARIMA ëª¨í˜• í™•ì¸
 auto.arima(kings)   # --> ARIMA(0,1,1)
 
-# ¿¹Ãø
-kings_arima <- arima(kings_ts, order = c(3,1,1))    # Â÷ºĞÅëÇØ È®ÀÎÇÑ °ª Àû¿ë
+# ì˜ˆì¸¡
+kings_arima <- arima(kings_ts, order = c(3,1,1))    # ì°¨ë¶„í†µí•´ í™•ì¸í•œ ê°’ ì ìš©
 kings_arima
 kings_fcast <- forecast.Arima(kings_arima, h = 5)
 kings_fcast
 plot.forecast(kings_fcast)
 
-kings_arima1 <- arima(kings_ts, order = c(0,1,1))   # auto.arima ÃßÃµ°ª Àû¿ë
+kings_arima1 <- arima(kings_ts, order = c(0,1,1))   # auto.arima ì¶”ì²œê°’ ì ìš©
 kings_arima1
 kings_fcast1 <- forecast.Arima(kings_arima1, h = 5)
 kings_fcast1
@@ -223,7 +224,7 @@ plot.forecast(kings_fcast1)
 
 #--------------------------------------------------------------
 # Decompose seasonal data
-# 1946³â 1¿ùºÎÅÍ 1959³â 12¿ù±îÁö ´º¿åÀÇ ¿ùº° Ãâ»ıÀÚ ¼ö µ¥ÀÌÅÍ
+# 1946ë…„ 1ì›”ë¶€í„° 1959ë…„ 12ì›”ê¹Œì§€ ë‰´ìš•ì˜ ì›”ë³„ ì¶œìƒì ìˆ˜ ë°ì´í„°
 #--------------------------------------------------------------
 
 data <- scan("http://robjhyndman.com/tsdldata/data/nybirths.dat")
@@ -233,19 +234,19 @@ birth <- ts(data, frequency = 12, start = c(1946, 1))
 birth
 plot.ts(birth)
 
-# µ¥ÀÌÅÍ ºĞÇØ - trend, seasonal, random µ¥ÀÌÅÍ Ãß¼¼ È®ÀÎ
+# ë°ì´í„° ë¶„í•´ - trend, seasonal, random ë°ì´í„° ì¶”ì„¸ í™•ì¸
 birth_comp <- decompose(birth)
 plot(birth_comp)
 
 birth_comp$trend
 birth_comp$seasonal
 
-# ½Ã°è¿­ µ¥ÀÌÅÍ¿¡¼­ °èÀı¼º ¿äÀÎ Á¦°Å
+# ì‹œê³„ì—´ ë°ì´í„°ì—ì„œ ê³„ì ˆì„± ìš”ì¸ ì œê±°
 birth_adjusted <- birth - birth_comp$seasonal
 
-# Â÷ºĞÀ» ÅëÇØ Á¤»ó¼º È®ÀÎ
+# ì°¨ë¶„ì„ í†µí•´ ì •ìƒì„± í™•ì¸
 birth_diff1 <- diff(birth_adjusted, differences = 1)
-plot.ts(birth_diff1)   # ºĞ»êÀÇ º¯µ¿¼ºÀÌ Å©´Ù
+plot.ts(birth_diff1)   # ë¶„ì‚°ì˜ ë³€ë™ì„±ì´ í¬ë‹¤
 
 auto.arima(birth)   # ARIMA(2,1,2)(1,1,1)[12]
 
@@ -259,7 +260,7 @@ plot(birth_fcast)
 
 
 #--------------------------------------------------------------
-# 1987³â 1¿ùºÎÅÍ 1993³â 12¿ù±îÁö ¸®Á¶Æ® ±â³äÇ°¸ÅÀå ¸ÅÃâ¾×
+# 1987ë…„ 1ì›”ë¶€í„° 1993ë…„ 12ì›”ê¹Œì§€ ë¦¬ì¡°íŠ¸ ê¸°ë…í’ˆë§¤ì¥ ë§¤ì¶œì•¡
 #--------------------------------------------------------------
 
 data <- scan("http://robjhyndman.com/tsdldata/data/fancy.dat")
@@ -267,14 +268,14 @@ data
 
 fancy <- ts(data, frequency = 12, start = c(1987, 1))
 fancy
-plot.ts(fancy)   # ºĞ»êÀÌ Áõ°¡ÇÏ´Â °æÇâ --> log º¯È¯À¸·Î ºĞ»ê Á¶Á¤
+plot.ts(fancy)   # ë¶„ì‚°ì´ ì¦ê°€í•˜ëŠ” ê²½í–¥ --> log ë³€í™˜ìœ¼ë¡œ ë¶„ì‚° ì¡°ì •
 
 fancy_log <- log(fancy)
 plot.ts(fancy_log)
 
 fancy_diff <- diff(fancy_log, differences = 1)
 plot.ts(fancy_diff)   
-# Æò±ÕÀº ¾î´ÀÁ¤µµ ÀÏÁ¤ÇÏÁö¸¸ Æ¯Á¤ ½Ã±â¿¡ ºĞ»êÀÌ Å©´Ù --> ARIMA º¸´Ù´Â ´Ù¸¥ ¸ğÇü Àû¿ë ÃßÃµ
+# í‰ê· ì€ ì–´ëŠì •ë„ ì¼ì •í•˜ì§€ë§Œ íŠ¹ì • ì‹œê¸°ì— ë¶„ì‚°ì´ í¬ë‹¤ --> ARIMA ë³´ë‹¤ëŠ” ë‹¤ë¥¸ ëª¨í˜• ì ìš© ì¶”ì²œ
 
 acf(fancy_diff, lag.max = 100)
 pacf(fancy_diff, lag.max = 100)
@@ -288,7 +289,7 @@ plot(fancy_fcast)
 
 
 #--------------------------------------------------------------
-# 1500³âºÎÅÍ 1969³â±îÁö È­»êÆø¹ß ¸ÕÁö·®
+# 1500ë…„ë¶€í„° 1969ë…„ê¹Œì§€ í™”ì‚°í­ë°œ ë¨¼ì§€ëŸ‰
 #--------------------------------------------------------------
 
 data <- scan("http://robjhyndman.com/tsdldata/annual/dvi.dat", skip = 1)
@@ -296,15 +297,15 @@ data
 
 dust <- ts(data, start = c(1500))
 dust
-plot.ts(dust)  # ÇÑµÎ°³ µ¥ÀÌÅÍ¸¦ Á¦¿ÜÇÏ°í´Â Æò±Õ°ú ºĞ»êÀÌ ¾î´ÀÁ¤µµ ÀÏÁ¤ÇÏ´Ù --> Â÷ºĞ ¾ÈÇÔ.
+plot.ts(dust)  # í•œë‘ê°œ ë°ì´í„°ë¥¼ ì œì™¸í•˜ê³ ëŠ” í‰ê· ê³¼ ë¶„ì‚°ì´ ì–´ëŠì •ë„ ì¼ì •í•˜ë‹¤ --> ì°¨ë¶„ ì•ˆí•¨.
 
 acf(dust, lag.max = 20)     # lag = 4 : MA(3)
 pacf(dust, lag.max = 20)    # lag = 2 : AR(2)
 
 auto.arima(dust)            # ARIMA(1,0,2)
 
-# d = 0 ÀÌ¹Ç·Î AR(2) / MA(3) / ARIMA(2,0,3) Áß ¼±ÅÃÇØ¼­ Àû¿ë °¡´É.
-# ¸ğ¼ö°¡ °¡Àå ÀûÀº ¸ğÇüÀ» ¼±ÅÃÇÏ´Â °ÍÀ» ÃßÃµ --> AR(2) Àû¿ë
+# d = 0 ì´ë¯€ë¡œ AR(2) / MA(3) / ARIMA(2,0,3) ì¤‘ ì„ íƒí•´ì„œ ì ìš© ê°€ëŠ¥.
+# ëª¨ìˆ˜ê°€ ê°€ì¥ ì ì€ ëª¨í˜•ì„ ì„ íƒí•˜ëŠ” ê²ƒì„ ì¶”ì²œ --> AR(2) ì ìš©
 
 dust_arima <- arima(dust, order = c(2,0,0))
 dust_fcast <- forecast.Arima(dust_arima, h = 30)
@@ -349,7 +350,7 @@ airquality
 airData <- melt(airquality, id = c("Month", "Day"), na.rm = T)
 head(airData);tail(airData)
 
-cast(airData, Month ~ Day ~ variable)  # 3Â÷¿ø
+cast(airData, Month ~ Day ~ variable)  # 3ì°¨ì›
 
 cast(airData, Month ~ variable, mean)
 cast(airData, Month ~ variable, mean, margins = c("grand_row", "grand_col"))
@@ -419,9 +420,9 @@ funcM <- function(x) {
 
 ddply(data, "year", funcM)
 
-ddply(data, "year", summarize, mean = mean(count))  # summarize : year ±âÁØ ¿ä¾à
+ddply(data, "year", summarize, mean = mean(count))  # summarize : year ê¸°ì¤€ ìš”ì•½
 
-ddply(data, "year", transform, total = sum(count))  # transform : ±âÁ¸ µ¥ÀÌÅÍ¿¡ Ãß°¡
+ddply(data, "year", transform, total = sum(count))  # transform : ê¸°ì¡´ ë°ì´í„°ì— ì¶”ê°€
 
 
 
@@ -448,7 +449,7 @@ tables()
 
 dt[J("1st")]    # pclass == 1st
 
-dt[J("1st"), mean(survived)]        # »ıÁ¸À² 61.9%
+dt[J("1st"), mean(survived)]        # ìƒì¡´ìœ¨ 61.9%
 dt[pclass == "1st", mean(survived)]
 
 dt[ , mean(survived), by = "pclass"]
@@ -457,11 +458,11 @@ dt[ , mean(survived), by = c("pclass", "sex")]
 
 
 #--------------------------------------------------------------
-# µ¥ÀÌÅÍ °¡°ø
+# ë°ì´í„° ê°€ê³µ
 #--------------------------------------------------------------
 
 #--------------------------------------------------------------
-# º¯¼öÀÇ Áß¿äµµ
+# ë³€ìˆ˜ì˜ ì¤‘ìš”ë„
 
 install.packages("klaR")
 library(klaR)
@@ -472,19 +473,19 @@ data("B3")      # West German Business Cycles 1955-1994
 head(B3)
 str(B3)
 
-# Wilks.lambda : Á¾¼Óº¯¼ö¿¡ ¹ÌÄ¡´Â ¿µÇâ·Â¿¡ µû¶ó º¯¼öÀÇ Áß¿äµµ¸¦ Á¤¸® (ÀÛÀ»¼ö·Ï ÀûÇÕ)
+# Wilks.lambda : ì¢…ì†ë³€ìˆ˜ì— ë¯¸ì¹˜ëŠ” ì˜í–¥ë ¥ì— ë”°ë¼ ë³€ìˆ˜ì˜ ì¤‘ìš”ë„ë¥¼ ì •ë¦¬ (ì‘ì„ìˆ˜ë¡ ì í•©)
 
 greedy.wilks(PHASEN ~ ., data = B3, niveau = 0.1)
 
-    # 13°³ º¯¼ö Áß¿¡ 8°³ ¼±ÅÃµÊ
+    # 13ê°œ ë³€ìˆ˜ ì¤‘ì— 8ê°œ ì„ íƒë¨
     # PHASEN ~ EWAJW + LSTKJW + ZINSK + CP91JW + IAU91JW + PBSPJW + ZINSLR + PCPJW
 
 
 
 #--------------------------------------------------------------
-# (¿¬¼ÓÇü) º¯¼öÀÇ ±¸°£È­
+# (ì—°ì†í˜•) ë³€ìˆ˜ì˜ êµ¬ê°„í™”
 
-# ÇÑ º¯¼ö¸¦ ±âÁØÀ¸·Î ±¸°£ ºĞ¼®
+# í•œ ë³€ìˆ˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ êµ¬ê°„ ë¶„ì„
 
 data(iris)
 head(iris)
@@ -494,16 +495,16 @@ head(iris2)
 
 plineplot(Species ~ ., data = iris2, method = "lda", x = iris[ , 4], xlab = "Petal.Width")
 plineplot(Species ~ ., data = iris, method = "lda", x = iris[ , 4], xlab = "Petal.Width")
-        # 0.6 / 1.8 ÁöÁ¡¿¡¼­ ±¸°£À» ³ª´©´Â °ÍÀÌ ÁÁ´Ù.
+        # 0.6 / 1.8 ì§€ì ì—ì„œ êµ¬ê°„ì„ ë‚˜ëˆ„ëŠ” ê²ƒì´ ì¢‹ë‹¤.
 
 
-# ¸ğµç º¯¼ö¸¦ ±âÁØÀ¸·Î ±¸°£ ºĞ¼®
+# ëª¨ë“  ë³€ìˆ˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ êµ¬ê°„ ë¶„ì„
 
 m <- NaiveBayes(Species ~ ., data = iris)
 plot(m)
 
 
-# ÀÇ»ç°áÁ¤Æ®¸®¸¦ ÅëÇØ ±¸°£ ºĞ¼®
+# ì˜ì‚¬ê²°ì •íŠ¸ë¦¬ë¥¼ í†µí•´ êµ¬ê°„ ë¶„ì„
 
 install.packages("party")
 library(party)
@@ -515,7 +516,7 @@ plot(m)
 
 
 #--------------------------------------------------------------
-# °áÃø°ª Ã³¸®
+# ê²°ì¸¡ê°’ ì²˜ë¦¬
 #--------------------------------------------------------------
 
 
