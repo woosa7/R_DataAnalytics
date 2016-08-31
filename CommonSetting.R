@@ -44,3 +44,8 @@ summary(model$Large)
 
 
 ##################################
+
+
+
+install.packages("psych", repo="https://cran.cnr.Berkeley.edu/", type="source")
+

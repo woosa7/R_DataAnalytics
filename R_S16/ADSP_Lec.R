@@ -1,8 +1,9 @@
 ################################################################
 #
-# ADSP
+# ADSP Lecture
 #
 ################################################################
+
 
 ################################################################
 # 회귀분석
@@ -25,7 +26,7 @@ cov(disp, wt)   # 공분산
 cor(disp, wt)   # 상관계수
 
 cov(mtcars)
-cor(mtcars)  # 모든 변수간의 상관계수 테이블 표시
+cor(mtcars)     # 모든 변수간의 상관계수 테이블 표시
 
 library(psych)
 pairs.panels(mtcars[ , c("disp", "wt", "drat")])
@@ -33,7 +34,6 @@ pairs.panels(mtcars[ , c("disp", "wt", "drat")])
 # 피어슨 상관계수 - 일반적인 경우. 연속형 변수.
 # 스피어만 상관계수 - 서열척도(순서형 변수)인 경우 사용.
 
-install.packages("Hmisc")
 library(Hmisc)
 
 rcorr(as.matrix(mtcars), type = "pearson")$r
@@ -73,12 +73,12 @@ df
 
 model <- lm(y ~ x1 + x2 + x3 + x4, data = df)
 summary(model)
+        # 회귀계수 중 p-value 가장 높은 x3 제거
 
-# 회귀계수 중 p-value 가장 높은 x3 제거
 model <- lm(y ~ x1 + x2 + x4, data = df)
 summary(model)
+        # 회귀계수 중 p-value 가장 높은 x4 제거
 
-# 회귀계수 중 p-value 가장 높은 x4 제거
 model <- lm(y ~ x1 + x2, data = df)
 summary(model)
 
@@ -94,6 +94,7 @@ step(model, direction = "both")
 
 library(MASS)
 attach(hills)
+head(hills)
 
 step(lm(time ~ dist + climb, data = hills), direction = "backward")
 
@@ -102,9 +103,9 @@ step(lm(time ~ 1, data = hills),
 
 
 
-#--------------------------------------------------------------
+################################################################
 # 시계열분석
-#--------------------------------------------------------------
+################################################################
 
 # 자기회귀모형(AR, Autoregressive model)
 # 이동평균모형(MA, Moving average model)
@@ -154,14 +155,10 @@ plot.ts(시계열데이터)
 plot.forecast(예측된시계열데이터)
 
 
-
 #--------------------------------------------------------------
 # Decompose non-seasonal data
 # 영국왕들의 사망시 나이
 #--------------------------------------------------------------
-
-install.packages("TTR")
-install.packages("forecast")
 
 library(TTR)
 library(forecast)
@@ -180,6 +177,7 @@ kings_sma8 <- SMA(kings_ts, n = 8)
 kings_sma12 <- SMA(kings_ts, n = 12)
 
 par(mfrow = c(2,2))
+
 plot.ts(kings_ts)
 plot.ts(kings_sma3)
 plot.ts(kings_sma8)
@@ -190,11 +188,11 @@ kings_diff1 <- diff(kings_ts, differences = 1)
 kings_diff2 <- diff(kings_ts, differences = 2)
 kings_diff3 <- diff(kings_ts, differences = 3)
 
-par(mfrow = c(2,2))
 plot.ts(kings_ts)
-plot.ts(kings_diff1)
+plot.ts(kings_diff1)    # 1차 차분만 해도 어느정도 정상화 패턴을 보임
 plot.ts(kings_diff2)
 plot.ts(kings_diff3)
+
 par(mfrow = c(1,1))
 
 mean(kings_diff1); sd(kings_diff1)
@@ -202,7 +200,7 @@ mean(kings_diff1); sd(kings_diff1)
 # 1차 차분한 데이터로 ARIMA 모형 확인
 acf(kings_diff1, lag.max = 20)      # lag 2부터 점선 안에 존재. lag 절단값 = 2. --> MA(1)
 pacf(kings_diff1, lag.max = 20)     # lag 4에서 절단값 --> AR(3)
-# --> ARIMA(3,1,1)
+                                    # --> ARIMA(3,1,1)
 
 # 자동으로 ARIMA 모형 확인
 auto.arima(kings)   # --> ARIMA(0,1,1)
@@ -243,15 +241,22 @@ birth_comp$seasonal
 
 # 시계열 데이터에서 계절성 요인 제거
 birth_adjusted <- birth - birth_comp$seasonal
+plot.ts(birth_adjusted)
 
 # 차분을 통해 정상성 확인
 birth_diff1 <- diff(birth_adjusted, differences = 1)
-plot.ts(birth_diff1)   # 분산의 변동성이 크다
+plot.ts(birth_diff1)   
+        # 분산의 변동성이 크다
 
+acf(birth_diff1, lag.max = 20)
+pacf(birth_diff1, lag.max = 20)
+        # PACF 절단값이 명확하지 않아 ARIMA 모형 확정이 어렵다.
+
+# Auto.Arima 함수 사용
 auto.arima(birth)   # ARIMA(2,1,2)(1,1,1)[12]
 
-# birth_arima <- arima(birth, order = c(4,1,3))
-birth_arima <- arima(birth, order = c(2,1,2), seasonal = list(order = c(0,1,1), period = 12))
+
+birth_arima <- arima(birth, order = c(2,1,2), seasonal = list(order = c(1,1,1), period = 12))
 birth_arima
 birth_fcast <- forecast.Arima(birth_arima)
 birth_fcast
@@ -275,7 +280,8 @@ plot.ts(fancy_log)
 
 fancy_diff <- diff(fancy_log, differences = 1)
 plot.ts(fancy_diff)   
-# 평균은 어느정도 일정하지만 특정 시기에 분산이 크다 --> ARIMA 보다는 다른 모형 적용 추천
+        # 평균은 어느정도 일정하지만 특정 시기에 분산이 크다 
+        # --> ARIMA 보다는 다른 모형 적용 추천
 
 acf(fancy_diff, lag.max = 100)
 pacf(fancy_diff, lag.max = 100)
@@ -300,7 +306,7 @@ dust
 plot.ts(dust)  # 한두개 데이터를 제외하고는 평균과 분산이 어느정도 일정하다 --> 차분 안함.
 
 acf(dust, lag.max = 20)     # lag = 4 : MA(3)
-pacf(dust, lag.max = 20)    # lag = 2 : AR(2)
+pacf(dust, lag.max = 20)    # lag = 3 : AR(2)
 
 auto.arima(dust)            # ARIMA(1,0,2)
 
@@ -313,9 +319,9 @@ plot.forecast(dust_fcast)
 
 
 
-#--------------------------------------------------------------
+################################################################
 # Data Mart
-#--------------------------------------------------------------
+################################################################
 
 #--------------------------------------------------------------
 # Reshape
@@ -331,10 +337,8 @@ x2 <- c(6, 5, 1, 4)
 mydata <- data.frame(id, time, x1, x2)
 mydata
 
-
 md <- melt(mydata, id = c("id", "time"))    # melt
 md
-
 
 cast(md, id + time ~ variable)
 cast(md, id + variable ~ time)
@@ -346,32 +350,33 @@ cast(md, time ~ variable, mean)
 
 # Example 2
 airquality
+head(airquality)
 
 airData <- melt(airquality, id = c("Month", "Day"), na.rm = T)
+
 head(airData);tail(airData)
 
 cast(airData, Month ~ Day ~ variable)  # 3차원
 
 cast(airData, Month ~ variable, mean)
-cast(airData, Month ~ variable, mean, margins = c("grand_row", "grand_col"))
+cast(airData, Month ~ variable, mean, margins = c("grand_row", "grand_col"))    # mean of row & column
 cast(airData, Month ~ variable, mean, subset = variable == "Ozone")
 cast(airData, Month ~ variable, range)
-
 
 
 #--------------------------------------------------------------
 # sqldf
 
-install.packages("sqldf")
 library(sqldf)
 
 iris
 head(iris);tail(iris)
 str(iris)
+summary(iris)
 
 sqldf("select * from iris limit 10")
 
-sqldf("select * from iris where Species like 'se%'")
+sqldf("select * from iris where Species like 'ver%'")
 
 sqldf("select * from iris where Species in ('setosa', 'virginica')")
 
@@ -385,8 +390,6 @@ sqldf('select * from iris where "Sepal.Length" > 7.0')
 # plyr
 
 library(plyr)
-
-?airquality
 
 # Example 1
 data <- airquality
@@ -406,7 +409,6 @@ ddply(subset(data, Ozone >= 30), c('Month'), summarize, mean_Temper = mean(Temp)
 
 
 # Example 2
-
 set.seed(1)
 data <- data.frame(year = rep(2000:2002, each = 6), count = round(runif(18, 0, 20)))
 data
@@ -429,7 +431,6 @@ ddply(data, "year", transform, total = sum(count))  # transform : 기존 데이�
 #--------------------------------------------------------------
 # data.table
 
-install.packages("data.table")
 library(data.table)
 
 ?data.table
@@ -457,9 +458,9 @@ dt[ , mean(survived), by = c("pclass", "sex")]
 
 
 
-#--------------------------------------------------------------
+###############################################################
 # 데이터 가공
-#--------------------------------------------------------------
+###############################################################
 
 #--------------------------------------------------------------
 # 변수의 중요도
