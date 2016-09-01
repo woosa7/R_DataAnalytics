@@ -11,6 +11,7 @@
 
 #--------------------------------------------------------------
 # 상관계수 correlation coefficient
+#--------------------------------------------------------------
 
 data("mtcars")
 mtcars
@@ -59,6 +60,7 @@ rcorr(as.matrix(rank), type = "spearman")
 
 #--------------------------------------------------------------
 # 모델 선택법
+#--------------------------------------------------------------
 
 x1 <- c(7, 1, 11, 11, 7, 11, 3, 1, 2, 21, 1, 11, 10)
 x2 <- c(26, 29, 56, 31, 52, 55, 71, 31, 54, 47, 40, 66, 68)
@@ -120,6 +122,7 @@ step(lm(time ~ 1, data = hills),
 
 #--------------------------------------------------------------
 # R functions for TimeSeries
+#--------------------------------------------------------------
 
 # 1) 소스 데이터를 시계열 데이터로 변환  
 ts(data, frequency = n, start = c(시작년도, 월))
@@ -219,7 +222,6 @@ kings_fcast1
 plot.forecast(kings_fcast1)
 
 
-
 #--------------------------------------------------------------
 # Decompose seasonal data
 # 1946년 1월부터 1959년 12월까지 뉴욕의 월별 출생자 수 데이터
@@ -255,13 +257,11 @@ pacf(birth_diff1, lag.max = 20)
 # Auto.Arima 함수 사용
 auto.arima(birth)   # ARIMA(2,1,2)(1,1,1)[12]
 
-
 birth_arima <- arima(birth, order = c(2,1,2), seasonal = list(order = c(1,1,1), period = 12))
 birth_arima
 birth_fcast <- forecast.Arima(birth_arima)
 birth_fcast
 plot(birth_fcast)
-
 
 
 #--------------------------------------------------------------
@@ -291,7 +291,6 @@ auto.arima(fancy)   # ARIMA(1,1,1)(0,1,1)[12]
 fancy_arima <- arima(fancy, order = c(1,1,1), seasonal = list(order = c(0,1,1), period = 12))
 fancy_fcast <- forecast.Arima(fancy_arima)
 plot(fancy_fcast)
-
 
 
 #--------------------------------------------------------------
@@ -325,6 +324,7 @@ plot.forecast(dust_fcast)
 
 #--------------------------------------------------------------
 # Reshape
+#--------------------------------------------------------------
 
 library(reshape)
 
@@ -366,6 +366,7 @@ cast(airData, Month ~ variable, range)
 
 #--------------------------------------------------------------
 # sqldf
+#--------------------------------------------------------------
 
 library(sqldf)
 
@@ -385,9 +386,9 @@ sqldf('select * from iris where "Sepal.Length" between 5.0 and 6.0')
 sqldf('select * from iris where "Sepal.Length" > 7.0')
 
 
-
 #--------------------------------------------------------------
 # plyr
+#--------------------------------------------------------------
 
 library(plyr)
 
@@ -430,6 +431,7 @@ ddply(data, "year", transform, total = sum(count))  # transform : 기존 데이�
 
 #--------------------------------------------------------------
 # data.table
+#--------------------------------------------------------------
 
 library(data.table)
 
@@ -459,13 +461,13 @@ dt[ , mean(survived), by = c("pclass", "sex")]
 
 
 ###############################################################
-# 데이터 가공
+# 데이터 가공 & 관리
 ###############################################################
 
 #--------------------------------------------------------------
 # 변수의 중요도
+#--------------------------------------------------------------
 
-install.packages("klaR")
 library(klaR)
 
 data("B3")      # West German Business Cycles 1955-1994
@@ -474,7 +476,8 @@ data("B3")      # West German Business Cycles 1955-1994
 head(B3)
 str(B3)
 
-# Wilks.lambda : 종속변수에 미치는 영향력에 따라 변수의 중요도를 정리 (작을수록 적합)
+# Wilks.lambda : 집단내 분산 / 총분산
+#                종속변수에 미치는 영향력에 따라 변수의 중요도를 정리 (작을수록 적합)
 
 greedy.wilks(PHASEN ~ ., data = B3, niveau = 0.1)
 
@@ -482,32 +485,31 @@ greedy.wilks(PHASEN ~ ., data = B3, niveau = 0.1)
     # PHASEN ~ EWAJW + LSTKJW + ZINSK + CP91JW + IAU91JW + PBSPJW + ZINSLR + PCPJW
 
 
-
 #--------------------------------------------------------------
 # (연속형) 변수의 구간화
+#--------------------------------------------------------------
 
-# 한 변수를 기준으로 구간 분석
+# Binning : 각각 동일한 갯수의 데이터를 50개 이하의 구간에 할당한 후 구간을 병합하면서 구간을 줄여나가는 방식
+# 의사결정나무 : 연속형 데이터의 구간을 나누는 분기점을 찾을 수 있다.
 
 data(iris)
 head(iris)
 
+# 한 변수를 기준으로 구간 분석
 iris2 <- iris[ , c(1,3,5)]
 head(iris2)
 
 plineplot(Species ~ ., data = iris2, method = "lda", x = iris[ , 4], xlab = "Petal.Width")
-plineplot(Species ~ ., data = iris, method = "lda", x = iris[ , 4], xlab = "Petal.Width")
-        # 0.6 / 1.8 지점에서 구간을 나누는 것이 좋다.
+#plineplot(Species ~ ., data = iris, method = "lda", x = iris[ , 4], xlab = "Petal.Width")
+        # 0.6 / 1.7 지점에서 구간을 나누는 것이 좋다.
 
 
 # 모든 변수를 기준으로 구간 분석
-
 m <- NaiveBayes(Species ~ ., data = iris)
 plot(m)
 
 
 # 의사결정트리를 통해 구간 분석
-
-install.packages("party")
 library(party)
 
 m <- ctree(Species ~ ., data = iris)
@@ -515,10 +517,35 @@ m
 plot(m)
 
 
-
 #--------------------------------------------------------------
 # 결측값 처리
 #--------------------------------------------------------------
+
+# Impute
+library(Hmisc)
+
+df <- data.frame(age = c(11, 23, NA, 40, 35, 15), gender = c('female', 'male'))
+df
+
+df$imputed_age <- with(df, impute(age, mean))
+df
+
+# Amelia
+library(Amelia)
+
+data(freetrade)
+head(freetrade)     # tariff 관세
+summary(freetrade)
+
+?amelia
+
+data <- amelia(freetrade, m = 5, ts = "year", cs = "country")
+data
+        # m	: the number of imputed datasets to create.
+        # ts : time series column
+        # cs : cross section variable
+
+# 4_3_7
 
 
 
