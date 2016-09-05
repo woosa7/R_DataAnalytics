@@ -106,25 +106,55 @@ step(lm(time ~ 1, data = hills),
 
 
 ################################################################
-# 시계열분석
+# 시계열 분석 Time Series
 ################################################################
 
-# 자기회귀모형(AR, Autoregressive model)
-# 이동평균모형(MA, Moving average model)
-# 자기회귀 누적 이동평균 모형 (ARIMA)
-
-# 비정상시계열 모형인 ARIMA를 차분이나 변환을 통해 AR, MA, ARMA 모형으로 정상화
-# 평균 비정상 : 차분 / 분산 비정상 : 변환
-# d : 차분, p : AR모형 차수, q : MA 모형 차수
-
-# 자기상관계수 함수(ACF, Autocorrelation Function)
-# 부분 자기상관계수 함수(PACF, Partial ACF)
+# 1. 시계열 자료 - 시간의 흐름에 따라 관찰된 데이터
+#
+#
+# 2. 정상성
+# 대부분의 시계열 자료는 다루기 어려운 비정상성 시계열 자료이기 때문에
+# 분석하기 쉬운 정상성 시계열 자료로 변환
+# (1) 평균이 일정 : 모든 시점에 대해 일정한 평균을 가진다.
+# - 평균이 일정하지 않은 시계열은 차분(difference)을 통해 정상화
+# - 차분은 현시점 자료에서 이전 시점 자료를 빼는 것
+# (2) 분산도 시점에 의존하지 않음
+# - 분산이 일정하지 않은 시계열은 변환(transformation)을 통해 정상화
+# (3) 공분산도 시차에만 의존할 뿐, 특정 시점에는 의존하지 않음
+#
+#
+# 3. 시계열 모형
+#
+# (1) 자기회귀 모형 (Autoregressive model, AR)
+#
+# P 시점 이전의 자료가 현재 자료에 영향을 줌
+# 오차항 = 백색잡음과정(white noise process)
+# 자기상관함수(Autocorrelation Function, ACF) : k 기간 떨어진 값들의 상관계수
+# 부분자기상관함수(partial ACF) : 서로 다른 두 시점의 중간에 있는 값들의 영향을 제외시킨 상관계수
+# ACF 빠르게 감소, PACF는 어느 시점에서 절단점을 갖는다
+# PACF가 2시점에서 절단점 가지면 AR(1) 모형
+#
+# (2) 이동평균 모형 (Moving average model, MA)
+#
+# 유한한 갯수의 백색잡음 결합이므로 항상 정상성 만족
+# ACF가 절단점을 갖고, PACF는 빠르게 감소
+#
+# (3) 자기회귀누적이동평균 모형 (Autoregressive integrated moving average model, ARIMA)
+#
+# 비정상 시계열 모형
+# 차분이나 변환을 통해 AR, MA, 또는 이 둘을 합한 ARMA 모형으로 정상화
+# ARIMA(p, d, q) - d : 차분 차수 / p : AR 모형 차수 / q : MA 모형 차수
+#
+# (4) 분해 시계열
+#
+# 시계열에 영향을 주는 일반적인 요인을 시계열에서 분리해 분석하는 방법
+# 계절 요인(seasonal factor), 순환 요인(cyclical), 추세 요인(trend), 불규칙 요인(random)
 
 #--------------------------------------------------------------
 # R functions for TimeSeries
 #--------------------------------------------------------------
 
-# 1) 소스 데이터를 시계열 데이터로 변환  
+# 1) 소스 데이터를 시계열 데이터로 변환
 ts(data, frequency = n, start = c(시작년도, 월))
 
 # 2) 시계열 데이터를 x, trend, seasonal, random 값으로 분해
@@ -232,7 +262,7 @@ data
 
 birth <- ts(data, frequency = 12, start = c(1946, 1))
 birth
-plot.ts(birth)
+plot.ts(birth, main = "뉴욕 월별 출생자 수")
 
 # 데이터 분해 - trend, seasonal, random 데이터 추세 확인
 birth_comp <- decompose(birth)
@@ -243,11 +273,11 @@ birth_comp$seasonal
 
 # 시계열 데이터에서 계절성 요인 제거
 birth_adjusted <- birth - birth_comp$seasonal
-plot.ts(birth_adjusted)
+plot.ts(birth_adjusted, main = "birth - seasonal factor")
 
 # 차분을 통해 정상성 확인
 birth_diff1 <- diff(birth_adjusted, differences = 1)
-plot.ts(birth_diff1)   
+plot.ts(birth_diff1, main = "1차 차분")   
         # 분산의 변동성이 크다
 
 acf(birth_diff1, lag.max = 20)
@@ -261,7 +291,7 @@ birth_arima <- arima(birth, order = c(2,1,2), seasonal = list(order = c(1,1,1), 
 birth_arima
 birth_fcast <- forecast.Arima(birth_arima)
 birth_fcast
-plot(birth_fcast)
+plot(birth_fcast, main = "Forecasts 1960 & 1961")
 
 
 #--------------------------------------------------------------
@@ -530,22 +560,138 @@ df
 df$imputed_age <- with(df, impute(age, mean))
 df
 
+
 # Amelia
 library(Amelia)
+
+?amelia
 
 data(freetrade)
 head(freetrade)     # tariff 관세
 summary(freetrade)
 
-?amelia
+missmap(freetrade)  # 결측치 분포 시각화
 
-data <- amelia(freetrade, m = 5, ts = "year", cs = "country")
+data <- amelia(freetrade, m = 5, ts = "year", cs = "country")   # 결측치 대치값 생성
 data
         # m	: the number of imputed datasets to create.
         # ts : time series column
         # cs : cross section variable
 
-# 4_3_7
+impute3 <- data$imputations[[3]]$tariff
+hist(impute3, col = "grey", border = "black")
+
+freetrade$tariff <- impute3     # 결측치 대치
+missmap(freetrade)
+
+
+#--------------------------------------------------------------
+# 이상치(outlier) 찾기 및 처리
+#--------------------------------------------------------------
+
+library(DMwR)
+
+head(iris)
+
+outlier.score <- lofactor(iris[ , 1:4], k = 5)
+
+plot(density(outlier.score))        # score 가 2.0, 2.5인 데이터가 outlier
+
+outliers <- order(outlier.score, decreasing = T)[1:5]  # score 높은 5개 
+outliers
+
+# outler 만 plot에서 번호 표시
+labels <- 1:nrow(iris)
+labels[-outliers] <- "."
+labels
+
+prcomp(iris[ , 1:4])   # 주성분분석
+biplot(prcomp(iris[ , 1:4]), cex = 0.8, xlabs = labels)
+
+pch <- rep(".", nrow(iris))
+pch[outliers] <- "#"
+
+col <- rep("black", nrow(iris))
+col[outliers] <- "red"
+
+pairs(iris[ , 1:4], pch = pch, col = col)
+
+
+
+###############################################################
+# 정형 데이터 마이닝
+###############################################################
+
+#--------------------------------------------------------------
+# 분류분석 (Classification)
+#--------------------------------------------------------------
+
+# Supervised learning 기법
+# 미리 정의된 그룹으로 데이터를 분류 (목적변수가 범주형)
+# 회귀분석 / 의사결정나무 / 베이지안 분류 / 인공신경망 / k Nearest Neighborhood
+
+#--------------------------------------------------------------
+# Decision Tree
+
+# - 세분화
+# - 분류
+# - 예측
+# - 차원 축소 및 변수 선택
+# - 교호작용 (interaction effect) 파악
+# - 범주의 병합, binning
+
+# 반복적 분할(recursive partitioning)
+# - 나눠진 영역이 가능한 순수하거나 동질적인 요소로 이루어지도록
+
+# 분할 규칙 (splitting rule) / 정지 규칙
+
+# 분할 기준
+# - 이산형 목표 변수 : 카이제곱 통계량 p 값 / 지니 지수 / 엔트로피 지수
+# - 연속형 목표 변수 : 분산분석 F 통계량
+
+
+iris
+
+# 데이터 나누기 - training / test
+
+idx <- sample(2, nrow(iris), replace = T, prob = c(0.7, 0.3))
+idx
+table(idx)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
