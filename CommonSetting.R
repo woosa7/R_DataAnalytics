@@ -7,10 +7,15 @@ install.packages("treemap")
 
 colors()   # color name list
 
-par(family="NanumGothic")   # Mac Plot 한글 표시
-a <- c("서울","부산","제주","제주","서울","대전","부산","서울")
-fa <- factor(a)
-plot(fa)
+
+ddply()
+aggregate()
+dcast()
+
+basket %>%
+    group_by(custId) %>%
+    summarize(avg_amt=mean(amount)) %>%
+    arrange(desc(avg_amt))
 
 
 ##################################

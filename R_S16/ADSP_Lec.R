@@ -349,6 +349,123 @@ plot.forecast(dust_fcast)
 
 
 ################################################################
+# 다차원 척도법 Multi-Dimensional Scaling
+################################################################
+
+# 개체들 사이의 유사성/비유사성을 측정하여 2차원 또는 3차원 공간상에 점으로 표현하는 분석 방법.
+# 개체들간의 근접성(proximity)을 시각화하여 데이터 속에 잠재해 있는 패턴이나 구조를 찾아내는 통계 기법.
+# 개체들간의 거리 계산은 유클리드 거리 행렬을 사용한다.
+# 상대적 거리의 정확도를 높이기 위해 적합한 정도를 스트레스 값(stress value)으로 나타낸다.
+
+# 1. 계량적 MDS
+
+# 데이터가 연속형 변수(구간척도, 비율척도)인 경우 사용.
+# 각 개체들간의 유클리드 거리 행렬을 계산하고 개체들간의 비유사성을 공간상에 표현한다.
+
+library(MASS)
+data(eurodist)              # 유럽 도시들간의 거리
+eurodist
+
+loc <- cmdscale(eurodist)   # 2차원으로 도시들을 mapping
+loc
+
+x <- loc[ , 1]
+y <- -loc[ , 2]             # 북쪽 도시를 상단에 표시하기 위해 부호 변경
+
+plot(x, y, type = "n", asp = 1, main = "Metric MDS")   # asp : y/x aspect ratio
+text(x, y, rownames(loc), cex = 0.8)
+abline(v = 0, h = 0, lty = 2, lwd = 1)
+
+
+
+# 2. 비계량적 MDS
+
+# 데이터가 순서척도인 경우 사용.
+# 개체들간의 거리가 순서로 주어진 경우에는 순서척도를 거리의 속성과 같도록 변환하여 거리를 생성.
+
+data(swiss)
+head(swiss)     # 스위스 연방 주들의 사회경제적 지표
+
+# (1) isoMDS : Kruskal's Non-metric Multidimensional Scaling
+
+swissA <- as.matrix(swiss)
+dist <- dist(swissA)        # make distance matrix
+dist
+mds <- isoMDS(dist)         # make points & stress
+mds
+
+plot(mds$points, type = "n")
+text(mds$points, labels = rownames(swissA), cex = 0.7)
+abline(v = 0, h = 0, lty = 2, lwd = 1)
+
+
+swissC <- as.matrix(swiss[ , -2])    # Agriculture 제외하고 비교한 경우
+distC <- dist(swissC)
+mdsC <- isoMDS(distC)
+
+plot(mdsC$points, type = "n")
+text(mdsC$points, labels = rownames(swissC), cex = 0.8)
+abline(v = 0, h = 0, lty = 2, lwd = 1)
+
+
+# (2) sammon : Non-Linear Mapping
+
+swissK <- as.matrix(swiss)
+sam <- sammon(dist(swissK))
+
+plot(sam$points, type = "n", main = "Nonmetric MDS : sammon")
+text(sam$points, labels = rownames(swissK), cex = 0.7)
+abline(v = 0, h = 0, lty = 2, lwd = 1)
+
+
+
+################################################################
+# 주성분 분석 (Pricipal Component Analysis, PCA)
+################################################################
+
+# 상관관계가 있는 변수들을 선형결합하여 변수를 축약하는 기법. 요인 분석의 한 종류. 
+# 첫번째 주성분이 전체 변동을 가장 많이 설명하고, 두번째 주성분은 첫번째 주성분과 상관성이 낮아 
+# 첫번째 주성분이 설명하지 못하는 나머지 변동을 정보의 손실없이 가장 많이 설명할 수 있도록 변수들을 조합.
+
+
+# 1. 목적
+# - 여러 변수들 간에 내재하는 상관관계, 연관성을 이용해 소수의 주성분으로 차원을 축소
+# - 다중공선성이 존재하는 경우, 상관성이 적은 주성분으로 변수들을 축소하여 모형 개발에 활용
+# - 주성분분석을 통해 차원을 축소한 후 군집분석을 수행하면 결과와 연산속도를 개선할 수 있음
+# - 다량의 센서 데이터를 주성분분석으로 차원 축소한 후 시계열로 분포나 추세의 변화를 분석하여 고장 징후를 사전에 파악
+
+
+# 2. 주성분 선택법
+# 주성분분석 결과에서 누적분산비율(cumulative proportion)이 85%이상인 주성분까지 선택
+# screen plot에서 고유값이 수평을 유지하기 전단계로 주성분의 수를 선택
+
+df <- USArrests
+library(psych)
+pairs.panels(df)
+
+pcomp <- princomp(df, cor = T)
+summary(pcomp)
+        # 제2 주성분까지의 cumulative proportion이 86.74% 이므로 
+        # 2개의 주성분 변수를 활용하여 전체 데이터의 86.75%를 설명할 수 있다.
+
+screeplot(pcomp, npcs = 4, type = "lines", main = "USArrests princomp")
+
+# 변수들이 각 주성분에 기여하는 가중치 표시
+pcomp$loadings
+        # 제1 주성분에는 4개의 변수가 평균적으로 기여한다.
+        # 제2 주성분에서는 (Murder, Assault)와 (UrbanPop, Rape) 계수의 부호가 다르다.
+
+head(pcomp$scores);tail(pcomp$scores)
+
+# 2개 주성분에 의한 plot
+biplot(pcomp)
+        # 알라스카, 루이지애나는 살인 비율이 높다
+        # 미시건, 텍사스는 강간 비율이 높다.
+        # 아이다호, 뉴햄프셔, 아이오와는 인구 비율이 낮으면서 강력범죄도 낮다.
+
+
+
+################################################################
 # Data Mart
 ################################################################
 
@@ -435,8 +552,15 @@ ddply(
     }
 )
 
-# 2
+# 위와 동일
 ddply(subset(data, Ozone >= 30), c('Month'), summarize, mean_Temper = mean(Temp))
+
+
+# 2
+head(CO2)
+summary(CO2)
+
+ddply(subset(CO2), c('Plant', 'Type'), summarize, mean_uptake = mean(uptake))
 
 
 # Example 2
@@ -499,15 +623,17 @@ dt[ , mean(survived), by = c("pclass", "sex")]
 #--------------------------------------------------------------
 
 library(klaR)
-
 data("B3")      # West German Business Cycles 1955-1994
 ?B3
 
 head(B3)
 str(B3)
 
+# AIC 이용한 변수 선택법 : PHASEN이 범주형 변수이므로 사용할 수 없음.
+# step(model, direction = "both")
+
 # Wilks.lambda : 집단내 분산 / 총분산
-#                종속변수에 미치는 영향력에 따라 변수의 중요도를 정리 (작을수록 적합)
+# 종속변수에 미치는 영향력에 따라 변수의 중요도를 정리 (작을수록 적합)
 
 greedy.wilks(PHASEN ~ ., data = B3, niveau = 0.1)
 
@@ -551,6 +677,26 @@ plot(m)
 # 결측값 처리
 #--------------------------------------------------------------
 
+# 1. 단순 대치법 (Single Imputation)
+# 
+# - completes analysis : 결측값 존재하는 레코드 삭제
+# - mean imputaion : 관측 데이터의 평균으로 대치(비조건부) 또는 회귀분석을 활용한 대치(조건부)
+# 
+# 2. 다중 대치법 (Multiple Imputation)
+# 
+# - 단순 대치법을 m 번 수행. imputation - analysis - combination step.
+# - Amelia : time series cross sectional dataset을 활용
+# 
+# 3. imputation in R
+# 
+# - rfImpute() : Random Forest 모델은 결측값 존재시 바로 에러 발생. 이 함수 이용하여 결측값 대치 후 알고리즘 적용.
+# - complete.cases() : 데이터 내에 결측값 있으면 False
+# - is.na() : 결측값이 NA 인지 체크
+# - centralImputation() : DMwR 패키지. 중위수 또는 최빈값(factor)으로 대치
+# - knnImputation() : DMwR 패키지. knn 분류 알고리즘 사용
+# - amelia()
+
+
 # Impute
 library(Hmisc)
 
@@ -558,63 +704,134 @@ df <- data.frame(age = c(11, 23, NA, 40, 35, 15), gender = c('female', 'male'))
 df
 
 df$imputed_age <- with(df, impute(age, mean))
+df$imputedR_age <- with(df, impute(age, "random"))
 df
 
 
 # Amelia
 library(Amelia)
-
 ?amelia
 
-data(freetrade)
-head(freetrade)     # tariff 관세
-summary(freetrade)
+trade <- freetrade
+head(trade)     # tariff 관세 - NA's :58
+summary(trade)
 
-missmap(freetrade)  # 결측치 분포 시각화
+missmap(trade)  # 결측치 분포 시각화
 
-data <- amelia(freetrade, m = 5, ts = "year", cs = "country")   # 결측치 대치값 생성
-data
+# 결측치 대치값 생성. 시작값 = min(tariff)
+am_data <- amelia(trade, m = 5, ts = "year", cs = "country", startvals =  7.10)
         # m	: the number of imputed datasets to create.
         # ts : time series column
         # cs : cross section variable
 
-impute3 <- data$imputations[[3]]$tariff
-hist(impute3, col = "grey", border = "black")
+am_data
+summary(am_data$imputations[[1]]$tariff)
+summary(am_data$imputations[[2]]$tariff)
+summary(am_data$imputations[[3]]$tariff)
 
-freetrade$tariff <- impute3     # 결측치 대치
-missmap(freetrade)
+# 최소값이 0보다 큰 첫번째 데이터 적용
+impute1 <- am_data$imputations[[1]]$tariff
+hist(impute1, col = "grey", border = "black")
+
+trade$tariff <- impute1     # 결측치 대치
+missmap(trade)
+
+plot(am_data)
+par(mfrow=c(1,1))
+
 
 
 #--------------------------------------------------------------
 # 이상치(outlier) 찾기 및 처리
 #--------------------------------------------------------------
 
-library(DMwR)
+# outlier 식별
+# - EDS (Extreme Studentized Deviation) : 평균에서 3 표준편차 이상 떨어진 값
+# - 사분위수 이용. boxplot outer fence 벗어난 값
+
+#--------------------------------------------------------------
+# Case 1. iris
 
 head(iris)
 
-outlier.score <- lofactor(iris[ , 1:4], k = 5)
+# (1) 사분위수 이용 : 1개 변수에 대한 이상치
 
-plot(density(outlier.score))        # score 가 2.0, 2.5인 데이터가 outlier
+boxplot(iris)
+boxplot(iris$Sepal.Width)
 
-outliers <- order(outlier.score, decreasing = T)[1:5]  # score 높은 5개 
+a <- iris$Sepal.Width
+
+# fivenum : minimum, lower-hinge, median, upper-hinge, maximum
+which(a < fivenum(a)[2] - 1.5*IQR(a))
+which(a > fivenum(a)[4] + 1.5*IQR(a))
+
+
+# (2) lofactor 함수 (local outlier factor algorithm) : 모든 변수 고려시 이상치
+
+library(DMwR)
+outlier.score <- lofactor(iris[ , 1:4], k = 5)                  # k : outlier 계산을 위한 이웃 갯수
+plot(density(outlier.score), main = "outlier score of iris")    # score 가 2.0, 2.5인 데이터가 outlier
+
+sort(outlier.score, decreasing = T)[1:10]   # score > 1.9 인 3개 데이터를 이상치로 결정
+outliers <- order(outlier.score, decreasing = T)[1:3]
 outliers
 
 # outler 만 plot에서 번호 표시
 labels <- 1:nrow(iris)
 labels[-outliers] <- "."
-labels
 
-prcomp(iris[ , 1:4])   # 주성분분석
+# 주성분분석
 biplot(prcomp(iris[ , 1:4]), cex = 0.8, xlabs = labels)
 
 pch <- rep(".", nrow(iris))
-pch[outliers] <- "#"
+pch[outliers] <- "@"
 
 col <- rep("black", nrow(iris))
 col[outliers] <- "red"
 
 pairs(iris[ , 1:4], pch = pch, col = col)
+
+
+#--------------------------------------------------------------
+# Case 2. 
+
+library(psych)
+library(MVA)
+
+df <- USairpollution
+head(df)
+
+outlier.score <- lofactor(df, k = 5)
+plot(density(outlier.score), main = "outlier score of USairpollution")
+
+sort(outlier.score, decreasing = T)     # score > 3 인 이상치 2개
+outliers <- order(outlier.score, decreasing = T)[1:2]
+outliers
+df[outliers, ]
+
+# outler 만 plot에서 번호 표시
+labels <- 1:nrow(df)
+labels[-outliers] <- "."
+
+# 주성분분석
+biplot(prcomp(df), cex = 0.8, xlabs = labels)
+
+# plot 1
+pch <- rep(4, nrow(df))
+pch[outliers] <- 1
+
+col <- rep("black", nrow(df))
+col[outliers] <- "red"
+
+pairs(df, pch = pch, col = col)
+
+# plot 2
+df$col <- "normal"
+df[outliers, ]$col <- "outlier"
+df$col <- factor(df$col)
+head(df, 10)
+
+pairs.panels(df[1:7], bg = c("black", "yellow")[df$col], pch = 21)
 
 
 
