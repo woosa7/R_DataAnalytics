@@ -1,4 +1,122 @@
 ﻿----------------------------------------------------------------------------------------
+###############################################################
+#
+# 정형 데이터 마이닝
+#
+###############################################################
+
+Supervised Learning - 목표 변수 존재
+	1) 분류 (Classification) : 목표 변수가 범주형
+	2) 추정/예측 (Estimation) : 목표 변수가 연속형
+
+Unsupervised Learning - 목표 변수가 없이 데이터 내부의 특성 이용
+	1) 군집분석(Clustering)
+	2) 연관규칙(Association rule)
+	3) 연속규칙(Sequence rule)
+
+
+--------------------------------------------------------------
+분류분석 (Classification)
+--------------------------------------------------------------
+
+Supervised learning 기법
+미리 정의된 그룹으로 데이터를 분류 (목표 변수가 범주형)
+회귀분석 / 의사결정나무 / 베이지안 분류 / 인공신경망 / k Nearest Neighborhood
+
+
+--------------------------------------------------------------
+1. Decision Tree
+
+(1) Decision Tree 활용
+
+- 세분화/분류 : 데이터를 비슷한 특성을 갖는 몇 개의 그룹 또는 몇 개의 등급으로 분할
+- 예측 : 데이터에서 규칙을 찾아낸 후 이를 이용하여 미래의 사건을 예측
+- 차원 축소 및 변수 선택 : 목표 변수에 큰 영향을 미치는 변수를 골라냄
+- 변수들 간의 교호작용 (interaction effect) 파악
+- 목표 변수의 범주를 병합하거나 연속형 목표 변수를 이산화(binning)
+
+(2) Decision Tree의 특징
+
+- 결과를 설명하기 쉽다.
+- 모형을 만드는 방법이 계산적으로 복잡하지 않다.
+- 대용량 데이터도 빠르게 처리할 수 있다.
+- 비정상 잡음 데이터에 대해서 민감하지 않다.
+- 불필요한 변수가 있어도 크게 영향받지 않는다.
+
+(3) Decision Tree 알고리즘
+
+a. CART (Classification and Regression Tree)
+	- 가장 많이 활용되는 알고리즘.
+	- 목표 변수가 범주형, 연속형 모두 가능. 이진 분리.
+	- 불순도 측도는 범주형일 경우 지니 지수, 연속형인 경우 분산을 사용.
+	- 개별 입력변수 뿐만 아니라 입력변수들의 선형결합드 중에서 최적의 분리를 찾을 수 있다.
+	
+b. C4.5 & C5.0
+	- 다지 분리(multiple split) 가능
+	- 불순도 측도는 엔트로피 지수 사용.
+
+c. CHAID (Chi-squared Automatic Interaction Detection)
+	- 적당한 크기에서 나무모형의 성장을 중지
+	- 불순도 측도는 카이제곱 통계량 사용.
+
+
+--------------------------------------------------------------
+# party package 이용한 Decision Tree
+--------------------------------------------------------------
+
+library(party)
+library(caret)
+
+# train / test data 분리 (6:4 or 7:3)
+idx <- sample(2, nrow(iris), replace = T, prob = c(0.6, 0.4))
+table(idx)
+train_1 <- iris[idx == 1, ]
+test_1 <- iris[idx == 2, ]
+
+# train data 이용한 모델 
+tree_model <- ctree(Species ~ ., data = train_1)
+tree_model
+plot(tree_model)
+plot(tree_model, type = "simple")
+
+# 예측된 데이터와 실제 데이터 비교
+table(train_1$Species)                        # real data
+train_1$pred <- predict(tree_model)
+confusionMatrix(train_1$pred, train_1$Species)  # Accuracy : 0.9762
+
+# Test Data로 검증
+test_1$pred <- predict(tree_model, newdata = test_1)
+confusionMatrix(test_1$pred, test_1$Species)    # Accuracy : 0.9394
+
+
+--------------------------------------------------------------
+# C50 패키지 이용한 Decision Tree
+--------------------------------------------------------------
+
+library(C50)
+
+# train / test data 분리 (6:4)
+idx <- sample(2, nrow(iris), replace = T, prob = c(0.6, 0.4))
+table(idx)
+train_2 <- iris[idx == 1, ]
+test_2 <- iris[idx == 2, ]
+
+# modeling
+c5_options <- C5.0Control(winnow = FALSE, noGlobalPruning = FALSE)
+
+c5_model <- C5.0(Species ~ ., data = train_2, control=c5_options, rules=FALSE)
+summary(c5_model)
+plot(c5_model)
+
+# validation
+train_2$pred <- predict(c5_model, newdata = train_2)
+confusionMatrix(train_2$pred, train_2$Species)      # Accuracy : 0.9885
+
+test_2$pred <- predict(c5_model, newdata = test_2)
+confusionMatrix(test_2$pred, test_2$Species)        # Accuracy : 0.9048
+
+
+----------------------------------------------------------------------------------------
 이상치(outlier) 찾기와 처리
 
 

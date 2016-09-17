@@ -749,6 +749,10 @@ par(mfrow=c(1,1))
 # - EDS (Extreme Studentized Deviation) : 평균에서 3 표준편차 이상 떨어진 값
 # - 사분위수 이용. boxplot outer fence 벗어난 값
 
+# outlier 처리방법
+# - 절단(trimming) : outlier 포함된 레코드 삭제
+# - 조정(winsorizing) : outlier를 상한 또는 하한 값으로 조정
+
 #--------------------------------------------------------------
 # Case 1. iris
 
@@ -766,7 +770,7 @@ which(a < fivenum(a)[2] - 1.5*IQR(a))
 which(a > fivenum(a)[4] + 1.5*IQR(a))
 
 
-# (2) lofactor 함수 (local outlier factor algorithm) : 모든 변수 고려시 이상치
+# (2) lofactor 함수 (local outlier factor algorithm) : 모든 변수 고려한 이상치
 
 library(DMwR)
 outlier.score <- lofactor(iris[ , 1:4], k = 5)                  # k : outlier 계산을 위한 이웃 갯수
@@ -840,40 +844,69 @@ pairs.panels(df[1:7], bg = c("black", "yellow")[df$col], pch = 21)
 ###############################################################
 
 #--------------------------------------------------------------
-# 분류분석 (Classification)
+# 분류분석 (Classification) - Decision Tree
 #--------------------------------------------------------------
 
-# Supervised learning 기법
-# 미리 정의된 그룹으로 데이터를 분류 (목적변수가 범주형)
-# 회귀분석 / 의사결정나무 / 베이지안 분류 / 인공신경망 / k Nearest Neighborhood
+head(iris)
 
 #--------------------------------------------------------------
-# Decision Tree
+# party package 이용한 Decision Tree
 
-# - 세분화
-# - 분류
-# - 예측
-# - 차원 축소 및 변수 선택
-# - 교호작용 (interaction effect) 파악
-# - 범주의 병합, binning
+library(party)
+library(caret)
 
-# 반복적 분할(recursive partitioning)
-# - 나눠진 영역이 가능한 순수하거나 동질적인 요소로 이루어지도록
-
-# 분할 규칙 (splitting rule) / 정지 규칙
-
-# 분할 기준
-# - 이산형 목표 변수 : 카이제곱 통계량 p 값 / 지니 지수 / 엔트로피 지수
-# - 연속형 목표 변수 : 분산분석 F 통계량
-
-
-iris
-
-# 데이터 나누기 - training / test
-
-idx <- sample(2, nrow(iris), replace = T, prob = c(0.7, 0.3))
-idx
+# train / test data 분리 (6:4 or 7:3)
+idx <- sample(2, nrow(iris), replace = T, prob = c(0.6, 0.4))
 table(idx)
+train_1 <- iris[idx == 1, ]
+test_1 <- iris[idx == 2, ]
+
+# train data 이용한 모델 
+tree_model <- ctree(Species ~ ., data = train_1)
+tree_model
+plot(tree_model)
+plot(tree_model, type = "simple")
+
+# 예측된 데이터와 실제 데이터 비교
+table(train_1$Species)                        # real data
+train_1$pred <- predict(tree_model)
+confusionMatrix(train_1$pred, train_1$Species)  # Accuracy : 0.9762
+
+# Test Data로 검증
+test_1$pred <- predict(tree_model, newdata = test_1)
+confusionMatrix(test_1$pred, test_1$Species)    # Accuracy : 0.9394
+
+
+#--------------------------------------------------------------
+# C50 패키지 이용한 Decision Tree
+
+library(C50)
+
+# train / test data 분리 (6:4)
+idx <- sample(2, nrow(iris), replace = T, prob = c(0.6, 0.4))
+table(idx)
+train_2 <- iris[idx == 1, ]
+test_2 <- iris[idx == 2, ]
+
+# modeling
+c5_options <- C5.0Control(winnow = FALSE, noGlobalPruning = FALSE)
+
+c5_model <- C5.0(Species ~ ., data = train_2, control=c5_options, rules=FALSE)
+summary(c5_model)
+plot(c5_model)
+
+# validation
+train_2$pred <- predict(c5_model, newdata = train_2)
+confusionMatrix(train_2$pred, train_2$Species)      # Accuracy : 0.9885
+
+test_2$pred <- predict(c5_model, newdata = test_2)
+confusionMatrix(test_2$pred, test_2$Species)        # Accuracy : 0.9048
+
+
+
+#--------------------------------------------------------------
+# Classification - Decision Tree - Ensemble
+#--------------------------------------------------------------
 
 
 
@@ -900,6 +933,31 @@ table(idx)
 
 
 
+
+
+
+#--------------------------------------------------------------
+# randomForest 이용한 Decision Tree
+
+library(randomForest)
+
+# train / test data 분리 (6:4)
+idx <- sample(2, nrow(iris), replace = T, prob = c(0.6, 0.4))
+table(idx)
+train_3 <- iris[idx == 1, ]
+test_3 <- iris[idx == 2, ]
+
+# modeling
+rf_model <- randomForest(Species ~ ., data = train_3, ntree = 100, proximity = T)
+plot(rf_model)
+varImpPlot(rf_model)
+
+# validation
+train_3$pred <- predict(rf_model, newdata = train_3)
+confusionMatrix(train_3$pred, train_3$Species)
+
+test_3$pred <- predict(rf_model, newdata = test_3)
+confusionMatrix(test_3$pred, test_3$Species)
 
 
 
