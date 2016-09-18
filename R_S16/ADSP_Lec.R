@@ -905,73 +905,67 @@ confusionMatrix(test_2$pred, test_2$Species)        # Accuracy : 0.9048
 
 
 #--------------------------------------------------------------
-# Classification - Decision Tree - Ensemble
+# Decision Tree - Ensemble - Bagging
 #--------------------------------------------------------------
 
+library(party)
+library(caret)
 
+df <- iris
+head(df)
 
+# decision tree 적용하기엔 데이터가 너무 적으므로 booting data 생성
+data_boot1 <- df[sample(1:nrow(iris), replace = T), ]
+data_boot2 <- df[sample(1:nrow(iris), replace = T), ]
+data_boot3 <- df[sample(1:nrow(iris), replace = T), ]
+data_boot4 <- df[sample(1:nrow(iris), replace = T), ]
+data_boot5 <- df[sample(1:nrow(iris), replace = T), ]
 
+dim(data_boot5)
 
+# Modeling
+tree1 <- ctree(Species ~ ., data_boot1)
+tree2 <- ctree(Species ~ ., data_boot2)
+tree3 <- ctree(Species ~ ., data_boot3)
+tree4 <- ctree(Species ~ ., data_boot4)
+tree5 <- ctree(Species ~ ., data_boot5)
 
+plot(tree1)
+plot(tree2)
+plot(tree3)
+plot(tree4)
+plot(tree5)
 
+pred1 <- predict(tree1, iris)
+pred2 <- predict(tree2, iris)
+pred3 <- predict(tree3, iris)
+pred4 <- predict(tree4, iris)
+pred5 <- predict(tree5, iris)
 
+test <- data.frame(Species = iris$Species, pred1, pred2, pred3, pred4, pred5)
+head(test)
 
+confusionMatrix(test$pred1, test$Species)
+confusionMatrix(test$pred2, test$Species)
+confusionMatrix(test$pred3, test$Species)
+confusionMatrix(test$pred4, test$Species)
+confusionMatrix(test$pred5, test$Species)
 
+library(plyr)
 
+funcResultValue <- function(x) {
+    result <- NULL
+    for (i in 1:nrow(x)) {
+        xtab <- count(t(x[i, ]))
+        rvalue <- as.character( xtab[1,1] )
+        #print(xtab)
+        #print(rvalue)
+        
+        result <- c(result, rvalue)
+    }
+    return(result)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#--------------------------------------------------------------
-# randomForest 이용한 Decision Tree
-
-library(randomForest)
-
-# train / test data 분리 (6:4)
-idx <- sample(2, nrow(iris), replace = T, prob = c(0.6, 0.4))
-table(idx)
-train_3 <- iris[idx == 1, ]
-test_3 <- iris[idx == 2, ]
-
-# modeling
-rf_model <- randomForest(Species ~ ., data = train_3, ntree = 100, proximity = T)
-plot(rf_model)
-varImpPlot(rf_model)
-
-# validation
-train_3$pred <- predict(rf_model, newdata = train_3)
-confusionMatrix(train_3$pred, train_3$Species)
-
-test_3$pred <- predict(rf_model, newdata = test_3)
-confusionMatrix(test_3$pred, test_3$Species)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+test$result <- funcResultValue(test[ , 2:6])
+confusionMatrix(test$result, test$Species)
 

@@ -85,23 +85,55 @@ head(selectedTarget)
 #write.csv(target[order(target$c5_pred_prob[,"YES"], decreasing=T), ], "dm_target.csv", row.names=FALSE)
 
 
-#------------------------------------------
-# randomForest
+######################################################################
+# Bagging
+######################################################################
 
-test_rf <- read.csv("pepTestSet.csv", stringsAsFactors = T)
-test_rf <- subset(test_rf, select=-c(id))
+train <- read.csv("pepTrainSet.csv", stringsAsFactors = T)
+train <- subset(train, select=-c(id))
 
-library(randomForest)
+test <- read.csv("pepTestSet.csv", stringsAsFactors = T)
+test <- subset(test, select=-c(id))
 
-rf_model <- randomForest(pep ~ ., data = train, ntree = 100, proximity = T)
-plot(rf_model)
-varImpPlot(rf_model)
+summary(train)
 
-test_rf$rf_pred <- predict(rf_model, test_rf, type = "class")      # 예측
-test_rf$rf_pred_prob <- predict(rf_model, test_rf, type = "prob")  # 확률
-confusionMatrix(test_rf$rf_pred, test_rf$pep)
-head(test_rf)
+# booting data 생성
+data_boot1 <- train[sample(1:nrow(train), replace = T), ]
+data_boot2 <- train[sample(1:nrow(train), replace = T), ]
+data_boot3 <- train[sample(1:nrow(train), replace = T), ]
+data_boot4 <- train[sample(1:nrow(train), replace = T), ]
+data_boot5 <- train[sample(1:nrow(train), replace = T), ]
 
+summary(data_boot5)
+head(data_boot5);tail(data_boot5)
+
+# Modeling
+c5_options <- C5.0Control(winnow = FALSE, noGlobalPruning = FALSE)
+
+model1 <- C5.0(pep ~ ., data = data_boot1, control = c5_options, rules = FALSE)
+model2 <- C5.0(pep ~ ., data = data_boot2, control = c5_options, rules = FALSE)
+model3 <- C5.0(pep ~ ., data = data_boot3, control = c5_options, rules = FALSE)
+model4 <- C5.0(pep ~ ., data = data_boot4, control = c5_options, rules = FALSE)
+model5 <- C5.0(pep ~ ., data = data_boot5, control = c5_options, rules = FALSE)
+
+test$pred1 <- predict(model1, test, type = "class")
+test$pred2 <- predict(model2, test, type = "class")
+test$pred3 <- predict(model3, test, type = "class")
+test$pred4 <- predict(model4, test, type = "class")
+test$pred5 <- predict(model5, test, type = "class")
+
+head(test)
+head(test[, 11:16])
+
+funcResultValue <- function(x) {
+    predVec <- ifelse(x == "YES", 1, 0)
+    sumVal <- apply(predVec, 1, sum)
+    result <- ifelse(sumVal >= 3, "YES", "NO")
+    return(result)
+}
+
+test$result <- funcResultValue(test[ , 12:16])
+confusionMatrix(test$result, test$pep)
 
 
 ######################################################################
@@ -178,33 +210,4 @@ confusionMatrix(test$resultPep, test$pep)
 head(test[test$pep != test$resultPep, ])
 
 
-
-######################################################################
-#
-# 3개 패키지에 train dataset을  모델링 (party, C50, RandomForest)
-#
-######################################################################
-
-train <- read.csv("pepTrainSet.csv", stringsAsFactors = T)
-train <- subset(train, select=-c(id))
-
-test <- read.csv("pepTestSet.csv", stringsAsFactors = T)
-test <- subset(test, select=-c(id))
-
-library(caret)
-library(C50)
-
-?C5.0Control
-
-c5_options <- C5.0Control(winnow = F, noGlobalPruning = F)
-model <- C5.0(pep ~ ., data = train, control = c5_options, rules = FALSE)
-plot(model, type = "simple")
-
-test$pred <- predict(model, newdata = test, type = "class")
-confusionMatrix(test$pred, test$pep)   # 0.89
-
-odds <- test[test$pep != test$pred, ]
-head(odds)
-tail(odds)
-summary(odds)
 
