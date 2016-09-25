@@ -956,8 +956,8 @@ library(plyr)
 funcResultValue <- function(x) {
     result <- NULL
     for (i in 1:nrow(x)) {
-        xtab <- count(t(x[i, ]))
-        rvalue <- as.character( xtab[1,1] )
+        xtab <- table(t(x[i, ]))
+        rvalue <- names(sort(xtab, decreasing = T)[1])
         #print(xtab)
         #print(rvalue)
         
@@ -968,4 +968,29 @@ funcResultValue <- function(x) {
 
 test$result <- funcResultValue(test[ , 2:6])
 confusionMatrix(test$result, test$Species)
+
+
+#--------------------------------------------------------------
+# Decision Tree - Ensemble - Boosting
+#--------------------------------------------------------------
+
+data(kyphosis, package = "rpart")
+data <- kyphosis
+head(data)
+
+totalCount <- nrow(data)
+
+boost <- function(k, compare) {
+    pr <- rep(1/totalCount, totalCount)
+    result <- matrix(0, k, 3)
+}
+
+
+
+
+
+
+
+
+
 

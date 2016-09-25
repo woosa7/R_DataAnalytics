@@ -210,4 +210,23 @@ confusionMatrix(test$resultPep, test$pep)
 head(test[test$pep != test$resultPep, ])
 
 
+#-------------------------------------------------------------------
+
+library(dplyr)
+
+exam1 <- read.csv("exam1.csv")
+exam1
+
+cs <- read.table("dataCustomers.tab", sep="\t", header = T, stringsAsFactors = F)
+tr <- read.table("dataTransactions.tab", sep="\t", header = T, stringsAsFactors = F)
+tr$product <- as.character(tr$product)
+
+filter(cs, age >= 50 & age <=59 ) %>% tail()
+
+head(cs)
+head(tr)
+
+summary(tr)
+
+
 

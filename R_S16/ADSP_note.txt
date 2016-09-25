@@ -1,6 +1,108 @@
 ﻿----------------------------------------------------------------------------------------
 Ensemble
 
+의사결정나무(Decision Tree)는 데이터의 작은 변화에 의해 예측 모델이 크게 변하는 불안정성이 있다.
+주어진 자료로 여러개의 예측 모델을 만들어 조합하여 하나의 최종 예측 모델을 만드는 방법을 앙상블(ensemble) 기법이라고 한다.
+
+
+# 참고
+http://cse-wiki.unl.edu/wiki/index.php/Bagging_and_Boosting
+http://www.slideshare.net/hustwj/an-introduction-to-ensemble-methodsboosting-bagging-random-forests-and-more
+http://www.richardafolabi.com/blog/non-technical-introduction-to-random-forest-and-gradient-boosting-in-machine-learning.html
+
+
+(1) Bagging
+
+주어진 데이터에서 여러 개의 bootstrap 자료를 생성 --> 각 자료에 대한 예측 모델 생성 --> 결합하여 최종 모델 결정
+일반적으로 traing data의 모집단 분포를 모르기 때문에 실제 문제에서는 평균예측모델을 구할 수 없다.
+배깅은 traing data를 모집단으로 생각하고 평균예측모델을 구하기 때문에 분산을 줄이고 예측력을 향상시킬 수 있다.
+일반적으로 overfitting 된 모델일 경우 사용하면 좋다.
+bootstrap : raw data 에서 랜덤 복원추출을 통해 만든 동일한 크기의 자료들
+voting : 여러 개의 모델로부터 산출된 결과를 합쳐 다수결에 의해 최종 결과로 선택
+
+# 이미지
+
+(2) Boosting
+
+예측력이 약한 모델들을 결합하여 강한 예측 모델을 만드는 방법. 훈련오차를 빨리 그리고 쉽게 줄일 수 있다.
+잘못 분류된 데이터에 가중치를 주어서 더 잘 분류하는 것이 목적.
+
+# 이미지
+
+단점 : 2차, 3차 분류기에 들어가는 데이터는 기존 데이터의 일부만 적용되므로 traing data의 규모가 커야 한다.
+Adaboost : 이진분류 문제에서 랜덤 분류기보다 조금 더 좋은 분류기 n개에 가중치를 설정하고 이를 결합하여 최종 분류기를 만듬 
+
+
+(3) Random Forest
+
+bagging, boosting 보다 더 많은 무작위성을 주어 모델을 생성한 후 이를 선형 결합하여 최종 모델을 만드는 방법.
+입력 변수가 아주 많은 경우에도 변수 제거없이 실행 가능.
+최종 결과에 대한 해석이 어렵다는 단점이 있지만 좋은 예측력을 보인다.
+
+
+-------------------------------------
+Bagging
+
+library(party)
+library(caret)
+
+df <- iris
+head(df)
+
+# decision tree 적용하기엔 데이터가 너무 적으므로 booting data 생성
+data_boot1 <- df[sample(1:nrow(iris), replace = T), ]
+data_boot2 <- df[sample(1:nrow(iris), replace = T), ]
+data_boot3 <- df[sample(1:nrow(iris), replace = T), ]
+data_boot4 <- df[sample(1:nrow(iris), replace = T), ]
+data_boot5 <- df[sample(1:nrow(iris), replace = T), ]
+
+dim(data_boot5)
+
+# Modeling
+tree1 <- ctree(Species ~ ., data_boot1)
+tree2 <- ctree(Species ~ ., data_boot2)
+tree3 <- ctree(Species ~ ., data_boot3)
+tree4 <- ctree(Species ~ ., data_boot4)
+tree5 <- ctree(Species ~ ., data_boot5)
+
+plot(tree1)
+plot(tree2)
+plot(tree3)
+plot(tree4)
+plot(tree5)
+
+pred1 <- predict(tree1, iris)
+pred2 <- predict(tree2, iris)
+pred3 <- predict(tree3, iris)
+pred4 <- predict(tree4, iris)
+pred5 <- predict(tree5, iris)
+
+test <- data.frame(Species = iris$Species, pred1, pred2, pred3, pred4, pred5)
+head(test)
+
+confusionMatrix(test$pred1, test$Species)
+confusionMatrix(test$pred2, test$Species)
+confusionMatrix(test$pred3, test$Species)
+confusionMatrix(test$pred4, test$Species)
+confusionMatrix(test$pred5, test$Species)
+
+library(plyr)
+
+funcResultValue <- function(x) {
+    result <- NULL
+    for (i in 1:nrow(x)) {
+        xtab <- table(t(x[i, ]))
+        rvalue <- names(sort(xtab, decreasing = T)[1])
+        #print(xtab)
+        #print(rvalue)
+        
+        result <- c(result, rvalue)
+    }
+    return(result)
+}
+
+test$result <- funcResultValue(test[ , 2:6])
+confusionMatrix(test$result, test$Species)
 
 
 
@@ -11,11 +113,45 @@ Ensemble
 
 
 
+----------------------------------------------------------------------------------------
+Classification 성과 분석
+
+1. 정확도, 민감도, 특이도
+
+		실제		실제
+		Positive	Negative
+예측:Positive	TP		FP
+예측:Negative	FN		TN
+
+정확도(Accuracy)	= (TP + TN) / TOTAL
+
+민감도(Sensitivity) = TP / (TP + FN)
+
+특이도(Specificity) = TN / (FP + TN)
 
 
 
+2. ROCR
+
+ROCR 패키지는 이진 분류 (binary classification)만 지원 가능
+
+y : TPR (true positive rate) = 민감도 : 1인 케이스에 대해 1로 예측한 비율
+x : FPR (false positive rate = 1 - 특이도 : 0인 케이스에 대해 1로 잘못 예측한 비율
 
 
+3. 이익 도표(Lift Chart)
+
+전체 데이터를 예측 확률을 기준으로 내림차순 정렬한다.
+
+- 전체 5000명 중에 950명이 실제로 구매
+baseline lift = 950 / 5000 = 0.19 = 19 %
+
+- 예측 확률 상위 10% 500명 중 415명 구매
+반응률(Response) = 415 / 500 = 83 %
+반응검출률(Captured Response) = 415 / 950 = 43.68 %
+
+- 예측 확률 상위 10%의 Lift
+Lift = Response / Baseline lift = 83 / 19 = 4.37
 
 
 
