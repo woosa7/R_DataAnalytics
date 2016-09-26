@@ -1,23 +1,11 @@
+###############################################################
+#
+# 다변량 통계분석 2 (정여진 교수)
+#
+###############################################################
 
-
-#------------------------------------
-crime <- read.csv("crime.csv")
-head(crime)
-
-rownames(crime) <- crime$state
-crime <- crime[ , -c(1,9)]
-
-# star & nightingale - dataframe
-a <- stars(crime)
-stars(crime, key.loc = c(12, 2), cex = 0.8)
-stars(crime, key.loc = c(12, 2), cex = 0.8, draw.segments = T)
-
-# heatmap - matrix
-crime <- as.matrix(crime)
-
-heatmap(crime, scale = "column", Colv = NA) 
-
-
+library(MVA)
+demo("Ch-PCA")
 
 #------------------------------------------------------------
 # 주성분 분석

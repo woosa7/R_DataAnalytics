@@ -6,6 +6,7 @@
 
 library(MVA)        # 교재 package
 demo("Ch-MVA")
+demo("Ch-Viz")
 par(mfcol=c(1,1))
 
 #--------------------------------------------------------------
