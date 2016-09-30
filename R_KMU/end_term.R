@@ -4,9 +4,7 @@
 #----------------------------------------------------------------
 # 0. load data
 
-setwd("/Volumes/MacHDD/workspace/R_Study/R_KMU")
-
-cdrData <- read.csv("trainData_CDR.csv", header = T, stringsAsFactors = F)
+cdrData <- read.csv("data/trainData_CDR.csv", header = T, stringsAsFactors = F)
 summary(cdrData)
 head(cdrData)
 
