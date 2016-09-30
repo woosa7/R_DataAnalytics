@@ -4,6 +4,7 @@
 #
 ############################################################
 
+# Data Mining Process Demo
 # PEP: Personal Equity Plan, 연금보험 구매 여부
 
 library(caret)
@@ -152,24 +153,6 @@ funcResultValue <- function(x) {
 test$result <- funcResultValue(test[ , 12:18])
 confusionMatrix(test$result, test$pep)
 
-
-#-------------------------------------------------------------------
-
-library(dplyr)
-
-exam1 <- read.csv("exam1.csv")
-exam1
-
-cs <- read.table("dataCustomers.tab", sep="\t", header = T, stringsAsFactors = F)
-tr <- read.table("dataTransactions.tab", sep="\t", header = T, stringsAsFactors = F)
-tr$product <- as.character(tr$product)
-
-filter(cs, age >= 50 & age <=59 ) %>% tail()
-
-head(cs)
-head(tr)
-
-summary(tr)
 
 
 
