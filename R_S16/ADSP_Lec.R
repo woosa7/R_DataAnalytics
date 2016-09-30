@@ -911,17 +911,14 @@ confusionMatrix(test_2$pred, test_2$Species)        # Accuracy : 0.9048
 library(party)
 library(caret)
 
-df <- iris
-head(df)
+head(iris)
 
-# decision tree 적용하기엔 데이터가 너무 적으므로 booting data 생성
-data_boot1 <- df[sample(1:nrow(iris), replace = T), ]
-data_boot2 <- df[sample(1:nrow(iris), replace = T), ]
-data_boot3 <- df[sample(1:nrow(iris), replace = T), ]
-data_boot4 <- df[sample(1:nrow(iris), replace = T), ]
-data_boot5 <- df[sample(1:nrow(iris), replace = T), ]
-
-dim(data_boot5)
+# bootstrap data 생성
+data_boot1 <- iris[sample(1:nrow(iris), replace = T), ]
+data_boot2 <- iris[sample(1:nrow(iris), replace = T), ]
+data_boot3 <- iris[sample(1:nrow(iris), replace = T), ]
+data_boot4 <- iris[sample(1:nrow(iris), replace = T), ]
+data_boot5 <- iris[sample(1:nrow(iris), replace = T), ]
 
 # Modeling
 tree1 <- ctree(Species ~ ., data_boot1)
@@ -942,25 +939,16 @@ pred3 <- predict(tree3, iris)
 pred4 <- predict(tree4, iris)
 pred5 <- predict(tree5, iris)
 
+# 각각의 예측 결과를 취합
 test <- data.frame(Species = iris$Species, pred1, pred2, pred3, pred4, pred5)
 head(test)
 
-confusionMatrix(test$pred1, test$Species)
-confusionMatrix(test$pred2, test$Species)
-confusionMatrix(test$pred3, test$Species)
-confusionMatrix(test$pred4, test$Species)
-confusionMatrix(test$pred5, test$Species)
-
-library(plyr)
-
+# 5개 분류기의 결과를 취합하여 최종 결과를 voting
 funcResultValue <- function(x) {
     result <- NULL
     for (i in 1:nrow(x)) {
         xtab <- table(t(x[i, ]))
         rvalue <- names(sort(xtab, decreasing = T)[1])
-        #print(xtab)
-        #print(rvalue)
-        
         result <- c(result, rvalue)
     }
     return(result)
@@ -974,7 +962,6 @@ confusionMatrix(test$result, test$Species)
 # Decision Tree - Ensemble - Boosting
 #--------------------------------------------------------------
 
-install.packages("tree")
 library(tree)
 
 data(kyphosis, package = "rpart")
@@ -985,31 +972,35 @@ totalCount <- nrow(data)
 totalCount
     
 boost <- function(k, compare) {
-    # 초기 표본 추출 확률을 동일하게 설정
-    pr <- rep(1/totalCount, totalCount)   
-    # 결과에 대한 확률 및 모델의 정확도를 저장
+    # 첫번째 표본 추출 확률을 모두 동일하게 설정
+    pr <- rep(1/totalCount, totalCount)
+    
+    # 결과에 대한 확률 및 모델의 정확도를 저장할 객체
     result <- matrix(0, k, 3) # k row 3 col
     
     # k개 만큼 tree model 생성
     for (j in 1:k) {
         # 배깅과 달리 각 인덱스에 설정된 확률로 샘플링
         data.boost <- data[sample(1:totalCount, prob = pr, replace = T), ]
-        data.tr <- tree(Kyphosis ~ ., data.boost)
         
+        # 샘플링 데이터에 대한 tree 생성
+        data.tree <- tree(Kyphosis ~ ., data.boost)
+
+        # 각 row에 대한 예측을 저장할 객체  
         pred <- matrix(0, totalCount, 1)
         
         for (i in 1:totalCount) {
-            # 각 row에 대한 예측을 pred 에 저장
-            if (predict(data.tr, data[i, ])[ , 1] == 1) {
+            # predict - absent / present 확률
+            if (predict(data.tree, data[i, ])[ , 1] > 0.5) {
                 pred[i, 1] <- "absent"
             } else {
                 pred[i, 1] <- "present"
             }
         }
         
-        # test data 한 개에 대한 예측 확률
-        result[j, 1] <- predict(data.tr, compare)[ , 1]
-        result[j, 2] <- predict(data.tr, compare)[ , 2]
+        # test data (compare) 한 개에 대한 예측 확률
+        result[j, 1] <- predict(data.tree, compare)[ , 1]
+        result[j, 2] <- predict(data.tree, compare)[ , 2]
         result[j, 3] <- length(which(as.matrix(data)[ , 1] == pred)) / totalCount # 정확도
         
         pr <- rep(1/totalCount, totalCount)
@@ -1019,8 +1010,8 @@ boost <- function(k, compare) {
     return(result)
 }
 
-# 80번 데이터로 5회 반복해서 측정
-boost.result <- boost(5, data[80, ])
+# 80번째 데이터로 10회 반복해서 측정
+boost.result <- boost(10, data[80, ])
 boost.result
 
 a <- t(boost.result[,1])%*%(boost.result[,3])    # absent 확률
@@ -1041,7 +1032,6 @@ idx <- sample(2, nrow(iris), replace = T, prob = c(0.7, 0.3))
 trainData <- iris[idx == 1, ]
 testData <- iris[idx == 2, ]
 
-install.packages("randomForest")
 library(randomForest)
 
 # ntree = 100 : 100 개의 tree 만듬.
@@ -1054,7 +1044,7 @@ table(trainData$Species, predict(model))
 importance(model)  
 # 지니계수. 값이 높은 변수가 클래스를 분류하는데 가장 큰 영향을 줌.
 
-plot(model)
+plot(model, main = "randomForest model of iris")
 # tree가 40개 이상일 경우 오차가 안정적으로 나타난다.
 
 varImpPlot(model)
@@ -1062,8 +1052,7 @@ varImpPlot(model)
 
 pred <- predict(model, newdata = testData)
 table(testData$Species, pred)
+
 plot(margin(model, testData$Species))
-
-
 
 
