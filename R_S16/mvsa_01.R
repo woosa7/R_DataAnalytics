@@ -6,7 +6,6 @@
 
 library(MVA)        # 교재 package
 demo("Ch-MVA")
-demo("Ch-Viz")
 par(mfcol=c(1,1))
 
 #--------------------------------------------------------------
@@ -219,20 +218,19 @@ head(crime, 10)
 # A. 살인(murder)와 절도(burglary) 사이의 산점도를 단변량 분포와 함께 그리시오. 
 # 상관계수도 함께 살피시오.
 
-cdata <- crime[ , c("murder", "burglary")]
-head(cdata)
-
-# 발생비율의 단위가 다르므로 비교를 위해 scaling 한다.
-boxplot(scale(cdata))   # murder 가 특이하게 높은 이상점 존재
-cor.test(cdata$murder, cdata$burglary)
-
 library(psych)
 pairs.panels(cdata)     # cor = 0.28
-
+cor.test(cdata$murder, cdata$burglary)
 
 #--------------------------------------------------------------
 # B. 위를 통해 이상점 존재여부를 판단하고 존재한다면 해당 주를 확인하고 제거하시오. 
 # 제거 후 변수들 사이의 관계가 어떻게 변화하는지 살피시오.
+
+cdata <- crime[ , c("murder", "burglary")]
+head(cdata)
+
+# 발생비율의 단위가 다르므로 비교를 위해 scaling 한다.
+boxplot(scale(cdata))   # murder 에 특이하게 높은 이상점 존재
 
 # 사분위수를 이용한 outlier 확인
 # fivenum : minimum, lower-hinge, median, upper-hinge, maximum
