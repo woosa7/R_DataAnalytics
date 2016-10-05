@@ -119,18 +119,30 @@ cs.v6 <- cs %>%
 ggplot(cs.v6, aes(agegrp)) + geom_bar(aes(fill = agegrp))
 
 
-# 7. 기간별 구매금액 및 구매횟수
-
-# (1) 최근 12개월
+# 7. 기간별(최근 12개월, 6개월, 3개월) 구매금액 및 구매횟수
 
 end_date <- ymd(ymd_hms(max(tr$sales_date)))
+
 start_date <- ymd('20010501') - months(12)   # 특정 일자 기준으로 12개월 전 날짜
+cs.v7.12 <- tr %>%
+    filter(sales_date >= start_date & sales_date <= end_date) %>%
+    group_by(custid) %>% summarise(amt12 = sum(net_amt), nop12 = n())
 
+start_date <- ymd('20010501') - months(6)
+cs.v7.6 <- tr %>%
+    filter(sales_date >= start_date & sales_date <= end_date) %>%
+    group_by(custid) %>% summarise(amt6 = sum(net_amt), nop6 = n())
 
+start_date <- ymd('20010501') - months(3)
+cs.v7.3 <- tr %>%
+    filter(sales_date >= start_date & sales_date <= end_date) %>%
+    group_by(custid) %>% summarise(amt3 = sum(net_amt), nop3 = n())
 
+cs.v7 <- left_join(cs.v7.12, cs.v7.6) %>% left_join(cs.v7.3) %>% 
+    mutate(amt6 = ifelse(is.na(amt6), 0, amt6),
+           nop6 = ifelse(is.na(nop6), 0, nop6),
+           amt3 = ifelse(is.na(amt3), 0, amt3),
+           nop3 = ifelse(is.na(nop3), 0, nop3))
 
-
-
-
-
+cs.v7
 
