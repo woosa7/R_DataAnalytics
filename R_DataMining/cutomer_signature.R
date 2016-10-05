@@ -27,8 +27,9 @@ card <- read.delim("HDS_Cards.tab", stringsAsFactors = F)
 job <- read.delim("HDS_Jobs.tab", stringsAsFactors = F)
 
 
-#-----------------------------------------------------------------
-# 주 구매상품
+#--------------------------------수---------------------------------
+# 주 구매상품 변수
+# 고객의 브랜드별 구매내역 집계 중 가장 구매금액이 큰 브랜드
 
 funcBrdPick <- function(x) {
     vPick = NULL
@@ -36,7 +37,6 @@ funcBrdPick <- function(x) {
         if (as.integer(i)%%100 == 0)
             print(i)
         
-        # 고객의 브랜드별 구매내역 집계 중 가장 구매금액이 큰 브랜드
         brd_pick <- tr %>% filter(custid == i) %>% 
             group_by(custid, brd_nm) %>% summarise(brd_amt = sum(net_amt), brd_qty = n()) %>% 
             arrange(desc(brd_amt)) %>% head(1)
@@ -52,7 +52,7 @@ head(cs.v11);tail(cs.v11)
 
 
 #-----------------------------------------------------------------
-# 시즌 선호도
+# 시즌 선호도 변수
 # 계절별 구매금액 집계와 총구매액에 대한 비율
 
 cs.v12 <- tr %>% 
@@ -70,10 +70,9 @@ head(cs.v12);tail(cs.v12)
 
 
 #-----------------------------------------------------------------
-# 가격 선호도
+# 가격 선호도 변수
 
-# 내점당 구매금액 (PAPV, Purchase Amount Per Visit)
-# 총구매금액 < 0 인 내역은 제외
+# PAPV : 내점당 구매금액 (Purchase Amount Per Visit). 총구매금액 < 0 인 내역은 제외.
 
 # P_group : 내점당 구매금액(PAPV) 및 평균구매주기(API)에 따른 고객 구분
 # 1 : 한번 방문당 구매금액이 높고 자주 방문하는 고객
@@ -81,11 +80,12 @@ head(cs.v12);tail(cs.v12)
 # 3 : 한번 방문당 구매금액이 낮지만 자주 방문하는 고객
 # 4 : 한번 방문당 구매금액도 낮고 자주 오지 않는 고객
 
+# price_group : 선호 가격대 그룹 (1만원대, 10만원대, .....)
+
 totalAmt <- tr %>% 
     group_by(custid) %>% summarise(PAmount = sum(net_amt)) %>% 
     mutate(PAmount = ifelse(PAmount < 0, 0, PAmount))
 
-# price_group : 선호 가격대 그룹
 cutRange <- c(-1, 100000, 200000, 300000, 400000, 500000, 1000000, 10000000)
 cutLabel <- c(1, 10, 20, 30, 40, 50, 100)
 
@@ -106,12 +106,22 @@ cs.v13 %>% filter(price_group == 10)
 
 
 #-----------------------------------------------------------------
-# 구매추세 패턴
-# 전반기/후반기 6개월간의 평균구매주기(API)를 비교하여 상승, 하강, 유지, 신규, 이탈로 구분
+# 구매추세 패턴 변수
+# 휴면 및 이탈 가망 변수
+
+# 평균구매주기(API) : 작을수록 자주 방문 및 구매
+# 상반기/하반기 6개월간의 평균구매주기(API)를 비교하여 상승, 하강, 유지, 신규, 휴면, 이탈로 구분
+
+# 상반기 API / 1.5 > 하반기 API : 상승 (하반기 더 자주 방문)
+# 하반기 API / 1.5 > 상반기 API : 하강 (상반기 더 자주 방문)
+# 상반기 API = 999 (NA) : 신규
+# 하반기 API = 999 (NA) : 휴면
+# 하반기 API = 999 (NA) & 상반기 API > 60 : 이탈 (상반기 구매주기 60일 이상, 하반기 구매 없음)
+# 나머지 : 유지
 
 cs.v14 <- cs %>% select(custid)
 
-# 전반기 API
+# 상반기 API
 start_date <- ymd(ymd_hms(min(tr$sales_date)))
 end_date = start_date + months(6)
 
@@ -123,8 +133,9 @@ temp1 <- tr %>%
     select(custid, api1)
 
 temp1
+summary(temp1$api1)
 
-# 후반기 API
+# 하반기 API
 start_date <- end_date
 end_date = start_date + months(6)
 
@@ -136,22 +147,46 @@ temp2 <- tr %>%
     select(custid, api2)
 
 temp2
+summary(temp2$api2)
 
-# 후반기 > 전반기 * 1.5 : up
-# 전반기 > 후반기 * 1.5 : down
-# 전반기 = 0 : new / 후반기 = 0 : leave
-cs.v14 <- left_join(cs.v14, temp1)  %>% left_join(temp2) %>%
-    mutate(api1 = ifelse(is.na(api1), 0, api1),
-           api2 = ifelse(is.na(api2), 0, api2)) %>%
-    mutate(p_trend = ifelse(api2 > api1 * 1.5, "up", "keep"),
-           p_trend = ifelse(api1 > api2 * 1.5, "down", p_trend),
-           p_trend = ifelse(api1 == 0, "new", p_trend),
-           p_trend = ifelse(api2 == 0, "leave", p_trend)) %>%
+cs.v14 <- left_join(cs.v14, temp1) %>% left_join(temp2) %>%
+    mutate(api1 = ifelse(is.na(api1), 999, api1),
+           api2 = ifelse(is.na(api2), 999, api2)) %>%
+    mutate(p_trend = ifelse((api1 / 1.5) > api2, "up", "keep"),   
+           p_trend = ifelse((api2 / 1.5) > api1, "down", p_trend),
+           p_trend = ifelse(api1 == 999, "new", p_trend),
+           p_trend = ifelse(api2 == 999, "sleep", p_trend),
+           p_trend = ifelse(api2 == 999 & api1 > 60, "leave", p_trend)) %>%
     select(custid, p_trend, api1, api2)
 
-cs.v14
+head(cs.v14)
+
+cs.v14 %>% filter(api2 == 999 & api1 > 60)
 
 cs.v14 %>% group_by(p_trend) %>% summarise(p = n())
+
+
+#-----------------------------------------------------------------
+# 상품별 구매순서
+
+funcBrdTimeline <- function(x) {
+    vPick = NULL
+    for (i in x) {
+        if (as.integer(i)%%100 == 0)
+            print(i)
+        
+        a <- tr %>% filter(custid == i) %>% distinct(brd_nm)
+        brd_pick <- paste(a$brd_nm, collapse = "/")
+        vPick <- c(vPick, brd_pick)
+    }
+    return(vPick)
+}
+
+cs.v15 <- cs %>% select(custid)
+
+cs.v15$brd_timeline <- funcBrdTimeline(cs$custid)
+
+head(cs.v15)
 
 
 #-----------------------------------------------------------------
@@ -159,8 +194,7 @@ cs.v14 %>% group_by(p_trend) %>% summarise(p = n())
 
 
 
-#-----------------------------------------------------------------
-# 상품별 구매순서
+
 
 
 #-----------------------------------------------------------------
