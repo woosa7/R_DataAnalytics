@@ -1,7 +1,7 @@
 load("data/smpl_lda_df.RData")
 df <- smpl_lda_df
 head(df)
-str(df)
+dim(df)
 
 # 1. 확률이 0 보다 큰 토픽의 갯수 리턴
 fCountTopic <- function(x) {
@@ -18,8 +18,8 @@ fTopicNames <- function(x) {
 }
 
 
-df$Ntopic <- apply(df[1:20], 1, fCountTopic) # 토픽 갯수 일괄 적용
-df$Tname <- apply(df[1:20], 1, fTopicNames)  # 토픽명 일괄 적용
+df$Ntopic <- apply(df[,1:20], 1, fCountTopic) # 토픽 갯수 일괄 적용
+df$Tname <- apply(df[,1:20], 1, fTopicNames)  # 토픽명 일괄 적용
 answer <- df[21:22]
 head(answer)
 
