@@ -9,13 +9,13 @@ library(lubridate)
 library(ggplot2)
 
 # windows
-# tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
+tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
 
 # Mac
-tr <- read.delim("HDS_Transactions1.tab", stringsAsFactors = F)
-tr2 <- read.delim("HDS_Transactions2.tab", stringsAsFactors = F)
-tr <- rbind(tr, tr2)
-rm(tr2)
+# tr <- read.delim("HDS_Transactions1.tab", stringsAsFactors = F)
+# tr2 <- read.delim("HDS_Transactions2.tab", stringsAsFactors = F)
+# tr <- rbind(tr, tr2)
+# rm(tr2)
 head(tr)
 
 cs <- read.delim("HDS_Customers.tab", stringsAsFactors = F)
@@ -108,10 +108,14 @@ cs.v13 <- inner_join(cs.v3, totalAmt) %>%
 
 cs.v13
 
+# P_group
 data <- cs.v13 %>% group_by(P_group) %>% summarise(Count = n())
-data
-ggplot(data, aes(x = P_group, y = Count)) + geom_bar(stat = "identity", fill = rainbow(4))
+f_ratio <- round(data$Count / sum(data$Count) * 100, 2)
+f_labels <- paste(data$P_group, "\n", f_ratio, "%")
+pie(data$Count, main = "P_group", init.angle = 90, col = rainbow(length(counts)), 
+    radius = 1, cex = 1.0, labels = f_labels)
 
+# price_group
 data2 <- cs.v13 %>% group_by(price_group) %>% summarise(Count = n())
 data2
 ggplot(data2, aes(x = price_group, y = Count)) + geom_bar(stat = "identity", aes(fill = price_group)) +
@@ -185,7 +189,7 @@ head(cs.v14)
 data <- cs.v14 %>% group_by(p_trend) %>% summarise(Count = n())
 data
 ggplot(data, aes(x = p_trend, y = Count)) + geom_bar(stat = "identity", aes(fill = p_trend)) +
-    geom_text(aes(y = Count, label = Count), color = "black", size=4)
+    geom_text(aes(y = Count, label = Count), color = "black", size = 4)
 
 
 #-----------------------------------------------------------------
@@ -243,6 +247,24 @@ funcLikeBrand <- function(x) {
 cs.v16 <- funcLikeBrand(cs$custid)
 
 cs.v16
+
+
+#-----------------------------------------------------------------
+# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
