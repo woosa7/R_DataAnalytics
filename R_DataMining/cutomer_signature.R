@@ -27,9 +27,9 @@ card <- read.delim("HDS_Cards.tab", stringsAsFactors = F)
 job <- read.delim("HDS_Jobs.tab", stringsAsFactors = F)
 
 
-#--------------------------------수---------------------------------
+#-----------------------------------------------------------------
 # 주 구매상품 변수
-# 고객의 브랜드별 구매내역 집계 중 가장 구매금액이 큰 브랜드
+# 고객의 브랜드별 구매내역 집계 중 구매금액 및 구매횟수 비중이 가장 큰 브랜드
 
 funcBrdPick <- function(x) {
     vPick = NULL
@@ -39,7 +39,13 @@ funcBrdPick <- function(x) {
         
         brd_pick <- tr %>% filter(custid == i) %>% 
             group_by(custid, brd_nm) %>% summarise(brd_amt = sum(net_amt), brd_qty = n()) %>% 
-            arrange(desc(brd_amt)) %>% head(1)
+            mutate(amtScore = as.numeric(round(scale(brd_amt), 2)),
+                   qtyScore = as.numeric(round(scale(brd_qty), 2)),
+                   qtyScore = ifelse(is.na(qtyScore), 0, qtyScore),
+                   brdScore = amtScore + qtyScore) %>% 
+            arrange(desc(brdScore)) %>%
+            head(1) %>%
+            select(custid, brd_nm, brdScore)
         
         vPick <- rbind(vPick, brd_pick)
     }
@@ -64,7 +70,8 @@ cs.v12 <- tr %>%
     mutate(spring_ratio = round(spring_buy / net_amt, 2),
            summer_ratio = round(summer_buy / net_amt, 2),
            fall_ratio = round(fall_buy / net_amt, 2),
-           winter_ratio = round(winter_buy / net_amt, 2))
+           winter_ratio = round(winter_buy / net_amt, 2)) %>%
+    select(-net_amt)
 
 head(cs.v12);tail(cs.v12)
 
@@ -89,7 +96,8 @@ totalAmt <- tr %>%
 cutRange <- c(-1, 100000, 200000, 300000, 400000, 500000, 1000000, 10000000)
 cutLabel <- c(1, 10, 20, 30, 40, 50, 100)
 
-cs.v13 <- inner_join(cs.v3, totalAmt) %>% mutate(PAPV = PAmount / visits) %>%
+cs.v13 <- inner_join(cs.v3, totalAmt) %>% 
+    mutate(PAPV = PAmount / visits) %>%
     mutate(P_group = ifelse(PAPV >= mean(PAPV) & API <= mean(API), 1, 99)) %>%
     mutate(P_group = ifelse(PAPV >= mean(PAPV) & API > mean(API), 2, P_group)) %>%
     mutate(P_group = ifelse(PAPV < mean(PAPV) & API <= mean(API), 3, P_group)) %>%
@@ -100,23 +108,32 @@ cs.v13 <- inner_join(cs.v3, totalAmt) %>% mutate(PAPV = PAmount / visits) %>%
 
 cs.v13
 
-cs.v13 %>% group_by(P_group) %>% summarise(p = n())
-cs.v13 %>% group_by(price_group) %>% summarise(p = n())
+data <- cs.v13 %>% group_by(P_group) %>% summarise(Count = n())
+data
+ggplot(data, aes(x = P_group, y = Count)) + geom_bar(stat = "identity", fill = rainbow(4))
+
+data2 <- cs.v13 %>% group_by(price_group) %>% summarise(Count = n())
+data2
+ggplot(data2, aes(x = price_group, y = Count)) + geom_bar(stat = "identity", aes(fill = price_group)) +
+    geom_text(aes(y = Count, label = Count), color="black", size=4)
+
 cs.v13 %>% filter(price_group == 10)
 
 
 #-----------------------------------------------------------------
 # 구매추세 패턴 변수
-# 휴면 및 이탈 가망 변수
+# 휴면/이탈 가망 변수
 
 # 평균구매주기(API) : 작을수록 자주 방문 및 구매
-# 상반기/하반기 6개월간의 평균구매주기(API)를 비교하여 상승, 하강, 유지, 신규, 휴면, 이탈로 구분
+# 상반기/하반기 6개월간의 평균구매주기(API)를 비교하여 
+# 상승, 하강, 유지, 신규, 휴면, 이탈, 충성고객으로 구분
 
 # 상반기 API / 1.5 > 하반기 API : 상승 (하반기 더 자주 방문)
 # 하반기 API / 1.5 > 상반기 API : 하강 (상반기 더 자주 방문)
-# 상반기 API = 999 (NA) : 신규
-# 하반기 API = 999 (NA) : 휴면
-# 하반기 API = 999 (NA) & 상반기 API > 60 : 이탈 (상반기 구매주기 60일 이상, 하반기 구매 없음)
+# 상반기 API = 999 (NA) : 신규 (상반기 기록 없음, 하반기 구매)
+# 하반기 API = 999 (NA) : 휴면 (상반기 방문/구매 했으나, 하반기 기록 없음)
+# 하반기 API = 999 (NA) & 상반기 API > 60 : 이탈 (상반기 구매주기 60일 이상, 하반기 방문/구매 없음)
+# 상반기 API & 하반기 API < 10 : 충성고객 (상반기, 하반기 모두 10일 이내 재방문)
 # 나머지 : 유지
 
 cs.v14 <- cs %>% select(custid)
@@ -156,14 +173,19 @@ cs.v14 <- left_join(cs.v14, temp1) %>% left_join(temp2) %>%
            p_trend = ifelse((api2 / 1.5) > api1, "down", p_trend),
            p_trend = ifelse(api1 == 999, "new", p_trend),
            p_trend = ifelse(api2 == 999, "sleep", p_trend),
-           p_trend = ifelse(api2 == 999 & api1 > 60, "leave", p_trend)) %>%
+           p_trend = ifelse(api2 == 999 & api1 > 60, "leave", p_trend),
+           p_trend = ifelse(api1 < 10 & api2 < 10, "loyalty", p_trend)) %>%
     select(custid, p_trend, api1, api2)
 
+cs.v14 %>% filter(p_trend == "leave")
+
+cs.v14$p_trend <- factor(cs.v14$p_trend, levels = c("loyalty", "up", "down", "keep", "new", "sleep", "leave"))
 head(cs.v14)
 
-cs.v14 %>% filter(api2 == 999 & api1 > 60)
-
-cs.v14 %>% group_by(p_trend) %>% summarise(p = n())
+data <- cs.v14 %>% group_by(p_trend) %>% summarise(Count = n())
+data
+ggplot(data, aes(x = p_trend, y = Count)) + geom_bar(stat = "identity", aes(fill = p_trend)) +
+    geom_text(aes(y = Count, label = Count), color = "black", size=4)
 
 
 #-----------------------------------------------------------------
@@ -191,20 +213,36 @@ head(cs.v15)
 
 #-----------------------------------------------------------------
 # 상품별 구매금액 및 횟수
+# 구매금액과 구매횟수의 비중이 가장 큰 2개 브랜드
+# 브랜드점수(brdScore) = 구매금액점수(amtScore) + 구매횟수점수(qtyScore)
 
+funcLikeBrand <- function(x) {
+    vPick = NULL
+    for (i in x) {
+        if (as.integer(i)%%100 == 0)
+            print(i)
+        
+        pick <- tr %>% filter(custid == i) %>% 
+            group_by(custid, brd_nm) %>% summarise(brd_amt = sum(net_amt), brd_qty = n()) %>% 
+            mutate(amtScore = as.numeric(round(scale(brd_amt), 2)),
+                   qtyScore = as.numeric(round(scale(brd_qty), 2)),
+                   qtyScore = ifelse(is.na(qtyScore), 0, qtyScore),
+                   brdScore = amtScore + qtyScore) %>% 
+            arrange(desc(brdScore)) %>%
+            head(2)
+        
+        df <- data.frame(custid = i, 
+                         brd_nm1 = pick[1,]$brd_nm, brd_amt1 = pick[1,]$brd_amt, brd_qty1 = pick[1,]$brd_qty, 
+                         brd_nm2 = pick[2,]$brd_nm, brd_amt2 = pick[2,]$brd_amt, brd_qty2 = pick[2,]$brd_qty)
+        
+        vPick <- rbind(vPick, df)
+    }
+    return(vPick)
+}
 
+cs.v16 <- funcLikeBrand(cs$custid)
 
-
-
-
-#-----------------------------------------------------------------
-# 휴면/이탈 가망 변수
-
-
-
-
-
-
+cs.v16
 
 
 
