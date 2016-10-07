@@ -77,6 +77,8 @@ cs.v12 <- tr %>%
 
 head(cs.v12);tail(cs.v12)
 
+save(cs.v12, file = "cs_v12.RData")
+
 
 #-----------------------------------------------------------------
 # 가격 선호도 변수
@@ -114,7 +116,7 @@ cs.v13
 data <- cs.v13 %>% group_by(P_group) %>% summarise(Count = n())
 f_ratio <- round(data$Count / sum(data$Count) * 100, 2)
 f_labels <- paste(data$P_group, "\n", f_ratio, "%")
-pie(data$Count, main = "P_group", init.angle = 90, col = rainbow(length(counts)), 
+pie(data$Count, main = "P_group", init.angle = 90, col = rainbow(length(data$Count)), 
     radius = 1, cex = 1.0, labels = f_labels)
 
 # price_group
@@ -123,7 +125,7 @@ data2
 ggplot(data2, aes(x = price_group, y = Count)) + geom_bar(stat = "identity", aes(fill = price_group)) +
     geom_text(aes(y = Count, label = Count), color="black", size=4)
 
-cs.v13 %>% filter(price_group == 10)
+save(cs.v13, file = "cs_v13.RData")
 
 
 #-----------------------------------------------------------------
@@ -155,9 +157,6 @@ temp1 <- tr %>%
     mutate(api1 = as.integer((end_date - start_date) / visits1)) %>%
     select(custid, api1)
 
-temp1
-summary(temp1$api1)
-
 # 하반기 API
 start_date <- end_date
 end_date = start_date + months(6)
@@ -169,7 +168,7 @@ temp2 <- tr %>%
     mutate(api2 = as.integer((end_date - start_date) / visits2)) %>%
     select(custid, api2)
 
-temp2
+summary(temp1$api1)
 summary(temp2$api2)
 
 cs.v14 <- left_join(cs.v14, temp1) %>% left_join(temp2) %>%
@@ -183,15 +182,14 @@ cs.v14 <- left_join(cs.v14, temp1) %>% left_join(temp2) %>%
            p_trend = ifelse(api1 < 10 & api2 < 10, "loyalty", p_trend)) %>%
     select(custid, p_trend, api1, api2)
 
-cs.v14 %>% filter(p_trend == "leave")
-
 cs.v14$p_trend <- factor(cs.v14$p_trend, levels = c("loyalty", "up", "down", "keep", "new", "sleep", "leave"))
-head(cs.v14)
 
 data <- cs.v14 %>% group_by(p_trend) %>% summarise(Count = n())
 data
 ggplot(data, aes(x = p_trend, y = Count)) + geom_bar(stat = "identity", aes(fill = p_trend)) +
     geom_text(aes(y = Count, label = Count), color = "black", size = 4)
+
+save(cs.v14, file = "cs_v14.RData")
 
 
 #-----------------------------------------------------------------
@@ -215,6 +213,8 @@ cs.v15 <- cs %>% select(custid)
 cs.v15$brd_timeline <- funcBrdTimeline(cs$custid)
 
 head(cs.v15)
+
+save(cs.v15, file = "cs_v15.RData")
 
 
 #-----------------------------------------------------------------
@@ -248,27 +248,100 @@ funcLikeBrand <- function(x) {
 
 cs.v16 <- funcLikeBrand(cs$custid)
 
-cs.v16
+head(cs.v16)
+
+save(cs.v16, file = "cs_v16.RData")
 
 
 #-----------------------------------------------------------------
-# 
+# 고객별 할부 구매횟수, 평균 할부기간 및 할부구매비율
+
+# buyCount : 총구매횟수
+# instCnt : 할부구매 횟수
+# instMonth :  평균 할부 기간
+# instRatio : 전체 구매건에 대한 할부구매 비율
+
+cs.v17 <- tr %>% group_by(custid) %>% summarise(buyCount = n())
+
+installment <- tr %>% filter(inst_mon > 1) %>% 
+    group_by(custid) %>% summarise(instCnt = n(), instMonth = round(mean(inst_mon),1))
+
+cs.v17 <- left_join(cs.v17, installment) %>% 
+    mutate(instCnt = ifelse(is.na(instCnt), 0, instCnt),
+           instMonth = ifelse(is.na(instMonth), 0, instMonth),
+           instRatio = ifelse(instCnt == 0, 0, round(instCnt / buyCount, 2)))
+
+save(cs.v17, file = "cs_v17.RData")
 
 
+#-----------------------------------------------------------------
+# 고객별 이용 매장
+# 매장별 이용 코너 갯수
+
+funcVisitStore <- function(x) {
+    vPick = NULL
+    store <- tr %>% distinct(str_nm)
+    storeV <- store$str_nm           # 매장번호 - s1 : 신촌점, s2 : 본점, s3 : 무역점, s4 : 천호점
+    
+    for (i in x) {
+        if (as.integer(i)%%100 == 0)
+            print(i)
+        
+        # 고객별 구매내역
+        temp <- tr %>% filter(custid == i)
+        
+        # 이용 매장 및 갯수
+        data1 <- temp %>% distinct(str_nm)
+        store_nms <- paste(data1$str_nm, collapse = "/")
+        store_cnt <- nrow(data1)
+        
+        # 매장별 이용 코너 갯수
+        data2 <- temp %>% distinct(str_nm, corner_nm) %>% 
+            group_by(str_nm) %>% summarise(corner = n())
+
+        for (k in 1:nrow(data2)) {
+            sname <- data2[k, ]$str_nm
+            ccount <- as.integer(data2[k, ]$corner)
+
+            if (sname == storeV[1]) {
+                s1_corner <- ccount
+            } else {
+                s1_corner <- 0
+            }
+
+            if (sname == storeV[2]) {
+                s2_corner <- ccount
+            } else {
+                s2_corner <- 0
+            }
+
+            if (sname == storeV[3]) {
+                s3_corner <- ccount
+            } else {
+                s3_corner <- 0
+            }
+
+            if (sname == storeV[4]) {
+                s4_corner <- ccount
+            } else {
+                s4_corner <- 0
+            }
+        }
+        
+        df <- data.frame(custid = i, store_nms, store_cnt, s1_corner, s2_corner, s3_corner, s4_corner)
+        
+        vPick <- rbind(vPick, df)
+    }
+    return(vPick)
+}
+
+cs.v18 <- funcVisitStore(cs$custid)
+
+head(cs.v18, 10)
+
+save(cs.v18, file = "cs_v18.RData")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#-----------------------------------------------------------------
 
 
