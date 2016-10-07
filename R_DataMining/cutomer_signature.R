@@ -9,13 +9,13 @@ library(lubridate)
 library(ggplot2)
 
 # windows
-tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
+# tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
 
 # Mac
-# tr <- read.delim("HDS_Transactions1.tab", stringsAsFactors = F)
-# tr2 <- read.delim("HDS_Transactions2.tab", stringsAsFactors = F)
-# tr <- rbind(tr, tr2)
-# rm(tr2)
+tr <- read.delim("HDS_Transactions1.tab", stringsAsFactors = F)
+tr2 <- read.delim("HDS_Transactions2.tab", stringsAsFactors = F)
+tr <- rbind(tr, tr2)
+rm(tr2)
 head(tr)
 
 cs <- read.delim("HDS_Customers.tab", stringsAsFactors = F)
@@ -55,6 +55,8 @@ funcBrdPick <- function(x) {
 cs.v11 <- funcBrdPick(cs$custid)
 
 head(cs.v11);tail(cs.v11)
+
+save(cs.v11, file = "cs_v11.RData")
 
 
 #-----------------------------------------------------------------

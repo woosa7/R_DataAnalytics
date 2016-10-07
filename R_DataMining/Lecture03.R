@@ -4,6 +4,8 @@
 #
 ############################################################
 
+# lubridate package : blog.naver.com/dfdf4912/220623488198
+
 # H 백화점 2000.0501 ~ 2001.04.29 : 고객정보, 구매정보 데이터
 
 library(dplyr)
@@ -39,13 +41,23 @@ tr %>% group_by(str_nm) %>%
 #-------------------------------------------------------------------
 # 1. 고객의 환불형태(금액, 건수) : 환불 = net_amt <0
 
-cs.v1 <- tr %>% filter(net_amt < 0) %>% 
+cs.v1 <- cs %>% select(custid)
+
+refund <- tr %>% 
+    filter(net_amt < 0) %>% 
     group_by(custid) %>% summarize(rf_amt = sum(net_amt), rf_cnt = n())
+
+cs.v1 <- left_join(cs.v1, refund) %>%
+    mutate(rf_amt = ifelse(is.na(rf_amt), 0, rf_amt),
+           rf_cnt = ifelse(is.na(rf_cnt), 0, rf_cnt))
 
 cs.v1[order(cs.v1$rf_amt), ]
 cs.v1[order(cs.v1$rf_cnt, decreasing = T), ]
 
+save(cs.v1, file = "cs_v1.RData")
 
+
+#-------------------------------------------------------------------
 # 2. 고객의 구매상품 다양성
 
 cs.v2 <- tr %>% distinct(custid, brd_nm) %>% 
@@ -53,9 +65,11 @@ cs.v2 <- tr %>% distinct(custid, brd_nm) %>%
 
 cs.v2[order(cs.v2$buy_brd, decreasing = T), ]
 
+save(cs.v2, file = "cs_v2.RData")
 
+
+#-------------------------------------------------------------------
 # 3. 고객의 내점일수와 평균구매주기(API, average purchasing interval)
-# lubridate package : blog.naver.com/dfdf4912/220623488198
 
 start_date = ymd(ymd_hms(min(tr$sales_date)))   # 2000-05-03 00:00:00
 end_date = ymd(ymd_hms(max(tr$sales_date)))
@@ -67,19 +81,25 @@ cs.v3 <- tr %>% distinct(custid, sales_date) %>%
 max(cs.v3$visits)
 filter(cs.v3, visits >= 100, API < 10 )
 
+save(cs.v3, file = "cs_v3.RData")
 
+
+#-------------------------------------------------------------------
 # 4. 내점당구매건수(Number of Purchases Per Visit)
 
 tmp <- tr %>% group_by(custid) %>% summarise(PCount = n())
 tmp
 
 cs.v4 <- inner_join(cs.v3, tmp) %>%
-    mutate(NPPV = PCount / visits) %>%
+    mutate(NPPV = round(PCount / visits, 2)) %>%
     select(custid, NPPV)
 
 cs.v4
 
+save(cs.v4, file = "cs_v4.RData")
 
+
+#-------------------------------------------------------------------
 # 5. 고객의 주중/주말 구매패턴
 # wday : 1 = sunday
 
@@ -94,11 +114,13 @@ cs.v5
 
 ggplot(cs.v5, aes(wk_pat)) + geom_bar(aes(fill = wk_pat))
 
+save(cs.v5, file = "cs_v5.RData")
 
+
+#-------------------------------------------------------------------
 # 6. 고객의 생일로부터 특정시점의 나이와 연령대를 계산
 # age == NA 이면 평균 연령으로
 
-# case 1.
 cs.v6 <- cs[c("custid", "birth")] %>%
     mutate(age = year('2001-05-01') - year(ymd_hms(birth))) %>%
     mutate(age = ifelse(age < 10 | age > 100, NA, age)) %>%
@@ -106,19 +128,14 @@ cs.v6 <- cs[c("custid", "birth")] %>%
     mutate(agegrp = cut(age, c(0, 19, 29, 39, 49, 59, 69, 100), labels = F) * 10) %>%
     select(custid, age, agegrp)
 
-head(cs.v6)
-
-# case 2.
-cs.v6 <- cs %>%
-    mutate(age = year('2001-05-01') - year(ymd_hms(birth)),
-           #age = ifelse(age < 10 | age > 100, NA, age),
-           #age = ifelse(is.na(age), round(mean(age, na.rm = T)), age),
-           agegrp = cut(age, c(0, 19, 29, 39, 49, 59, 69, 100), labels = F)*10) %>%
-    select(custid, age, agegrp)
-
 ggplot(cs.v6, aes(agegrp)) + geom_bar(aes(fill = agegrp))
 
+cs.v6 %>% group_by(agegrp) %>% summarise(n = n())
 
+save(cs.v6, file = "cs_v6.RData")
+
+
+#-------------------------------------------------------------------
 # 7. 기간별(최근 12개월, 6개월, 3개월) 구매금액 및 구매횟수
 
 end_date <- ymd(ymd_hms(max(tr$sales_date)))
@@ -145,4 +162,6 @@ cs.v7 <- left_join(cs.v7.12, cs.v7.6) %>% left_join(cs.v7.3) %>%
            nop3 = ifelse(is.na(nop3), 0, nop3))
 
 cs.v7
+
+save(cs.v7, file = "cs_v7.RData")
 
