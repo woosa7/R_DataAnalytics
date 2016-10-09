@@ -92,4 +92,52 @@ biplot(pca, cex = 0.8, choices = c(1,3)) # pc1 & pc3
 # qqnorm(pca$x[,1])
 # qqplot(pca$x[,1])
 
+#------------------------------------------------------------
+# Practice 2
+
+bulls <- read.csv("bulls.csv", header = T)
+head(bulls)
+
+attach(bulls)
+
+library(psych)
+pairs.panels(bulls[ , -c(1,2)])
+
+# BkFat - 한쪽을 치우져 있어서 변환이 필요할 수도.
+# 로그변환 했으나 cor 증가가 미미하므로 변환하지 않고 분석진행도 가능
+
+plot(FtFrBody, PrctFFB)
+cor.test(FtFrBody, PrctFFB)
+
+boxplot(FtFrBody)
+boxplot(PrctFFB)
+
+plot(PrctFFB ~ FtFrBody, data = bulls, cex = 0.8, type = "n")
+text(FtFrBody, PrctFFB, cex = 0.8, labels = rownames(bulls))   # outlier = 51
+outlier <- 51
+
+bulls2 <- bulls[-outlier, ]
+plot(bulls2$FtFrBody, bulls2$PrctFFB)
+cor.test(bulls2$FtFrBody, bulls2$PrctFFB)
+
+# cov
+pca_cov <- prcomp(bulls[ , -c(1,2)])
+summary(pca_cov)
+biplot(pca_cov)
+
+# 설문조사처럼 같은 scale 점수화가 된 경우에는 cov 사용해도 되지만
+# 변수들의 scale이 많이 다른 경우 특정 변수가 전체적인 경향을 좌우하기 때문에 
+# cor 사용하여 분석하는 것이 좋다.
+
+# cor
+pca <- prcomp(bulls[ , -c(1,2)], scale = T)
+summary(pca)
+biplot(pca)
+
+
+qqnorm(pca$x[,1])
+qqline(pca$x[,1])
+
+summary(bulls)
+head(bulls2)
 
