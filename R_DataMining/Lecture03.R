@@ -1,6 +1,6 @@
 ############################################################
 #
-# Data Mining 3 - Customer Signature : 파생변수 만들기
+# Data Mining 4 - Customer Signature : 파생변수 만들기
 #
 ############################################################
 
@@ -54,8 +54,6 @@ cs.v1 <- left_join(cs.v1, refund) %>%
 cs.v1[order(cs.v1$rf_amt), ]
 cs.v1[order(cs.v1$rf_cnt, decreasing = T), ]
 
-save(cs.v1, file = "cs_v1.RData")
-
 
 #-------------------------------------------------------------------
 # 2. 고객의 구매상품 다양성
@@ -64,8 +62,6 @@ cs.v2 <- tr %>% distinct(custid, brd_nm) %>%
     group_by(custid) %>% summarize(buy_brd = n())
 
 cs.v2[order(cs.v2$buy_brd, decreasing = T), ]
-
-save(cs.v2, file = "cs_v2.RData")
 
 
 #-------------------------------------------------------------------
@@ -81,8 +77,6 @@ cs.v3 <- tr %>% distinct(custid, sales_date) %>%
 max(cs.v3$visits)
 filter(cs.v3, visits >= 100, API < 10 )
 
-save(cs.v3, file = "cs_v3.RData")
-
 
 #-------------------------------------------------------------------
 # 4. 내점당구매건수(Number of Purchases Per Visit)
@@ -95,8 +89,6 @@ cs.v4 <- inner_join(cs.v3, tmp) %>%
     select(custid, NPPV)
 
 cs.v4
-
-save(cs.v4, file = "cs_v4.RData")
 
 
 #-------------------------------------------------------------------
@@ -114,8 +106,6 @@ cs.v5
 
 ggplot(cs.v5, aes(wk_pat)) + geom_bar(aes(fill = wk_pat))
 
-save(cs.v5, file = "cs_v5.RData")
-
 
 #-------------------------------------------------------------------
 # 6. 고객의 생일로부터 특정시점의 나이와 연령대를 계산
@@ -131,8 +121,6 @@ cs.v6 <- cs[c("custid", "birth")] %>%
 ggplot(cs.v6, aes(agegrp)) + geom_bar(aes(fill = agegrp))
 
 cs.v6 %>% group_by(agegrp) %>% summarise(n = n())
-
-save(cs.v6, file = "cs_v6.RData")
 
 
 #-------------------------------------------------------------------
@@ -162,6 +150,4 @@ cs.v7 <- left_join(cs.v7.12, cs.v7.6) %>% left_join(cs.v7.3) %>%
            nop3 = ifelse(is.na(nop3), 0, nop3))
 
 cs.v7
-
-save(cs.v7, file = "cs_v7.RData")
 
