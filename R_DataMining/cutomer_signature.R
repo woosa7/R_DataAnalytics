@@ -8,33 +8,153 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 
-# windows
-# tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
-
-# Mac
-tr <- read.delim("HDS_Transactions1.tab", stringsAsFactors = F)
-tr2 <- read.delim("HDS_Transactions2.tab", stringsAsFactors = F)
-tr <- rbind(tr, tr2)
-rm(tr2)
-head(tr)
+tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
 
 cs <- read.delim("HDS_Customers.tab", stringsAsFactors = F)
 cs <- select(cs , -birth_flg, -income_flg, -car_stype, -rel_type, -dmnot_flg, -tmnot_flg, 
              -pur_date1, -pur_date2, -pur_date3, -card_flg2, -mail_flg, -billnot_flg);
-head(cs)
 
-card <- read.delim("HDS_Cards.tab", stringsAsFactors = F)
-job <- read.delim("HDS_Jobs.tab", stringsAsFactors = F)
+save(cs, file = "cs.RData")
+
+
+#-------------------------------------------------------------------
+# 1. 고객의 환불형태(금액, 건수) : 환불 = net_amt <0
+
+cs.v1 <- cs %>% select(custid)
+
+refund <- tr %>% 
+    filter(net_amt < 0) %>% 
+    group_by(custid) %>% summarize(rf_amt = sum(net_amt), rf_cnt = n())
+
+cs.v1 <- left_join(cs.v1, refund) %>%
+    mutate(rf_amt = ifelse(is.na(rf_amt), 0, rf_amt),
+           rf_cnt = ifelse(is.na(rf_cnt), 0, rf_cnt))
+
+cs.v1[order(cs.v1$rf_amt), ]
+cs.v1[order(cs.v1$rf_cnt, decreasing = T), ]
+
+save(cs.v1, file = "cs_v1.RData")
+
+
+#-------------------------------------------------------------------
+# 2. 고객의 구매상품 다양성
+
+cs.v2 <- tr %>% distinct(custid, brd_nm) %>% 
+    group_by(custid) %>% summarize(buy_brd = n())
+
+cs.v2[order(cs.v2$buy_brd, decreasing = T), ]
+
+save(cs.v2, file = "cs_v2.RData")
+
+
+#-------------------------------------------------------------------
+# 3. 고객의 내점일수와 평균구매주기(API, average purchasing interval)
+
+start_date = ymd(ymd_hms(min(tr$sales_date)))   # 2000-05-03 00:00:00
+end_date = ymd(ymd_hms(max(tr$sales_date)))
+
+cs.v3 <- tr %>% distinct(custid, sales_date) %>% 
+    group_by(custid) %>% summarize(visits = n()) %>% 
+    mutate(API = as.integer((end_date - start_date)/visits))
+
+max(cs.v3$visits)
+filter(cs.v3, visits >= 100, API < 10 )
+
+save(cs.v3, file = "cs_v3.RData")
+
+
+#-------------------------------------------------------------------
+# 4. 내점당구매건수(Number of Purchases Per Visit)
+
+tmp <- tr %>% group_by(custid) %>% summarise(PCount = n())
+tmp
+
+cs.v4 <- inner_join(cs.v3, tmp) %>%
+    mutate(NPPV = round(PCount / visits, 2)) %>%
+    select(custid, NPPV)
+
+cs.v4
+
+save(cs.v4, file = "cs_v4.RData")
+
+
+#-------------------------------------------------------------------
+# 5. 고객의 주중/주말 구매패턴
+# wday : 1 = sunday
+
+cs.v5 <- tr %>%
+    mutate(wk_amt = ifelse(wday(sales_date) %in% 2:6, net_amt, 0),
+           we_amt = ifelse(wday(sales_date) %in% c(1,7), net_amt, 0)) %>%
+    group_by(custid) %>% summarize_each(funs(sum), wk_amt, we_amt) %>%
+    mutate(wk_pat = ifelse(wk_amt >= we_amt * 1.5, "주중형",
+                           ifelse(we_amt >= wk_amt * 1.5, "주말형", "유형없음")))
+
+cs.v5
+
+ggplot(cs.v5, aes(wk_pat)) + geom_bar(aes(fill = wk_pat))
+
+save(cs.v5, file = "cs_v5.RData")
+
+
+#-------------------------------------------------------------------
+# 6. 고객의 생일로부터 특정시점의 나이와 연령대를 계산
+# age == NA 이면 평균 연령으로
+
+cs.v6 <- cs[c("custid", "birth")] %>%
+    mutate(age = year('2001-05-01') - year(ymd_hms(birth))) %>%
+    mutate(age = ifelse(age < 10 | age > 100, NA, age)) %>%
+    mutate(age = ifelse(is.na(age), round(mean(age, na.rm = T)), age)) %>%
+    mutate(agegrp = cut(age, c(0, 19, 29, 39, 49, 59, 69, 100), labels = F) * 10) %>%
+    select(custid, age, agegrp)
+
+ggplot(cs.v6, aes(agegrp)) + geom_bar(aes(fill = agegrp))
+
+cs.v6 %>% group_by(agegrp) %>% summarise(n = n())
+
+save(cs.v6, file = "cs_v6.RData")
+
+
+#-------------------------------------------------------------------
+# 7. 기간별(최근 12개월, 6개월, 3개월) 구매금액 및 구매횟수
+
+end_date <- ymd(ymd_hms(max(tr$sales_date)))
+
+start_date <- ymd('20010501') - months(12)   # 특정 일자 기준으로 12개월 전 날짜
+cs.v7.12 <- tr %>%
+    filter(sales_date >= start_date & sales_date <= end_date) %>%
+    group_by(custid) %>% summarise(amt12 = sum(net_amt), nop12 = n())
+
+start_date <- ymd('20010501') - months(6)
+cs.v7.6 <- tr %>%
+    filter(sales_date >= start_date & sales_date <= end_date) %>%
+    group_by(custid) %>% summarise(amt6 = sum(net_amt), nop6 = n())
+
+start_date <- ymd('20010501') - months(3)
+cs.v7.3 <- tr %>%
+    filter(sales_date >= start_date & sales_date <= end_date) %>%
+    group_by(custid) %>% summarise(amt3 = sum(net_amt), nop3 = n())
+
+cs.v7 <- left_join(cs.v7.12, cs.v7.6) %>% left_join(cs.v7.3) %>% 
+    mutate(amt6 = ifelse(is.na(amt6), 0, amt6),
+           nop6 = ifelse(is.na(nop6), 0, nop6),
+           amt3 = ifelse(is.na(amt3), 0, amt3),
+           nop3 = ifelse(is.na(nop3), 0, nop3))
+
+cs.v7
+
+save(cs.v7, file = "cs_v7.RData")
 
 
 #-----------------------------------------------------------------
-# 주 구매상품 변수
+# 11. 주 구매상품 변수
+
 # 고객의 브랜드별 구매내역 집계 중 구매금액 및 구매횟수 비중이 가장 큰 브랜드
+# 브랜드점수(brdScore) = 구매금액점수(amtScore) + 구매횟수점수(qtyScore)
 
 funcBrdPick <- function(x) {
     vPick = NULL
     for (i in x) {
-        if (as.integer(i)%%100 == 0)
+        if (as.integer(i)%%100 == 0)   # 진행상황 체크
             print(i)
         
         brd_pick <- tr %>% filter(custid == i) %>% 
@@ -60,7 +180,8 @@ save(cs.v11, file = "cs_v11.RData")
 
 
 #-----------------------------------------------------------------
-# 시즌 선호도 변수
+# 12. 시즌 선호도 변수
+
 # 계절별 구매금액 집계와 총구매액에 대한 비율
 
 cs.v12 <- tr %>% 
@@ -81,7 +202,7 @@ save(cs.v12, file = "cs_v12.RData")
 
 
 #-----------------------------------------------------------------
-# 가격 선호도 변수
+# 13. 가격 선호도 변수
 
 # PAPV : 내점당 구매금액 (Purchase Amount Per Visit). 총구매금액 < 0 인 내역은 제외.
 
@@ -129,8 +250,7 @@ save(cs.v13, file = "cs_v13.RData")
 
 
 #-----------------------------------------------------------------
-# 구매추세 패턴 변수
-# 휴면/이탈 가망 변수
+# 14. 구매추세 패턴 변수 & 휴면/이탈 가망 변수
 
 # 평균구매주기(API) : 작을수록 자주 방문 및 구매
 # 상반기/하반기 6개월간의 평균구매주기(API)를 비교하여 
@@ -193,7 +313,7 @@ save(cs.v14, file = "cs_v14.RData")
 
 
 #-----------------------------------------------------------------
-# 상품별 구매순서
+# 15. 상품별 구매순서 변수
 
 funcBrdTimeline <- function(x) {
     vPick = NULL
@@ -218,7 +338,8 @@ save(cs.v15, file = "cs_v15.RData")
 
 
 #-----------------------------------------------------------------
-# 상품별 구매금액 및 횟수
+# 16. 상품별 구매금액 및 횟수 변수
+
 # 구매금액과 구매횟수의 비중이 가장 큰 2개 브랜드
 # 브랜드점수(brdScore) = 구매금액점수(amtScore) + 구매횟수점수(qtyScore)
 
@@ -254,12 +375,12 @@ save(cs.v16, file = "cs_v16.RData")
 
 
 #-----------------------------------------------------------------
-# 고객별 할부 구매횟수, 평균 할부기간 및 할부구매비율
+# 17. 고객별 할부 구매횟수, 평균 할부기간 및 할부구매비율 변수
 
 # buyCount : 총구매횟수
 # instCnt : 할부구매 횟수
-# instMonth :  평균 할부 기간
 # instRatio : 전체 구매건에 대한 할부구매 비율
+# instMonth :  평균 할부 기간
 
 cs.v17 <- tr %>% group_by(custid) %>% summarise(buyCount = n())
 
@@ -268,20 +389,21 @@ installment <- tr %>% filter(inst_mon > 1) %>%
 
 cs.v17 <- left_join(cs.v17, installment) %>% 
     mutate(instCnt = ifelse(is.na(instCnt), 0, instCnt),
-           instMonth = ifelse(is.na(instMonth), 0, instMonth),
-           instRatio = ifelse(instCnt == 0, 0, round(instCnt / buyCount, 2)))
+           instRatio = ifelse(instCnt == 0, 0, round(instCnt / buyCount, 2)),
+           instMonth = ifelse(is.na(instMonth), 0, instMonth))
 
 save(cs.v17, file = "cs_v17.RData")
 
 
 #-----------------------------------------------------------------
-# 고객별 이용 매장
-# 매장별 이용 코너 갯수
+# 18. 고객별 이용 매장 및 매장별 이용 코너 내역 변수
+
+# 매장번호 - s1 : 신촌점, s2 : 본점, s3 : 무역점, s4 : 천호점
 
 funcVisitStore <- function(x) {
     vPick = NULL
     store <- tr %>% distinct(str_nm)
-    storeV <- store$str_nm           # 매장번호 - s1 : 신촌점, s2 : 본점, s3 : 무역점, s4 : 천호점
+    storeV <- store$str_nm           
     
     for (i in x) {
         if (as.integer(i)%%100 == 0)
@@ -295,36 +417,29 @@ funcVisitStore <- function(x) {
         store_nms <- paste(data1$str_nm, collapse = "/")
         store_cnt <- nrow(data1)
         
-        # 매장별 이용 코너 갯수
-        data2 <- temp %>% distinct(str_nm, corner_nm) %>% 
-            group_by(str_nm) %>% summarise(corner = n())
+        # 매장별 이용 코너
+        data2 <- temp %>% distinct(str_nm, corner_nm)
+        
+        s1_corner <- " "
+        s2_corner <- " "
+        s3_corner <- " "
+        s4_corner <- " "
 
         for (k in 1:nrow(data2)) {
             sname <- data2[k, ]$str_nm
-            ccount <- as.integer(data2[k, ]$corner)
-
+            cname <- data2[k, ]$corner_nm
+            
             if (sname == storeV[1]) {
-                s1_corner <- ccount
-            } else {
-                s1_corner <- 0
+                s1_corner <- paste(s1_corner, cname, sep = "/")
             }
-
             if (sname == storeV[2]) {
-                s2_corner <- ccount
-            } else {
-                s2_corner <- 0
+                s2_corner <- paste(s2_corner, cname, sep = "/")
             }
-
             if (sname == storeV[3]) {
-                s3_corner <- ccount
-            } else {
-                s3_corner <- 0
+                s3_corner <- paste(s3_corner, cname, sep = "/")
             }
-
             if (sname == storeV[4]) {
-                s4_corner <- ccount
-            } else {
-                s4_corner <- 0
+                s4_corner <- paste(s4_corner, cname, sep = "/")
             }
         }
         
@@ -343,5 +458,36 @@ save(cs.v18, file = "cs_v18.RData")
 
 
 #-----------------------------------------------------------------
+# 최종결과 종합
 
+rm(list=ls())
 
+load("cs.RData")
+
+load("cs_v1.RData")
+load("cs_v2.RData")
+load("cs_v3.RData")
+load("cs_v4.RData")
+load("cs_v5.RData")
+load("cs_v6.RData")
+load("cs_v7.RData")
+
+load("cs_v11.RData")
+load("cs_v12.RData")
+load("cs_v13.RData")
+load("cs_v14.RData")
+load("cs_v15.RData")
+load("cs_v16.RData")
+load("cs_v17.RData")
+load("cs_v18.RData")
+
+custsig <- cs %>% left_join(cs.v1) %>% left_join(cs.v2) %>% 
+    left_join(cs.v3) %>% left_join(cs.v4) %>% left_join(cs.v5) %>% 
+    left_join(cs.v6) %>% left_join(cs.v7) %>% 
+    left_join(cs.v11) %>% left_join(cs.v12) %>% left_join(cs.v13) %>% 
+    left_join(cs.v14) %>% left_join(cs.v15) %>% left_join(cs.v16) %>% 
+    left_join(cs.v17) %>% left_join(cs.v18)
+
+head(custsig)
+
+write.csv(custsig, file = "custsig.csv")
