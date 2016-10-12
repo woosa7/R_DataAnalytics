@@ -99,3 +99,36 @@ x + geom_bar(aes(fill = cut), binwidth = 3000, position = "dodge")
 x + geom_bar(aes(fill = cut), binwidth = 3000, position = "fill")
 
 
+#-----------------------------------------------------------
+# Pie Charts
+
+x <- ggplot(mtcars, aes(x = factor(1), fill = factor(cyl)))
+x + geom_bar(width = 1) + coord_polar(theta = "y")
+
+
+#-----------------------------------------------------------
+# Box Plots
+
+x <- ggplot(mtcars, aes(factor(cyl), mpg))
+x + geom_boxplot()
+x + geom_boxplot() + geom_jitter()
+x + geom_boxplot(aes(fill = factor(cyl)), outlier.colour = "red", outlier.size = 4)
+
+
+#-----------------------------------------------------------
+# Facets
+
+x <- ggplot(diamonds, aes(price))
+x + geom_histogram(bins = 10) + facet_wrap(~ cut)
+x + geom_histogram(binwidth = 3000) + facet_wrap(~ cut)
+x + geom_histogram(binwidth = 3000) + facet_grid(. ~ cut)
+x + geom_histogram(binwidth = 3000) + facet_grid(color ~ cut)
+
+
+#-----------------------------------------------------------
+# Density
+
+
+
+
+
