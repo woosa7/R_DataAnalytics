@@ -166,7 +166,7 @@ summary(pca)
 a1 <- pca$rotation[,1]
 a1
 bulls_x <- scale(bullsV7) %*% a1
-plot(bulls_x, pca$x[, 1])
+plot(bulls_x, pca$x[, 1], ylab = "PC1", xlab = "scale(bulls) %*% rotation")
 cor(bulls_x, pca$x[, 1])   # cor = 1
 
 # 7개의 각 변수값에 rotation 값을 행렬곱한 결과가 주성분의 값이다.
@@ -177,7 +177,7 @@ cor(bulls_x, pca$x[, 1])   # cor = 1
 a2 <- pca$rotation[,2]
 a2
 bulls_x2 <- scale(bullsV7) %*% a2
-plot(bulls_x2, pca$x[, 2])
+plot(bulls_x2, pca$x[, 2], ylab = "PC2", xlab = "scale(bulls) %*% rotation[,2]")
 
 
 #------------------------------------------------------------
@@ -201,9 +201,10 @@ biplot(pca)
 # BkFat 변수는 제1 주성분의 특징과 반대되는 성향을 보인다. 
 # 즉 BkFat 값이 큰 경우 SaleHt, YrHgt, Frame 등의 값은 작은 경향을 보인다.
 
-bulls[c(26, 44), ]   # BkFat 경향이 큰 소
-bulls[c(63, 57), ]   # PrctFFB 경향이 큰 소
+bulls[c(26, 44), ]   # BkFat 값이 큰 소
+bulls[c(63, 57), ]   # PrctFFB 값이 큰 소
 
+bulls[c(26, 44, 63, 57), ]
 
 #------------------------------------------------------------
 # 5. 첫 두개의 주성분을 사용해 산점도를 그리고 Breed를 서로 다른 색깔과 기호로 표시하시오. 
@@ -211,10 +212,6 @@ bulls[c(63, 57), ]   # PrctFFB 경향이 큰 소
 
 bulls$Breed <- factor(bulls$Breed)
 summary(bulls)
-
-# pch : 점모양 / col = 색상
-# text : 각 점에 해당하는 라벨 출력
-# plot의 각 옵션은 여기 참조 : github.com/woosa7/R_Study/blob/master/R_JS/C2_plot.R
 
 par(mfcol = c(1,2))
 biplot(pca)
@@ -229,26 +226,31 @@ par(mfcol = c(1,1))
 # 1번과 5번 종의 소는 비슷한 특성으로 보이며 섞여 있다.
 # 하지만 1번종은 BkFat, SaleWt이 5번 종보다 큰 경향을 보인다.
 
+plabels <- paste(as.character(bulls$Breed), rownames(bulls))
+
 plot(pca$x[,1], pca$x[,2], xlab = "PC1", ylab = "PC2", xlim = c(-8,4), ylim = c(-4,7),
      pch = as.numeric(bulls$Breed), col = as.numeric(bulls$Breed))
-text(pca$x[,1], pca$x[,2], labels = as.character(bulls$Breed),
+text(pca$x[,1], pca$x[,2], labels = rownames(bulls),
      cex = 0.7, pos = 3, col = as.numeric(bulls$Breed))
+legend(-2, 7, c(1,5,8), col = c("black", "red", "green"), fill = c("black", "red", "green"))
 
 lambda <- pca$sdev * sqrt(nrow(pca$x))
 Rot <- t(t(pca$rotation)*lambda)
 arrows(rep(0,nrow(pca$rotation)), rep(0,nrow(pca$rotation)), Rot[,1], Rot[,2], col = "grey")
-text (Rot[,1:2], rownames(Rot), col = "blue")
+text(Rot[,1:2], rownames(Rot), col = "blue")
+
 
 
 # 이상점(outlier)
-
 # 16번 소는 BkFat에서 특이하게 큰 값을 보인다.
-bulls[16, ]
-boxplot(bulls$BkFat)
-
 # 51번 소는 FtFrBody에서 특이하게 큰 값을 보인다.
+bulls[16, ]
 bulls[51, ]
-boxplot(bulls$FtFrBody)
+
+par(mfcol=c(1,2))
+boxplot(bulls$BkFat, xlab = "BkFat")
+boxplot(bulls$FtFrBody, xlab = "FtFrBody")
+par(mfcol=c(1,1))
 
 
 #------------------------------------------------------------
