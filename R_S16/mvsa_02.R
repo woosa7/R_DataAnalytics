@@ -31,7 +31,7 @@ pca_r
 # pc2 : mechanics 는 잘하지만 statistics는 못하는 특성의 학생들 분리
 # scaling 했기 때문에 각 주성분의 분산 = 1, 전체 총분산 = 5 (변수 5개)
 
-pca_r$sdev              # 고유값 = 각 주성분의 분산(Standard deviations)
+pca_r$sdev              # 고유값 = 각 주성분의 분산(Standard deviation의 제곱)
 pca_r$rotation[, 1]     # 고유벡터 = 각 주성분의 Rotation 값
 
 pc1 <- pca_r$x[, 1]
