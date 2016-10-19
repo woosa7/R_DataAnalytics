@@ -1056,3 +1056,63 @@ table(testData$Species, pred)
 plot(margin(model, testData$Species))
 
 
+#--------------------------------------------------------------
+# ROCR
+#--------------------------------------------------------------
+
+# http://blog.naver.com/woosa7/220840338896
+
+library(C50)
+library(ROCR)
+
+data(churn)     # C50 dataset. 서비스 제공자를 바꾸는 고객.
+summary(churnTrain)
+
+# Modeling
+c5_options <- C5.0Control(winnow = FALSE, noGlobalPruning = FALSE)
+model <- C5.0(churn ~ ., data = churnTrain, control = c5_options, rules = FALSE)
+summary(model)
+
+# 가지가 너무 많아서 Attribute usage 가 작은 변수 제거하고 다시 모델링
+drops <- c("total_day_charge", "account_length", "total_eve_calls", "total_day_calls", "total_eve_minutes")
+churnTrain2 <- churnTrain[, !(names(churnTrain) %in% drops)]
+
+model2 <- C5.0(churn ~ ., data = churnTrain2, control = c5_options, rules = FALSE)
+summary(model2)
+plot(model2, type = "simple")
+
+pred_train <- predict(model2, churnTrain2, type = "class")
+confusionMatrix(pred_train, churnTrain2$churn)   # Accuracy : 0.9583
+
+# Test
+head(churnTest)
+
+churnTest$pred <- predict(model2, churnTest, type = "class")        # 예측결과
+churnTest$pred_prob <- predict(model2, churnTest, type = "prob")    # 확률
+confusionMatrix(churnTest$pred, churnTest$churn)                    # Accuracy : 0.9478
+
+# Model Evaluation by ROCR chart
+head(churnTest$pred_prob)
+c5_pred <- prediction(churnTest$pred_prob[, "yes"], churnTest$churn)
+c5_model.perf <- performance(c5_pred, "tpr", "fpr")
+    # True positive rate (tpr) = Sensitivity
+    # False positive rate (fpr) = 1 - Specificity
+
+c5_model.perf
+
+plot(c5_model.perf, col = "red")
+
+AUROC <- performance(c5_pred, "auc")
+AUROC@y.values
+    # 0.8804094 : Good
+
+c5_model.lift <- performance(c5_pred, "lift", "rpp")  # rpp : Rate of positive predictions
+plot(c5_model.lift, col = "red")
+
+
+
+
+
+
+
+
