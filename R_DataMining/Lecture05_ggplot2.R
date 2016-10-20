@@ -7,8 +7,6 @@
 # http://docs.ggplot2.org/current/
 # C2_plot.R & C5_boxplot_ggplot.R 파일 참조
 
-# ggplot(dataframe, aes(x, y))
-
 library(ggplot2)
 library(dplyr)
 
@@ -33,13 +31,13 @@ head(df)
 ggplot(df, aes(x, y)) + geom_point()
 
 # 3.
+# colour 구분은 factor 변환 필요!!!
 load("custsig.RData")
-gdata <- custsig %>% select(agegrp, visits, buyCount) %>%
-    group_by(agegrp) %>% summarise_each(funs(mean), visits, buyCount)
 
-gdata$agegrp <- factor(gdata$agegrp)  # colour 구분은 factor 변환 필요!!!
+gdata <- custsig %>% select(p_trend, visits, buyCount) %>%
+    group_by(p_trend) %>% summarise_each(funs(mean), visits, buyCount)
 
-ggplot(gdata, aes(visits, buyCount)) + geom_point(aes(colour = agegrp, size = buyCount))
+ggplot(gdata, aes(visits, buyCount)) + geom_point(aes(colour = p_trend, size = buyCount))
 
 
 #-----------------------------------------------------------
@@ -128,7 +126,9 @@ x + geom_histogram(binwidth = 3000) + facet_grid(color ~ cut)
 #-----------------------------------------------------------
 # Density
 
+head(iris)
 
-
-
+x = ggplot(iris, aes(Petal.Length))
+x + geom_density()
+x + geom_density(aes(color = Species))
 
