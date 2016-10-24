@@ -14,19 +14,51 @@ library(lubridate)
 
 tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
 cs <- read.delim("HDS_Customers.tab", stringsAsFactors = F)
-cs <- cs %>% select(custid, sex)
+cs <- cs %>% filter(sex != 0) %>% select(custid, sex)
 cs$sex <- factor(cs$sex)            # 1 male, 2 female
 summary(cs)
 
-
-head(tr, 30)
+head(tr, 10)
 head(cs)
 
+
 # 총구매상품수
-v1 <- tr %>% distinct(custid, brd_nm) %>% 
+v1 <- tr %>% filter(net_amt > 0) %>%
+    distinct(custid, brd_nm) %>% 
     group_by(custid) %>% summarize(buy_brd = n())
 
-head(v1)
+custsig <- cs %>% left_join(v1)
+head(custsig)
 
+custsig %>% group_by(sex) %>% summarise(t = n(), s = sum(buy_brd), m = mean(buy_brd))
+
+
+# 내점일수와 평균구매주기(API, average purchasing interval)
+
+v2 <- tr %>% distinct(custid, sales_date) %>% 
+    group_by(custid) %>% summarize(visits = n()) %>% 
+    mutate(API = as.integer(365/visits))
+
+custsig <- custsig %>% left_join(v2)
+
+
+# -------------------------------------------------------
+head(custsig)
+
+library(C50)
+library(caret)
+
+inTrain <- createDataPartition(y = custsig$sex, p = 0.6, list = F)
+
+trainData = custsig[inTrain, ][, -1]
+testData = custsig[-inTrain, ][, -1]
+dim(trainData)
+dim(testData)
+
+options <- C5.0Control(winnow = FALSE, noGlobalPruning = FALSE)
+model <- C5.0(sex ~ ., data = trainData, control = options)
+
+plot(model)
+summary(model)
 
 
