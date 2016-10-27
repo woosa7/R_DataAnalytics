@@ -264,6 +264,40 @@ v3 <- tr %>%
 # --------------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------------
+load("custsig.RData")
+head(custsig)
+
+custsig <- custsig %>% filter(sex != 0) %>%
+    select(sex, buy_brd, visits, API, NPPV,  wk_amt,  we_amt, 
+                              spring_buy, summer_buy, fall_buy, p_trend, instCnt)
+
+custsig$sex <- factor(custsig$sex)
+summary(custsig)
+
+
+inTrain <- createDataPartition(y = custsig$sex, p = 0.6, list = F)
+
+trainData = custsig[inTrain, ]
+testData = custsig[-inTrain, ]
+
+dim(trainData)
+head(trainData)
+
+# options <- C5.0Control(winnow = FALSE, noGlobalPruning = FALSE, CF = 0.7)
+# options <- C5.0Control(winnow = TRUE, noGlobalPruning = FALSE)
+# options <- C5.0Control(winnow = FALSE, noGlobalPruning = TRUE)
+
+options <- C5.0Control(winnow = FALSE, noGlobalPruning = FALSE)
+model <- C5.0(sex ~ ., data = trainData, control = options)
+summary(model)
+plot(model)
+
+trainData$pred <- predict(model, trainData, type = "class")
+confusionMatrix(trainData$pred, trainData$sex)
+
+testData$pred <- predict(model, testData, type = "class")
+confusionMatrix(testData$pred, testData$sex)
+
 
 
 
