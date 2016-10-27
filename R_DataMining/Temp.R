@@ -10,11 +10,13 @@ custsig$sex = factor(custsig$sex)
 
 summary(custsig)
 
-tr <- read.delim("HDS_Transactions1.tab", stringsAsFactors = F)
-tr2 <- read.delim("HDS_Transactions2.tab", stringsAsFactors = F)
-tr <- rbind(tr, tr2)
-rm(tr2)
-rm(cs)
+tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
+
+# tr <- read.delim("HDS_Transactions1.tab", stringsAsFactors = F)
+# tr2 <- read.delim("HDS_Transactions2.tab", stringsAsFactors = F)
+# tr <- rbind(tr, tr2)
+# rm(tr2)
+# rm(cs)
 
 
 # --------------------------------------------------------------------------------
@@ -104,7 +106,9 @@ funcCornerCheck <- function(x) {
         pick3 <- clist %>% filter(corner_nm == '색조화장품')
         pick4 <- clist %>% filter(corner_nm == '여성구두')
         
-        df <- data.frame(custid = i, 
+        vv = nrow(pick1) + nrow(pick2) + nrow(pick3) + nrow(pick4)
+        
+        df <- data.frame(custid = i, pickFemaleItem = vv,
                          pickItem1 = ifelse(nrow(pick1) == 0, 0, 1), pickItem2 = ifelse(nrow(pick2) == 0, 0, 1),
                          pickItem3 = ifelse(nrow(pick3) == 0, 0, 1), pickItem4 = ifelse(nrow(pick4) == 0, 0, 1))
         
@@ -117,19 +121,28 @@ funcCornerCheck <- function(x) {
 a <- custsig %>% filter(sex == 1) %>% sample_n(5000) 
 b <- custsig %>% filter(sex == 2) %>% sample_n(5000) 
 
-tempcs <- rbind(a, b)
-head(tempcs)
+tempcs <- rbind(a, b) %>% arrange(custid)
+head(tempcs);tail(tempcs)
 dim(tempcs)
 
 tempcs %>% group_by(sex) %>% summarise(cnt = n())
 
 v8 <- funcCornerCheck(tempcs$custid)
 tempcs <- left_join(tempcs, v8)
+
+tempcs$pickFemaleItem <- factor(tempcs$pickFemaleItem)
+tempcs$pickItem1 <- factor(tempcs$pickItem1)
+tempcs$pickItem2 <- factor(tempcs$pickItem2)
+tempcs$pickItem3 <- factor(tempcs$pickItem3)
+tempcs$pickItem4 <- factor(tempcs$pickItem4)
+
+summary(tempcs)
+
 trainData = tempcs[, -1]
 
 head(trainData);tail(trainData)
 
-tree_model <- ctree(sex ~ ., data = trainData)
+tree_model <- ctree(sex ~ pickFemaleItem, data = trainData)
 plot(tree_model)
 trainData$pred <- predict(tree_model, newdata = trainData)
 confusionMatrix(trainData$pred, trainData$sex)
