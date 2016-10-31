@@ -284,33 +284,176 @@ plot(c5_model.lift, col = "red")
 # 인간의 뇌는 비선형적이며 병렬적인 정보처리를 한다.
 # 뉴런은 가중치가 있는 링크들로 연결되어 있다.
 # 뉴런은 여러 입력 신호를 받지만 출력 신호는 오직 하나만 생성한다.
-
-# 인공신경망 학습
+# 
+# 
+# 1. 인공신경망 분석
+# 
 # 가중치를 반복적으로 조정하며 학습
 # 뉴런의 각 링크에는 그와 연관된 수치적인 가중치가 있음.
 # 가중치는 장기 기억을 위한 기본적인 수단으로 각 뉴런 입력 강도 즉, 중요도를 표현
 # 신경망의 구조를 먼저 선택하고, 어떤 알고리즘을 사용할지 결정한 후 신경망을 훈련시킨다
 # 훈련 데이터를 통해 가중치를 갱신
 # 역전파 알고리즘(Backpropagation)을 활용하여 비선형성을 극복
-
-# Deep Learning
+# 
+# 2. Deep Learning
+# 
 # Unsupervised learning을 이용한 전처리 과정을 다층신경망에 추가하는 방식을 통해 
 # 다층망을 쌓아도 정확도를 해치지 않는 방식.
 # 신경망을 여러 층 쌓아올려 모델을 구축하는 머신 러닝 기법이면 모두 딥 러닝이라고 할 수 있다.
+# 
+# 3. 인공신경망의 구성요소
+# 
+# Processing Node (Input)
+# -	입력값 : 각 변수
+# -	연결강도 : 가중치(weight)
+# -	총입력값 = X1*W1 + X2*W2 + X3*W3 ……  + Xn*Wn
+# 
+# Activation Funtion (활성함수, Transfer function)
+# -	입력정보를 일정 범위의 값으로 변환해주는 함수. 출력값을 결정.
+# -	비선형함수(일반적으로 sigmoid 함수) 사용. Log(x) = 1 / (1+e-x)
+# 
+# 입력계층 – 은닉계층 – 출력계층
+# 은닉계층은 일반적으로 최대 2개까지만 사용
 
-# ---> 추후 수업 후 다시 정리할 것 !!!!
+library(caret)
 
-install.packages("nnet")
+inTrain = createDataPartition(y = iris$Species, p = 0.6, list = F)
+trainData = iris[inTrain, ]
+testData = iris[-inTrain, ]
+
+summary(trainData)
+summary(testData)
+
 library(nnet)
 
+??nnet
+# size : hidden layer
+# decay : weight decay. weight를 줄여나가는 가중치.
+
+ann1 = nnet(Species ~ ., data = trainData, size = 2, decay = 5e-4)   
+
+ann1            # 분석 요약
+names(ann1)
+summary(ann1)   # 각 노드간 가중치
+
+# testData 적용
+p = predict(ann1, testData, type = "class")
+confusionMatrix(p, testData$Species)
 
 
 
 
+###############################################################
+# 군집분석 (Cluster Aanlysis)
+###############################################################
+
+#--------------------------------------------------------------
+# 계층적 군집분석
+#--------------------------------------------------------------
+
+x1 = c(1,2,4,9,11,13,12)
+x2 = c(4,1,6,3,8,14,10)
+
+data = data.frame(x1, x2)
+rownames(data) = c("a","b","c","d","e","f","g")
+data
+
+# 거리 측도
+dist(data)   # default = euclidean
+dist(data, method = "manhattan")
+dist(data, method = "minkowski")
+mahalanobis(data, colMeans(data), cov(data))   # mahalanobis(x, center : 각 변수의 평균, cov : 공분산행렬)
+
+
+d = dist(data)
+
+m1 = hclust(d, method = "single")       # single linkage
+m2 = hclust(d, method = "complete")     # complete linkage
+m3 = hclust(d, method = "average")      # average linkage
+m4 = hclust(d, method = "ward.D")       # Ward linkage
+
+m1
+m1$height   # applied distance
+
+par(mfcol=c(2,2))
+plot(m1)
+plot(m2)
+plot(m3)
+plot(m4)
+par(mfcol=c(1,1))
+
+
+?cutree   # Cut a Tree into Groups of Data
+# k : desired number of groups
+# h : heights where the tree should be cut
+
+result = cutree(m3, k = 2)
+plot(data$x1, data$x2, col = result, pch = result)
+text(data$x1, data$x2, labels = rownames(data), col = result, pos = 3)
+
+
+# ------------------------------------------
+# USArrests
+
+df = USArrests
+distUS = dist(scale(df))
+
+par(mfcol=c(2,2))
+hc = hclust(distUS, method = "single")
+plot(hc)
+hc2 = hclust(distUS, method = "complete")
+plot(hc2)
+hc3 = hclust(distUS, method = "average")
+plot(hc3)
+hc4 = hclust(distUS, method = "ward.D")
+plot(hc4)
+par(mfcol=c(1,1))
+
+
+# average linkage 결과 사용
+result = cutree(hc3, k = 5)
+
+plot(df$Murder, df$Assault, col = result, pch = result)
+text(df$Murder, df$Assault, labels = rownames(df), col = result, pos = 3, cex = 0.7)
+
+plot(df$Murder, df$Rape, col = result, pch = result)
+text(df$Murder, df$Rape, labels = rownames(df), col = result, pos = 3, cex = 0.7)
+
+plot(df$Murder, df$UrbanPop, col = result, pch = result)
+text(df$Murder, df$UrbanPop, labels = rownames(df), col = result, pos = 3, cex = 0.7)
+
+# 군집간의 데이터 비교
+par(mfcol=c(2,2))
+for (i in 1:4) {
+    boxplot(df[,i] ~ result, main = names(df)[i])
+}
+par(mfcol=c(1,1))
 
 
 
+#--------------------------------------------------------------
+# 비계층적 군집분석 : K-means clustering
+#--------------------------------------------------------------
 
+kdata = iris
+kdata$Species = NULL
+head(kdata)
+
+# 3개의 군집으로 나누는 경우
+kmc = kmeans(kdata, 3)
+kmc
+table(kmc$cluster, iris$Species)
+
+plot(kdata$Sepal.Length, kdata$Sepal.Width, col = kmc$cluster)
+plot(kdata$Petal.Length, kdata$Petal.Width, col = kmc$cluster)
+
+
+# 4개의 군집으로 나누는 경우
+kmc2 = kmeans(kdata, 4)
+table(kmc2$cluster, iris$Species)
+
+plot(kdata$Sepal.Length, kdata$Sepal.Width, col = kmc2$cluster)
+plot(kdata$Petal.Length, kdata$Petal.Width, col = kmc2$cluster)
 
 
 
