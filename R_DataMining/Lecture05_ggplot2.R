@@ -20,7 +20,7 @@ head(iris)
 x <- ggplot(iris, aes(Sepal.Length, Sepal.Width))
 x + geom_point()
 x + geom_point(aes(colour = Species))
-x + geom_point(aes(colour = Species, size = Petal.Width))
+x + geom_point(aes(colour = Species, size = Petal.Width))   # colour 구분은 factor 필요!!!
 
 # 2. 
 x <- 1:50
@@ -31,22 +31,24 @@ head(df)
 ggplot(df, aes(x, y)) + geom_point()
 
 # 3.
-# colour 구분은 factor 변환 필요!!!
-load("custsig.RData")
+head(diamonds)
 
-gdata <- custsig %>% select(p_trend, visits, buyCount) %>%
-    group_by(p_trend) %>% summarise_each(funs(mean), visits, buyCount)
-
-ggplot(gdata, aes(visits, buyCount)) + geom_point(aes(colour = p_trend, size = buyCount))
+ggplot(diamonds, aes(x = carat, y = price)) + geom_point(aes(color = color))
 
 
 #-----------------------------------------------------------
 # Histograms
 
+# 1
 x <- ggplot(iris, aes(Sepal.Length))
 x + geom_histogram(binwidth = 0.1)
 x + geom_histogram(binwidth = 0.1, aes(fill = Species))
 x + geom_histogram(fill = "red", alpha = 0.3)
+
+# 2
+ggplot(diamonds) + geom_histogram(aes(x = carat))
+
+ggplot(diamonds) + geom_density(aes(x = carat), fill = "pink")
 
 
 #-----------------------------------------------------------
@@ -69,8 +71,21 @@ x <- ggplot(Orange, aes(age, circumference))
 x + geom_line(aes(colour = Tree))
 x + geom_line(aes(colour = Tree)) + geom_point()
 
-# 3.
 ggplot(Orange, aes(age, circumference, colour = Tree)) + geom_line() + geom_point()
+
+# 3.
+library(lubridate)
+
+eco = economics[which(year(economics$date) >= 2000), ]   # 2000년 이후 데이터만 추출
+head(eco)
+summary(eco)
+
+eco$year = factor(year(eco$date))           # year
+eco$month = month(eco$date, label = T)      # month name
+
+g = ggplot(eco, aes(x = month, y = pop))
+g + geom_line(aes(color = year, group = year)) + labs(title = "Population Growth")
+# g + scale_y_continuous(labels = comma)
 
 
 #-----------------------------------------------------------
@@ -105,22 +120,42 @@ x + geom_bar(width = 1) + coord_polar(theta = "y")
 
 
 #-----------------------------------------------------------
-# Box Plots
+# Box / Violin Plots
 
-x <- ggplot(mtcars, aes(factor(cyl), mpg))
+# 1
+x <- ggplot(mtcars, aes(x = factor(cyl), y = mpg))
 x + geom_boxplot()
 x + geom_boxplot() + geom_jitter()
 x + geom_boxplot(aes(fill = factor(cyl)), outlier.colour = "red", outlier.size = 4)
+
+# 2
+ggplot(diamonds, aes(x = 1, y = carat)) + geom_boxplot()        # x = 1 : 전체 데이터
+
+ggplot(diamonds, aes(x = cut, y = carat)) + geom_boxplot()      # x = factor
+
+ggplot(diamonds, aes(x = cut, y = carat)) + geom_violin()
+
+ggplot(diamonds, aes(x = cut, y = carat)) + geom_violin() + geom_point()
 
 
 #-----------------------------------------------------------
 # Facets
 
+head(diamonds)
+summary(diamonds)
+
+# 1
 x <- ggplot(diamonds, aes(price))
 x + geom_histogram(bins = 10) + facet_wrap(~ cut)
 x + geom_histogram(binwidth = 3000) + facet_wrap(~ cut)
 x + geom_histogram(binwidth = 3000) + facet_grid(. ~ cut)
 x + geom_histogram(binwidth = 3000) + facet_grid(color ~ cut)
+
+# 2
+d = ggplot(diamonds, aes(x = carat, y = price)) 
+d + geom_point(aes(color = color))
+d + geom_point(aes(color = color)) + facet_wrap(~color)
+d + geom_point(aes(color = color)) + facet_grid(cut ~ clarity)
 
 
 #-----------------------------------------------------------
