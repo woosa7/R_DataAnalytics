@@ -388,8 +388,9 @@ par(mfcol=c(1,1))
 # h : heights where the tree should be cut
 
 result = cutree(m3, k = 2)
-plot(data$x1, data$x2, col = result, pch = result)
+plot(data$x1, data$x2, col = result, pch = result, ylim = c(0,15))
 text(data$x1, data$x2, labels = rownames(data), col = result, pos = 3)
+
 
 
 # ------------------------------------------
@@ -410,17 +411,18 @@ plot(hc4)
 par(mfcol=c(1,1))
 
 
-# average linkage 결과 사용
+# Average linkage 결과 사용. 군집 5개로 설정.
 result = cutree(hc3, k = 5)
 
-plot(df$Murder, df$Assault, col = result, pch = result)
-text(df$Murder, df$Assault, labels = rownames(df), col = result, pos = 3, cex = 0.7)
+plot(df$Murder, df$Assault, col = result, pch = result, type = "n", xlab = "Murder", ylab = "Assault")
+text(df$Murder, df$Assault, labels = rownames(df), col = result, cex = 0.8)
 
-plot(df$Murder, df$Rape, col = result, pch = result)
-text(df$Murder, df$Rape, labels = rownames(df), col = result, pos = 3, cex = 0.7)
+plot(df$Murder, df$Rape, col = result, pch = result, type = "n", xlab = "Murder", ylab = "Rape")
+text(df$Murder, df$Rape, labels = rownames(df), col = result, cex = 0.8)
 
-plot(df$Murder, df$UrbanPop, col = result, pch = result)
-text(df$Murder, df$UrbanPop, labels = rownames(df), col = result, pos = 3, cex = 0.7)
+plot(df$Murder, df$UrbanPop, col = result, pch = result, type = "n", xlab = "Murder", ylab = "UrbanPop")
+text(df$Murder, df$UrbanPop, labels = rownames(df), col = result, cex = 0.8)
+
 
 # 군집간의 데이터 비교
 par(mfcol=c(2,2))
@@ -444,18 +446,31 @@ kmc = kmeans(kdata, 3)
 kmc
 table(kmc$cluster, iris$Species)
 
-plot(kdata$Sepal.Length, kdata$Sepal.Width, col = kmc$cluster)
-plot(kdata$Petal.Length, kdata$Petal.Width, col = kmc$cluster)
+plot(kdata$Sepal.Length, kdata$Sepal.Width, col = kmc$cluster, xlab = "Sepal.Length", ylab = "Sepal.Width")
+points(kmc$centers[, c(1:2)], col = "blue", pch = 4, cex = 2)
+
+plot(kdata$Petal.Length, kdata$Petal.Width, col = kmc$cluster, xlab = "Petal.Length", ylab = "Petal.Width")
+points(kmc$centers[, c(3:4)], col = "blue", pch = 4, cex = 2)
 
 
-# 4개의 군집으로 나누는 경우
-kmc2 = kmeans(kdata, 4)
-table(kmc2$cluster, iris$Species)
+# ------------------------------------------
+# USArrests
 
-plot(kdata$Sepal.Length, kdata$Sepal.Width, col = kmc2$cluster)
-plot(kdata$Petal.Length, kdata$Petal.Width, col = kmc2$cluster)
+kmUSA = kmeans(df, 3)
+plot(df$Murder, df$Assault, type = "n", xlab = "Murder", ylab = "Assault", main = "3 Cluster (K-means)")
+text(df$Murder, df$Assault, labels = rownames(df), cex = 0.8, col = kmUSA$cluster)
+points(kmUSA$centers[, c(1,2)], col = "blue", pch = 4, cex = 2)
 
 
 
+#--------------------------------------------------------------
+# 모형 기반 군집분석 (Model-based clustering)
+#--------------------------------------------------------------
+
+library(mclust)
+
+mc = Mclust(df)
+summary(mc)
+plot(mc)
 
 
