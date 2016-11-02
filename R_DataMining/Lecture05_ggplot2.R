@@ -83,9 +83,9 @@ summary(eco)
 eco$year = factor(year(eco$date))           # year
 eco$month = month(eco$date, label = T)      # month name
 
-g = ggplot(eco, aes(x = month, y = pop))
-g + geom_line(aes(color = year, group = year)) + labs(title = "Population Growth")
-# g + scale_y_continuous(labels = comma)
+g = ggplot(eco, aes(x = month, y = pop/1000))
+g + geom_line(aes(color = year, group = year)) + labs(title = "Population Growth", x = "Month", y = "Population")
+
 
 
 #-----------------------------------------------------------

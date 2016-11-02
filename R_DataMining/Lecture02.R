@@ -181,3 +181,41 @@ tr %>% group_by(custid) %>% summarise(Total = sum(amount)) %>%
     arrange(desc(Total)) %>%
     head(10)
 
+
+
+#-----------------------------------------------------------
+library(ggplot2)
+
+head(diamonds)
+
+# 1
+aggregate(price ~ cut, diamonds, mean)
+
+diamonds %>% group_by(cut) %>% summarise(price = mean(price))
+
+
+# 2
+aggregate(price ~ cut + color, diamonds, mean)
+
+diamonds %>% group_by(cut, color) %>% summarise(price = mean(price))
+
+
+# 3
+aggregate(cbind(price, carat) ~ cut, diamonds, mean)
+
+diamonds %>% group_by(cut) %>% summarise_each(funs(mean), price, carat)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
