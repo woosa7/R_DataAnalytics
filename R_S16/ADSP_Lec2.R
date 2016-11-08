@@ -431,6 +431,16 @@ for (i in 1:4) {
 }
 par(mfcol=c(1,1))
 
+# 군집별 변수간 비교
+df_s = scale(df)
+par(mfcol=c(2,3))
+for (i in 1:5) {
+    #boxplot(df_s[result==i,], main = paste("Group",i))
+    cdata = matrix(df_s[result==i,], ,4)
+    colnames(cdata) = c("Murder", "Assault", "UrbanPop", "Rape")
+    boxplot(cdata, las = 2, main = paste("Group",i), ylim = c(-3,3))
+}
+par(mfcol=c(1,1))
 
 
 #--------------------------------------------------------------
@@ -457,9 +467,25 @@ points(kmc$centers[, c(3:4)], col = "blue", pch = 4, cex = 2)
 # USArrests
 
 kmUSA = kmeans(df, 3)
+kmUSA
 plot(df$Murder, df$Assault, type = "n", xlab = "Murder", ylab = "Assault", main = "3 Cluster (K-means)")
 text(df$Murder, df$Assault, labels = rownames(df), cex = 0.8, col = kmUSA$cluster)
 points(kmUSA$centers[, c(1,2)], col = "blue", pch = 4, cex = 2)
+
+# 클러스터 갯수 결정시 지표
+# within_SS : Within cluster sum of squares by cluster: 군집내 거리의 제곱합. 작을수록 좋다. 
+# between_SS 군집간 거리의 제곱합. 클수록 좋다.
+kmUSA$withinss
+
+wss = c()
+for (k in 1:20) {
+    km = kmeans(df, k)
+    wss[k] = sum(km$withinss)
+}
+wss
+
+plot(1:20, wss, type = 'l')
+points(wss)
 
 
 

@@ -88,3 +88,61 @@ describeBy(df, group = h3result)
 # ----------------------------------
 # 비계층적 군집분석 : K-means Clustring
 
+
+
+
+
+#--------------------------------------------------------------
+# Jet
+
+jet = read.csv("jet.csv", header = T)
+jet
+
+rownames(jet) = jet$X
+jet = jet[, -c(1,7)]
+jet_s = scale(jet)
+
+distJet = dist(jet_s)
+
+par(mfcol=c(2,2))
+hc1 = hclust(distJet, method = "single")
+plot(hc1)
+hc2 = hclust(distJet, method = "complete")
+plot(hc2)
+hc3 = hclust(distJet, method = "average")
+plot(hc3)
+hc4 = hclust(distJet, method = "ward.D")
+plot(hc4)
+par(mfcol=c(1,1))
+
+# complete 선택
+result = cutree(hc4, k=2)
+
+# 1
+par(mfcol=c(2,3))
+for (i in 1:5) {
+    boxplot(jet_s[,i] ~ result, main = names(jet_s)[i], ylim = c(-2,3))
+}
+par(mfcol=c(1,1))
+
+# 2
+par(mfcol=c(1,2))
+for (i in 1:2) {
+    cdata = matrix(jet_s[result==i,], ,5)
+    colnames(cdata) = c("FFD","SPR","RGF","PLF","SLF")
+    boxplot(cdata, las = 2, main = paste("Group",i), ylim = c(-2,3))
+}
+par(mfcol=c(1,1))
+
+# pca
+pca <- prcomp(jet, scale = T)
+summary(pca)
+
+plot(pca$x[,1], pca$x[,2], xlab = "PC1", ylab = "PC2", pch = result, col = result)
+text(pca$x[,1], pca$x[,2], labels = names(result), cex = 0.7, pos = 3, col = result)
+
+biplot(pca, col = result)
+
+
+
+
