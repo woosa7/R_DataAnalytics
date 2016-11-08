@@ -152,6 +152,26 @@ out$p.value
 # 상황에 따라 어느 오류를 줄이는 것이 중요한가 (유의수준 조정) 판단 필요
 
 
+#---------------------------------------------------------------
+# Tips Practice
+
+# tip 평균이 2.5인지
+t.test(tips$tip, alternative = "two.sided", mu = 2.5)   # --> 기각
+
+# tip 평균이 2.5보다 큰지
+t.test(tips$tip, alternative = "greater", mu = 2.5)   # --> 기각
+
+# t분포
+randT = rt(30000, df = NROW(tips) - 1)   # t분포 생성
+tipsTest = t.test(tips$tip, alternative = "two.sided", mu = 2.5)
+
+ggplot(data.frame(x = randT)) + 
+    geom_density(aes(x = x), fill = "grey", color = "grey") +
+    geom_vline(xintercept = tipsTest$statistic) +                            # 실선 : tips T-통계량
+    geom_vline(xintercept = mean(randT) + c(-3,3)*sd(randT), linetype = 2)   # 점선 : 3 표준편차
+    # tips T-통계량이 해당 분포의 너무 바깥쪽에 있기 때문에 귀무가설 기각
+
+
 
 #---------------------------------------------------------------
 # 두 그룹의 평균에 대한 독립표본 T-검정 (Two sample T-test)

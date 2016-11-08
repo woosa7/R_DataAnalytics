@@ -99,6 +99,10 @@ out <- lm(dist ~ speed, data = cars)    # 회귀분석(종속변수~설명변수
 plot(out)
 summary(out)
 
+library(ggplot2)
+ggplot(cars, aes(speed, dist)) + geom_point() + geom_smooth(method = "lm")
+
+
 #---------------------------------------------------------------
 # 회귀계수 추정과 해석
 # 
