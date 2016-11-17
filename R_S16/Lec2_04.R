@@ -228,124 +228,163 @@ rownames(jet) = jet$X
 jet = jet[, -c(1,2,7)]   # FFD, CAR 제외.
 jet
 
-distJet = dist(scale(jet))
+jet_s = scale(jet)
+distJet = dist(jet_s)
 
-par(mfcol=c(2,2))
+par(mfrow=c(2,2))
 hc1 = hclust(distJet, method = "single")
-plot(hc1)
+plot(hc1, main = "Single")
 hc2 = hclust(distJet, method = "complete")
-plot(hc2)
+plot(hc2, main = "Complete")
 hc3 = hclust(distJet, method = "average")
-plot(hc3)
+plot(hc3, main = "Average")
 hc4 = hclust(distJet, method = "ward.D")
-plot(hc4)
+plot(hc4, main = "Ward.D")
 par(mfcol=c(1,1))
 
 
 # B. A의 결과를 사용해 두 개의 집단으로 관측치를 분류하고 각 집단의 특징을 원변수 관점에서 비교하시오.
 
-# 2개의 군집으로 나누기 좋은 complete linkage 선택
-result = cutree(hc2, k=2)
+# 2개의 군집으로 나누기 위해서는 complete linkage 또는 ward method를 선택하는 것이 좋다.
+
+# (1) complete linkage 사용하는 경우.
+result_hc = cutree(hc2, k=2)
 
 par(mfrow=c(2,3))
+plot(jet$SPR, jet$RGF, col=result_hc, pch=result_hc, xlab = "SPR", ylab = "RGF")
+text(jet$SPR, jet$RGF, labels = rownames(jet), col=result_hc, pos = 1)
+abline(v = 3.75)
 
-plot(jet$SPR, jet$RGF, col=result, pch=result, xlab = "SPR", ylab = "RGF")
-text(jet$SPR, jet$RGF, labels = rownames(jet), col=result, pos = 1)
-abline(v = 3.7)
+plot(jet$SPR, jet$PLF, col=result_hc, pch=result_hc, xlab = "SPR", ylab = "PLF")
+text(jet$SPR, jet$PLF, labels = rownames(jet), col=result_hc, pos = 1)
+abline(v = 3.75)
 
-plot(jet$SPR, jet$PLF, col=result, pch=result, xlab = "SPR", ylab = "PLF")
-text(jet$SPR, jet$PLF, labels = rownames(jet), col=result, pos = 1)
-abline(v = 3.7)
+plot(jet$SPR, jet$SLF, col=result_hc, pch=result_hc, xlab = "SPR", ylab = "SLF")
+text(jet$SPR, jet$SLF, labels = rownames(jet), col=result_hc, pos = 1)
+abline(v = 3.75)
 
-plot(jet$SPR, jet$SLF, col=result, pch=result, xlab = "SPR", ylab = "SLF")
-text(jet$SPR, jet$SLF, labels = rownames(jet), col=result, pos = 1)
-abline(v = 3.7)
+plot(jet$RGF, jet$PLF, col=result_hc, pch=result_hc, xlab = "RGF", ylab = "PLF")
+text(jet$RGF, jet$PLF, labels = rownames(jet), col=result_hc, pos = 1)
 
-plot(jet$RGF, jet$PLF, col=result, pch=result, xlab = "RGF", ylab = "PLF")
-text(jet$RGF, jet$PLF, labels = rownames(jet), col=result, pos = 1)
+plot(jet$RGF, jet$SLF, col=result_hc, pch=result_hc, xlab = "RGF", ylab = "SLF")
+text(jet$RGF, jet$SLF, labels = rownames(jet), col=result_hc, pos = 1)
 
-plot(jet$RGF, jet$SLF, col=result, pch=result, xlab = "RGF", ylab = "SLF")
-text(jet$RGF, jet$SLF, labels = rownames(jet), col=result, pos = 1)
-
-plot(jet$PLF, jet$SLF, col=result, pch=result, xlab = "PLF", ylab = "SLF")
-text(jet$PLF, jet$SLF, labels = rownames(jet), col=result, pos = 1)
-
+plot(jet$PLF, jet$SLF, col=result_hc, pch=result_hc, xlab = "PLF", ylab = "SLF")
+text(jet$PLF, jet$SLF, labels = rownames(jet), col=result_hc, pos = 1)
 par(mfcol=c(1,1))
 
+# single linkage 방법을 사용하여 두 개의 군집으로 나눌 경우에는 SPR 변수의 분포에 영향을 가장 크게 받았음을 알 수 있다.
+# SPR 값이 약 3.7 보다 작은 전투기는 cluster 1, 큰 전투기는 cluster 2로 군집이 형성되었다.
 
-# ward.D
-result = cutree(hc4, k=2)
+table(result_hc)
+
+
+# (2) ward method 사용하는 경우
+result_hc2 = cutree(hc4, k=2)
 
 par(mfrow=c(2,3))
+plot(jet$SPR, jet$RGF, col=result_hc2, pch=result_hc2, xlab = "SPR", ylab = "RGF")
+text(jet$SPR, jet$RGF, labels = rownames(jet), col=result_hc2, pos = 1)
 
-plot(jet$SPR, jet$RGF, col=result, pch=result, xlab = "SPR", ylab = "RGF")
-text(jet$SPR, jet$RGF, labels = rownames(jet), col=result, pos = 1)
+plot(jet$SPR, jet$PLF, col=result_hc2, pch=result_hc2, xlab = "SPR", ylab = "PLF")
+text(jet$SPR, jet$PLF, labels = rownames(jet), col=result_hc2, pos = 1)
 
-plot(jet$SPR, jet$PLF, col=result, pch=result, xlab = "SPR", ylab = "PLF")
-text(jet$SPR, jet$PLF, labels = rownames(jet), col=result, pos = 1)
+plot(jet$RGF, jet$PLF, col=result_hc2, pch=result_hc2, xlab = "RGF", ylab = "PLF")
+text(jet$RGF, jet$PLF, labels = rownames(jet), col=result_hc2, pos = 1)
 
-plot(jet$SPR, jet$SLF, col=result, pch=result, xlab = "SPR", ylab = "SLF")
-text(jet$SPR, jet$SLF, labels = rownames(jet), col=result, pos = 1)
-abline(h = 1.5)
+plot(jet$SLF, jet$SPR, col=result_hc2, pch=result_hc2, xlab = "SPR", ylab = "SLF")
+text(jet$SLF, jet$SPR, labels = rownames(jet), col=result_hc2, pos = 1)
+abline(v = 1.5)
 
-plot(jet$RGF, jet$PLF, col=result, pch=result, xlab = "RGF", ylab = "PLF")
-text(jet$RGF, jet$PLF, labels = rownames(jet), col=result, pos = 1)
+plot(jet$SLF, jet$RGF, col=result_hc2, pch=result_hc2, xlab = "RGF", ylab = "SLF")
+text(jet$SLF, jet$RGF, labels = rownames(jet), col=result_hc2, pos = 1)
+abline(v = 1.5)
 
-plot(jet$RGF, jet$SLF, col=result, pch=result, xlab = "RGF", ylab = "SLF")
-text(jet$RGF, jet$SLF, labels = rownames(jet), col=result, pos = 1)
-abline(h = 1.5)
-
-plot(jet$PLF, jet$SLF, col=result, pch=result, xlab = "PLF", ylab = "SLF")
-text(jet$PLF, jet$SLF, labels = rownames(jet), col=result, pos = 1)
-abline(h = 1.5)
-
+plot(jet$SLF, jet$PLF, col=result_hc2, pch=result_hc2, xlab = "PLF", ylab = "SLF")
+text(jet$SLF, jet$PLF, labels = rownames(jet), col=result_hc2, pos = 1)
+abline(v = 1.5)
 par(mfcol=c(1,1))
 
+# ward method를 사용하여 두 개의 군집으로 나눌 경우에는 SLF 변수의 분포가 가장 큰 영향을 끼쳤음을 알 수 있다.
+# SLF 값이 약 1.5 보다 작은 전투기는 cluster 1, 큰 전투기는 cluster 2로 군집이 형성되었다.
 
-jet
+table(result_hc2)
 
 
 # C. 두 집단을 주성분을 이용해 2차원 산점도로 표현하시오. 
-# (즉, 제1 주성분과 제2 주성분을 사용한 산점도에서 두 개의 집단을 서로 다른 마크와 색으로 표현하시오.)
+# 즉, 제1 주성분과 제2 주성분을 사용한 산점도에서 두 개의 집단을 서로 다른 마크와 색으로 표현하시오.
 
-# 1
-par(mfcol=c(2,3))
-for (i in 1:5) {
-    boxplot(jet_s[,i] ~ result, main = names(jet_s)[i], ylim = c(-2,3))
-}
-par(mfcol=c(1,1))
-
-# 2
-par(mfcol=c(1,2))
-for (i in 1:2) {
-    cdata = matrix(jet_s[result==i,],5)
-    colnames(cdata) = c("FFD","SPR","RGF","PLF","SLF")
-    boxplot(cdata, las = 2, main = paste("Group",i), ylim = c(-2,3))
-}
-par(mfcol=c(1,1))
-
-# pca
+# 주성분분석
 pca <- prcomp(jet, scale = T)
 summary(pca)
+# 2개의 주성분으로 전체 변동의 78%를 설명할 수 있다.
 
-plot(pca$x[,1], pca$x[,2], xlab = "PC1", ylab = "PC2", pch = result, col = result)
-text(pca$x[,1], pca$x[,2], labels = names(result), cex = 0.7, pos = 3, col = result)
 
-biplot(pca, col = result)
+library(ggfortify)
+
+jet_c = jet
+jet_c$cluster = factor(result_hc)    # single linkage
+jet_c$cluster2 = factor(result_hc2)  # ward method
+jet_c
+
+# single linkage
+autoplot(pca, data = jet_c, colour = jet_c$cluster, shape = F, label = T, loadings = T, loadings.label = T)
+# ward method
+autoplot(pca, data = jet_c, colour = jet_c$cluster2, shape = F, label = T, loadings = T, loadings.label = T)
+
+
+
+#--------------------------------------------------------------
+# 2. 비계층적군집분석
+
+# A. 군집 개수 1~5까지를 사용해 k-means clustering을 시행하고 
+# 얻은 within-group sum of squares를 저장하고 그래프로 표현하여 적절한 군집 개수를 판단하시오.
+
+wss = c()
+for (k in 1:5) {
+    km = kmeans(jet, k)
+    wss[k] = sum(km$withinss)
+}
+wss
+
+plot(1:5, wss, type = 'l')
+points(wss)
+
+# 2에서 팔꿈치 생김
+# 군집 3~5개 일 경우 서로 wss 차이가 많지 않음
+# ---> 2개의 군집으로 결정
+
+
+# B. K-means clustering을 이용해 2개의 집단으로 군집화하고 그 결과를 1번의 B, C와 같이 탐색하시오.
+
+result_km = kmeans(jet, 2)
+result_km
+
+plot(jet$SPR, jet$RGF, type = "n", xlab = "SPR", ylab = "RGF", main = "2 Cluster (K-means)")
+text(jet$SPR, jet$RGF, labels = rownames(jet), cex = 0.8, col = result_km$cluster)
+points(result_km$centers[, c(1,2)], col = "blue", pch = 4, cex = 2)
+
+table(result_km$cluster)
+
 
 
 # ---------------------------
-# 
+# 3. 모형기반 군집화를 통해 최적의 군집 개수를 찾고 그 결과를 1번의 B, C와 같이 탐색하시오.
 
-mc = Mclust(jet)
-summary(mc)
+library(mclust)
+
+result_mc = Mclust(jet)
+summary(result_mc)
+# 최종 선택 모형 : 군집 3개. VVI model
+
+plot(mc)
+# BIC plot에서 군집이 3개일 경우 VEI model로 선택
+
+result_mc = Mclust(jet, modelNames = c("VVI", "VEI"))
+
+plot(result_mc)
 
 
-
-# 2.	비계층적군집분석
-# A.	군집 개수 1~5까지를 사용해 k-means clustering을 시행하고 얻은 within-group sum of squares를 저장하고 그래프로 표현하여 적절한 군집 개수를 판단하시오.
-# B.	K-means clustering을 이용해 2개의 집단으로 군집화하고 그 결과를 1번의 B, C와 같이 탐색하시오.
-# 3.	모형기반 군집화를 통해 최적의 군집 개수를 찾고 그 결과를 1번의 B, C와 같이 탐색하시오.
 
 
 
