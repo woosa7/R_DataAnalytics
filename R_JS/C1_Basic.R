@@ -267,6 +267,8 @@ write.table(df, "data/save_fruits.txt", quote = F, append = F)
 
 
 #-----------------------------------------------------------
+# apply family
+#-----------------------------------------------------------
 # apply, lapply, sapply, by, tapply, aggregate
 
 # apply     : 결과를 vector로 반환 (1 행 / 2 열)
@@ -289,6 +291,12 @@ sapply(score, range)
 
 sapply(score, t.test)
 
+extremes <- function(x) {
+    c(min = min(x), max = max(x))
+}
+
+sapply(score, extremes)
+
 
 # matrix
 score <- c(s1, s2, s3)
@@ -302,34 +310,37 @@ apply(score, 2, max)
 
 
 # dataframe
-
-# Case 1.
-data <- as.data.frame(score)
-data$name <- c("K", "L", "M")
-data
-
-apply(data, 1, mean)   # error : 각 열의 데이터타입이 다름
-
-df <- data[-11]
-df
-
-apply(df, 1, mean)
-apply(df[3:5], 2, mean)
-
-lapply(df, mean)
-sapply(df, mean)
-
-
-# Case 2.
 df2 <- data.frame(score=c(s1, s2, s3))
 df2$name <- c("K", "L", "M")
 df2
+
+apply(df2, 1, mean)   # error : 각 열의 데이터타입이 다름
 
 by(df2$score, df2$name, mean)
 
 tapply(df2$score, df2$name, mean)
 
 aggregate(score ~ name, data = df2, mean)
+
+
+#-----------------------------------------------------------
+# apply examples
+
+# 1
+pioneers <- c("GAUSS:1777", "BAYES:1702", "PASCAL:1623", "PEARSON:1857")
+split <- strsplit(pioneers, split = ":")
+split
+
+names <- lapply(split, function(x) { x[1] })
+names
+
+# 2
+select_el <- function(x, index) {
+    x[index]
+}
+
+years <- lapply(split_low, select_el, index = 2)
+years
 
 
 
@@ -346,7 +357,7 @@ read.table("data/fruits.txt", header = T)
 
 
 #-----------------------------------------------------------
-# 문자열 처리 & 정규식
+# 문자열 합치기, 나누기, Replacement
 #-----------------------------------------------------------
 
 paste("abc", "xyz")
@@ -358,15 +369,16 @@ substr("123456789", -2, 2)
 strsplit("2016-04-19", split = "-")
 
 d <- readLines("data/alert_log.txt")
-d <- gsub(" ", "_", d)                     # 특정 문자열 치환
+d <- gsub(" ", "_", d)                     # 특정 문자열 치환. gsub
 length(d)
 
 c <- subset(d, nchar(d) > 100)             # nchar : 문자열 길이
 length(c)
 
 
+#-----------------------------------------------------------
 # 정규표현식
-
+#-----------------------------------------------------------
 regexpr("ORACLE", c)
 
 # \\d		숫자
@@ -377,9 +389,11 @@ regexpr("ORACLE", c)
 # 
 # \\t		Tab
 # \\n		new line (enter)
+# \\.       dot
 # 
 # ^		    시작 글자
 # $		    마지막 글자
+# .*        any character
 # 
 # [ab]		a 또는 b
 # [^ab]		a와 b 제외한 모든 문자
@@ -407,10 +421,29 @@ regexpr("ORACLE", c)
 # [:upper:]	대문자
 # [:xdigit:]	16진수
 
-grep("ORACLE", d)                # vector에서 특정 패턴을 찾아 위치 출력
+grep("ORACLE", d)                # vector에서 특정 패턴을 찾아 index 출력
 grep("ORACLE", d, value = T)     # 값 출력
 
 grep("^Setting", d)              # ^ : 첫글자
 grep("ing$", d)                  # $ : 마지막 글자
 grep("[7-9]", d)
+
+
+emails <- c("john.doe@ivyleague.edu", "education@world.gov", "dalai.lama@peace.org", 
+            "invalid.edu", "quant@bigdatacollege.edu", "cookie.monster@sesame.tv")
+
+hits = grep("@.*\\.edu$", emails)   # @ 다음에 .edu로 끝나는 것.
+emails[hits]
+
+gsub(pattern = "@.*\\.edu$", replacement = "@datacamp.edu", emails)
+
+
+
+
+
+
+
+
+
+
 

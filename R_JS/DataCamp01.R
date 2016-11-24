@@ -179,3 +179,38 @@ my_list2 <- list(name1 = my_vector, name2 = my_matrix, name3 = my_df)
 my_list2
 
 my_list2$year <- c(1990)
+
+
+
+#----------------------------------------------
+# Logical operators
+#----------------------------------------------
+
+t <- read.csv("data/Trend_Temperature_Seoul.csv", header=T)
+head(t)
+
+meanTemper <- t[,"MeanTemp"]
+extremes <- meanTemper > 28 | meanTemper < -10
+sum(extremes)
+
+t[extremes,]
+
+
+#----------------------------------------------
+# Loop
+#----------------------------------------------
+
+nyc <- list(pop = 8405837, 
+            boroughs = c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island"), 
+            capital = FALSE)
+
+# Loop version 1
+for (p in nyc) {
+    print(p)
+}
+
+# Loop version 2
+for (i in 1:length(nyc)) {
+    print(nyc[[i]])
+}
+
