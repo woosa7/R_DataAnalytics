@@ -99,8 +99,23 @@ compute_fail_pct <- function(x) {
 compute_fail_pct(logs)
 
 #----------------------------------------------
+lapply(logs, function(x) { x$details })
+sapply(logs, function(x) { x$timestamp })
 
+results = sapply(logs, function(x) { x$success })
+results
+mean(results)
 
+sapply(logs, length)
+vapply(logs, length, integer(1))
 
+vapply(logs, function(x) {x$success}, logical(1))
+
+#----------------------------------------------
+extract_info <- function(x) {
+    return(toupper(x$details$message))
+}
+
+sapply(logs, extract_info)
 
 

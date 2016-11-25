@@ -432,6 +432,9 @@ grep("[7-9]", d)
 emails <- c("john.doe@ivyleague.edu", "education@world.gov", "dalai.lama@peace.org", 
             "invalid.edu", "quant@bigdatacollege.edu", "cookie.monster@sesame.tv")
 
+grepl("@.*\\.edu$", emails)     # logical
+grep("@.*\\.edu$", emails)      # index
+
 hits = grep("@.*\\.edu$", emails)   # @ 다음에 .edu로 끝나는 것.
 emails[hits]
 
