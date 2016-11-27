@@ -273,7 +273,7 @@ plot(jet$PLF, jet$SLF, col=result_hc, pch=result_hc, xlab = "PLF", ylab = "SLF")
 text(jet$PLF, jet$SLF, labels = rownames(jet), col=result_hc, pos = 1)
 par(mfcol=c(1,1))
 
-# single linkage 방법을 사용하여 두 개의 군집으로 나눌 경우에는 SPR 변수의 분포에 영향을 가장 크게 받았음을 알 수 있다.
+# single linkage 방법을 사용하여 두 개의 군집으로 나눌 경우에는 SPR 변수의 영향을 가장 크게 받았음을 알 수 있다.
 # SPR 값이 약 3.7 보다 작은 전투기는 cluster 1, 큰 전투기는 cluster 2로 군집이 형성되었다.
 
 table(result_hc)
@@ -292,15 +292,15 @@ text(jet$SPR, jet$PLF, labels = rownames(jet), col=result_hc2, pos = 1)
 plot(jet$RGF, jet$PLF, col=result_hc2, pch=result_hc2, xlab = "RGF", ylab = "PLF")
 text(jet$RGF, jet$PLF, labels = rownames(jet), col=result_hc2, pos = 1)
 
-plot(jet$SLF, jet$SPR, col=result_hc2, pch=result_hc2, xlab = "SPR", ylab = "SLF")
+plot(jet$SLF, jet$SPR, col=result_hc2, pch=result_hc2, xlab = "SLF", ylab = "SPR")
 text(jet$SLF, jet$SPR, labels = rownames(jet), col=result_hc2, pos = 1)
 abline(v = 1.5)
 
-plot(jet$SLF, jet$RGF, col=result_hc2, pch=result_hc2, xlab = "RGF", ylab = "SLF")
+plot(jet$SLF, jet$RGF, col=result_hc2, pch=result_hc2, xlab = "SLF", ylab = "RGF")
 text(jet$SLF, jet$RGF, labels = rownames(jet), col=result_hc2, pos = 1)
 abline(v = 1.5)
 
-plot(jet$SLF, jet$PLF, col=result_hc2, pch=result_hc2, xlab = "PLF", ylab = "SLF")
+plot(jet$SLF, jet$PLF, col=result_hc2, pch=result_hc2, xlab = "SLF", ylab = "PLF")
 text(jet$SLF, jet$PLF, labels = rownames(jet), col=result_hc2, pos = 1)
 abline(v = 1.5)
 par(mfcol=c(1,1))
@@ -323,14 +323,19 @@ summary(pca)
 library(ggfortify)
 
 jet_c = jet
-jet_c$cluster = factor(result_hc)    # single linkage
+jet_c$cluster1 = factor(result_hc)   # single linkage
 jet_c$cluster2 = factor(result_hc2)  # ward method
 jet_c
 
 # single linkage
-autoplot(pca, data = jet_c, colour = jet_c$cluster, shape = F, label = T, loadings = T, loadings.label = T)
+autoplot(pca, data = jet_c, colour = 'cluster1', shape = F, label = T, loadings = T, 
+         label.size = 7, loadings.label.size = 5, main = "PCA (single linkage cluster)",
+         loadings.label = T, loadings.colour = "blue", loadings.label.colour = "blue")
+
 # ward method
-autoplot(pca, data = jet_c, colour = jet_c$cluster2, shape = F, label = T, loadings = T, loadings.label = T)
+autoplot(pca, data = jet_c, colour = 'cluster2', shape = F, label = T, loadings = T, 
+         label.size = 7, loadings.label.size = 5, main = "PCA (ward method cluster)",
+         loadings.label = T, loadings.colour = "blue", loadings.label.colour = "blue")
 
 
 
@@ -360,11 +365,17 @@ points(wss)
 result_km = kmeans(jet, 2)
 result_km
 
+par(mfcol=c(1,2))
+
 plot(jet$SPR, jet$RGF, type = "n", xlab = "SPR", ylab = "RGF", main = "2 Cluster (K-means)")
 text(jet$SPR, jet$RGF, labels = rownames(jet), cex = 0.8, col = result_km$cluster)
 points(result_km$centers[, c(1,2)], col = "blue", pch = 4, cex = 2)
 
-table(result_km$cluster)
+plot(jet$SLF, jet$SPR, type = "n", xlab = "SLF", ylab = "SPR", main = "2 Cluster (K-means)")
+text(jet$SLF, jet$SPR, labels = rownames(jet), cex = 0.8, col = result_km$cluster)
+points(result_km$centers[, c(4,1)], col = "blue", pch = 4, cex = 2)
+
+par(mfcol=c(1,1))
 
 
 
@@ -377,19 +388,23 @@ result_mc = Mclust(jet)
 summary(result_mc)
 # 최종 선택 모형 : 군집 3개. VVI model
 
-plot(mc)
-# BIC plot에서 군집이 3개일 경우 VEI model로 선택
-
-result_mc = Mclust(jet, modelNames = c("VVI", "VEI"))
-
 plot(result_mc)
 
+result_mc$classification
+
+rownames(jet[result_mc$classification == 1, ])
+rownames(jet[result_mc$classification == 2, ])
+rownames(jet[result_mc$classification == 3, ])
 
 
+jet[order(result_mc$uncertainty, decreasing = T), ][1, ]
 
 
+result_km3 = kmeans(jet, 3)
 
-
+plot(jet$SPR, jet$RGF, type = "n", xlab = "SPR", ylab = "RGF", main = "3 Cluster (K-means)")
+text(jet$SPR, jet$RGF, labels = rownames(jet), cex = 0.8, col = result_km3$cluster)
+points(result_km3$centers[, c(1,2)], col = "blue", pch = 4, cex = 2)
 
 
 
