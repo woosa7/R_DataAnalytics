@@ -38,41 +38,47 @@ write.csv(mainData, "SpeedDatingMainData.csv", row.names = F)
 library(psych)
 
 # before
+all_1 = mainData[,c(2,3:8)]
 female_1 = mainData[mainData$gender==0, ][,3:8]
 male_1 = mainData[mainData$gender==1, ][,3:8]
 
-head(female_1)
-
+pairs.panels(all_1[,-1])
 pairs.panels(female_1)
 pairs.panels(male_1)
 
 # after
+all_2 = mainData[,c(2,9:14)]
 female_2 = mainData[mainData$gender==0, ][,9:14]
 male_2 = mainData[mainData$gender==1, ][,9:14]
 
+pairs.panels(all_2[,-1])
 pairs.panels(female_2)
 pairs.panels(male_2)
 
 # heatmap
-heatmap(as.matrix(female_1), scale = "column", Colv = NA)
-heatmap(as.matrix(male_1), scale = "column", Colv = NA)
+heatmap(as.matrix(all_1[,-1]), scale = "column", Colv = NA)
+heatmap(as.matrix(all_2[,-1]), scale = "column", Colv = NA)
+
 
 
 #-----------------------------------------------------------
 # 주성분분석
 #-----------------------------------------------------------
+library(ggfortify)
 
-pca_f_1 <- prcomp(female_1, scale = T)
-summary(pca_f_1)
-pca_f_1
-biplot(pca_f_1)
+pca_all_1 = prcomp(all_1[,-1], scale = T)
+summary(pca_all_1)
+pca_all_1
 
-pca_f_2 <- prcomp(female_2, scale = T)
-summary(pca_f_2)
-pca_f_2
-biplot(pca_f_2)
-
+autoplot(pca_all_1, data = all_1, colour = 'gender', shape = F, label = T, loadings = T, 
+         label.size = 7, loadings.label.size = 5, main = "PCA / Before Dating",
+         loadings.label = T, loadings.colour = "blue", loadings.label.colour = "blue")
 
 
+pca_all_2 = prcomp(all_2[,-1], scale = T)
+summary(pca_all_2)
+pca_all_2
 
-
+autoplot(pca_all_2, data = all_2, colour = 'gender', shape = F, label = T, loadings = T, 
+         label.size = 7, loadings.label.size = 5, main = "PCA / After Dating",
+         loadings.label = T, loadings.colour = "blue", loadings.label.colour = "blue")
