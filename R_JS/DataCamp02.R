@@ -119,3 +119,65 @@ extract_info <- function(x) {
 sapply(logs, extract_info)
 
 
+
+#----------------------------------------------
+# Titanic
+#----------------------------------------------
+
+titanic <- read.csv("data/titanic.csv", stringsAsFactors = F)
+head(titanic)
+summary(titanic)
+dim(titanic)
+
+titanic$Survived = factor(titanic$Survived)
+titanic$Pclass = factor(titanic$Pclass)
+titanic$Sex = factor(titanic$Sex)
+
+library(ggplot2)
+
+# 승객 연령분포
+df = titanic[!is.na(titanic$Age), ]
+ggplot(df) + geom_histogram(aes(x = Age), binwidth = 5)
+ggplot(df) + geom_density(aes(x = Age), fill = "pink")
+
+# 생존자 객실등급 분포
+df = titanic[titanic$Survived == 1, ]
+
+x <- ggplot(df, aes(Pclass))
+x + geom_bar(aes(fill = Sex))
+x + geom_bar(aes(fill = Sex), position = "dodge")
+
+
+#----------------------------------------------
+# Infer gender from name
+# male : 577
+
+is_man = grepl(", Mr\\.", titanic$Name)
+sum(is_man)
+
+# .* : any character --> last name, first name  -->  , (.*?)\\.  부분을 검색
+# \\1 : 괄호 안의 조건에 맞는 문자열로 전체를 치환.
+
+titles = unique(gsub("^.*, (.*?)\\..*$", "\\1", titanic$Name))   
+titles
+titles <- paste(",", c("Mr\\.", "Master", "Don", "Rev", "Dr\\.", "Major", "Sir", "Col", "Capt", "Jonkheer"))
+
+is_man = sapply(titles, grepl, titanic$Name)
+sum(is_man)
+
+#----------------------------------------------
+# 호칭을 제외한 순수 이름만 추출.
+convert_name <- function(name) {
+    if (grepl("\\(.*?\\)", name)) {
+        # 괄호 안의 이름을 가져옴
+        gsub("^.*?\\((.*?)\\)$", "\\1", name)
+    } else {
+        # 성과 이름의 순서를 바꿈
+        gsub("^(.*?),\\s[a-zA-Z\\.]*?\\s(.*?)$", "\\2 \\1", name)
+    }
+}
+
+clean_names = vapply(titanic$Name, FUN = convert_name, FUN.VALUE = character(1), USE.NAMES = FALSE)
+head(clean_names)
+
+head(titanic$Name)
