@@ -61,5 +61,48 @@ map_chr(df, typeof)
 map(df, summary)
 
 
+list_of_results <- list(
+    list(a = 1, b = "A"), 
+    list(a = 2, b = "C"), 
+    list(a = 3, b = "D")
+)
 
+map(list_of_results, "a")
+map(list_of_results, 1)   # 1st element
+
+#----------------------------------------------
+# Writing anonymous functions
+
+cars = split(mtcars, mtcars$cyl)
+
+cars[[1]]
+
+map(cars, function(df) lm(mpg ~ wt, data = df))
+map(cars, ~ lm(mpg ~ wt, data = .))
+
+map_dbl(cars, function(df) mean(df$disp))
+map_dbl(cars, ~ mean(.$disp))
+
+
+models = map(cars, ~ lm(mpg ~ wt, data = .))
+
+coefs = map(models, coef)   # = coef(models[[1]])
+map(coefs, "wt")
+map_dbl(coefs, 2)
+
+
+# purrr ㅡ includes a pipe operator: %>%
+
+mtcars %>% 
+    split(mtcars$cyl) %>%
+    map(~ lm(mpg ~ wt, data = .)) %>%
+    map(coef) %>% 
+    map_dbl("wt")
+
+
+models <- mtcars %>% 
+    split(mtcars$cyl) %>%
+    map(~ lm(mpg ~ wt, data = .))
+
+models %>% map(summary) %>% map_dbl("r.squared")
 
