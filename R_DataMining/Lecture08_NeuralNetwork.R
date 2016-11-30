@@ -1,3 +1,9 @@
+############################################################
+#
+# Data Mining 8 & 9 - Neural Network
+#
+############################################################
+
 ##### 1. Neural Network Analysis using nnet package
 
 install.packages("nnet")

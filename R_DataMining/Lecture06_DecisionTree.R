@@ -1,6 +1,6 @@
 ############################################################
 #
-# Data Mining 6 - Classification / Decision Tree
+# Data Mining 6 & 7 - Classification / Decision Tree
 #
 ############################################################
 
