@@ -10,6 +10,8 @@ data = data[-8]   # bonus 번호 제외
 head(data)
 tail(data)
 
+# tr = read.transactions("lottoData.csv", sep = ",", format = "basket", skip = 1, cols = 1)
+
 #---------------------------------------------------------
 # arules의 transactions format으로 변환
 mdata = melt(data, id = "round")
