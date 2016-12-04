@@ -10,7 +10,7 @@ library(C50)
 library(caret)
 library(ROCR)
 
-cb = read.table("Hshopping.txt", header = T)
+cb = read.table("data/Hshopping.txt", header = T)
 summary(cb)
 
 cb$반품여부 <- factor(cb$반품여부)

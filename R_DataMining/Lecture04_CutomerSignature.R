@@ -8,9 +8,9 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 
-tr <- read.delim("HDS_Transactions.tab", stringsAsFactors = F)
+tr <- read.delim("data/HDS_Transactions.tab", stringsAsFactors = F)
 
-cs <- read.delim("HDS_Customers.tab", stringsAsFactors = F)
+cs <- read.delim("data/HDS_Customers.tab", stringsAsFactors = F)
 cs <- select(cs , -birth_flg, -income_flg, -car_stype, -rel_type, -dmnot_flg, -tmnot_flg, 
              -pur_date1, -pur_date2, -pur_date3, -card_flg2, -mail_flg, -billnot_flg);
 

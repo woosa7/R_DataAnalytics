@@ -16,12 +16,12 @@ library(e1071)
 # 1. Data Preparation
 
 # Train Set
-train <- read.csv("pepTrainSet.csv", stringsAsFactors = T)
+train <- read.csv("data/pepTrainSet.csv", stringsAsFactors = T)
 head(train)
 summary(train)
 
 # Test Set
-test <- read.csv("pepTestSet.csv", stringsAsFactors = T)
+test <- read.csv("data/pepTestSet.csv", stringsAsFactors = T)
 head(test)
 summary(test)
 
@@ -29,7 +29,7 @@ train <- subset(train, select=-c(id))   # id 제거
 test <- subset(test, select=-c(id))
 
 # New Data
-newdata <- read.csv("pepNewCustomers.csv", stringsAsFactors = T)
+newdata <- read.csv("data/pepNewCustomers.csv", stringsAsFactors = T)
 head(newdata)
 summary(newdata)
 
@@ -101,10 +101,10 @@ head(selectedTarget)
 # Bagging - 위 데이터에 ensemble 기법 적용
 ######################################################################
 
-train <- read.csv("pepTrainSet.csv", stringsAsFactors = T)
+train <- read.csv("data/pepTrainSet.csv", stringsAsFactors = T)
 train <- subset(train, select=-c(id))
 
-test <- read.csv("pepTestSet.csv", stringsAsFactors = T)
+test <- read.csv("data/pepTestSet.csv", stringsAsFactors = T)
 test <- subset(test, select=-c(id))
 
 summary(train)

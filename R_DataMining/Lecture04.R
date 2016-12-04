@@ -12,10 +12,10 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 
-cs <- read.delim("HDS_Customers.tab", stringsAsFactors = F)
-tr <- read.delim("HDS_Transactions_MG.tab", stringsAsFactors = F)
-card <- read.delim("HDS_Cards.tab", stringsAsFactors = F)
-job <- read.delim("HDS_Jobs.tab", stringsAsFactors = F)
+cs <- read.delim("data/HDS_Customers.tab", stringsAsFactors = F)
+tr <- read.delim("data/HDS_Transactions_MG.tab", stringsAsFactors = F)
+card <- read.delim("data/HDS_Cards.tab", stringsAsFactors = F)
+job <- read.delim("data/HDS_Jobs.tab", stringsAsFactors = F)
 
 
 #-----------------------------------------------------------

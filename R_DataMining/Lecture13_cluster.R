@@ -1,10 +1,10 @@
+############################################################
+#
+# Data Mining 13 - Clustering
+#
+############################################################
+
 # Required packages
-install.packages("cluster")
-install.packages("NbClust") 
-install.packages("kohonen")
-install.packages("ggplot2")
-install.packages("gridExtra")
-install.packages("scales")
 library(cluster)
 library(NbClust)
 library(kohonen)
@@ -13,13 +13,12 @@ library(gridExtra)
 library(scales)
 
 # Read Data
-cdata <- read.delim("Cluster.txt", stringsAsFactors=FALSE)
+cdata <- read.delim("data/Cluster.txt", stringsAsFactors=FALSE)
 head(cdata)
 
 ##### K-means Clustering with R
 
 # 군집수를 4로 하는 k-means clustering
-set.seed(1)
 km <- kmeans(subset(cdata, select=-c(ID)), centers=4)
 str(km)
 km
@@ -29,7 +28,9 @@ km3 <- kmeans(subset(cdata, select=-c(ID, API)), centers=3)
 
 # 군집의 반경과 관계를 2차원으로 도식
 clusplot(subset(cdata, select=-c(ID)), km$cluster)
+
 clusplot(subset(cdata, select=-c(ID, API)), km3$cluster)
+
 
 # 군집의 분포를 도식
 cdata$cluster <- as.factor(km$cluster)
@@ -58,11 +59,11 @@ grid.arrange(p1, p2, p3, p4, ncol=1, nrow=4)
 x <- ggplot(cdata, aes(x=factor(1), fill=cluster))
 x + geom_bar(width=1) + coord_polar(theta="y")
 
+
 # 최적의 군집 수 찾기: 방법1
-set.seed(100)
 sd <- cdata[sample(1:nrow(cdata),100),-1]
-d <- dist(sd, method = "ward.D")
-fit <- hclust(d, method="ave")
+d <- dist(sd, method = "euclidean")
+fit <- hclust(d, method="complete")
 plot(fit)
 rect.hclust(fit, k=4, border = "red")
 
@@ -72,13 +73,13 @@ for(i in 1:15) wss[i] <- kmeans(subset(cdata, select=-c(ID)), centers=i)$tot.wit
 plot(1:15, wss, type="b", xlab="# of clusters", ylab="Within group sum of squares")
 
 # 최적의 군집 수 찾기: 방법3
-nc = NbClust(subset(cdata, select=-c(ID,cluster)), min.nc=2, max.nc=15, method='kmeans')
-barplot(table(nc$Best.nc[1,]), xlab="# of clusters", ylab="# of criteria", main="Number of clusters chosen by 26 criteria")
+# nc = NbClust(subset(cdata, select=-c(ID,cluster)), min.nc=2, max.nc=15, method='kmeans')
+# barplot(table(nc$Best.nc[1,]), xlab="# of clusters", ylab="# of criteria", main="Number of clusters chosen by 26 criteria")
 
 
 ##### SOM Clustering with R
 
-cdata <- read.delim("Cluster.txt", stringsAsFactors=FALSE)
+cdata <- read.delim("data/Cluster.txt", stringsAsFactors=FALSE)
 
 # 데이터 정규화
 cdata.n <- scale(subset(cdata, select=-c(ID)))
@@ -97,7 +98,8 @@ plot(sm, type="quality", main = "mapping quality")  # 할당된 element 들의 �
 
 coolBlueHotRed <- function(n, alpha = 1) {
   rainbow(n, end=4/6, alpha=alpha)[n:1]
-}도
+}
+
 # 군집별 변수의 영향도
 for (i in 1:ncol(sm$data))
   plot(sm, type="property", property=sm$codes[,i], main=dimnames(sm$data)[[2]][i], palette.name=coolBlueHotRed)
@@ -107,3 +109,4 @@ cdata$clusterX <- sm$grid$pts[sm$unit.classif,"x"]
 cdata$clusterY <- sm$grid$pts[sm$unit.classif,"y"]
 p <- ggplot(cdata, aes(clusterX, clusterY))
 p + geom_jitter(position = position_jitter(width=.2, height=.2))
+

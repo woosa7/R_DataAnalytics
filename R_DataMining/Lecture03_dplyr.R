@@ -11,13 +11,13 @@ library(dplyr)
 #-----------------------------------------------------------
 # 0. Data Setting
 
-cs <- read.csv("dataCustomers.csv", header = T, stringsAsFactors = T)
+cs <- read.csv("data/dataCustomers.csv", header = T, stringsAsFactors = T)
 head(cs)
 str(cs)
 
 cs$custid <- as.character(cs$custid)
 
-tr <- read.csv("dataTransactions.csv", header = T, stringsAsFactors = T)
+tr <- read.csv("data/dataTransactions.csv", header = T, stringsAsFactors = T)
 head(tr)
 str(tr)
 
@@ -102,7 +102,7 @@ distinct(cs, custid)
 #-----------------------------------------------------------
 # 6. Derive new fields based on existing fields
 
-score <- read.csv("score.csv", header = T)
+score <- read.csv("data/score.csv", header = T)
 score
 
 score <- mutate(score, ExamSum = exam1 + exam2, ExamMean = ExamSum / 2)
@@ -121,7 +121,7 @@ score
 #-----------------------------------------------------------
 # 8. Merge records
 
-score2 <- read.csv("score2.csv", header = T)
+score2 <- read.csv("data/score2.csv", header = T)
 score2
 
 merge(score, score2, by.x = "ID", by.y = "CID")
@@ -205,18 +205,5 @@ diamonds %>% group_by(cut, color) %>% summarise(price = mean(price))
 aggregate(cbind(price, carat) ~ cut, diamonds, mean)
 
 diamonds %>% group_by(cut) %>% summarise_each(funs(mean), price, carat)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

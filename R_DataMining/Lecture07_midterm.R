@@ -9,7 +9,8 @@ library(C50)
 library(caret)
 
 # Import Data
-custsig <- read.csv("custsig.csv", header = T)
+load("custsig.RData")
+# custsig <- read.csv("custsig.csv", header = T)
 head(custsig)
 
 custsig <- custsig %>% filter(sex != 0) %>%

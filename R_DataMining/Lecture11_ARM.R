@@ -1,11 +1,19 @@
+#####################################################################
+#
+# Data Mining 11 & 12 - ARM (Association Rule Mining) 연관규칙탐사
+#
+#####################################################################
+
+#--------------------------------------------------------------------
 ##### Mine Associations using arules package
 
 install.packages("arules")
 library(arules)
 library(dplyr)
 
-tr <- read.delim("dataTransactions.tab", stringsAsFactors=FALSE)
+tr <- read.csv("data/dataTransactions.csv", header = T, stringsAsFactors = T)
 head(tr)
+summary(tr)
 
 # 고객 관점 : 고객이 1년동안 구매한 것을 하나의 트랜잭션으로 가정함.
 tr.filter <- tr %>%
@@ -77,7 +85,7 @@ plot(rules, method = "graph", control = list(type="items"))
 ##### Exercise
 #--------------------------------------------------------------------
 
-data <- read.delim("shoppingmall.txt", stringsAsFactors=FALSE)
+data <- read.delim("data/shoppingmall.txt", stringsAsFactors=FALSE)
 head(data)
 st <- as.matrix(data[,-1])
 trans <- as(st, "transactions")

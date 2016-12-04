@@ -6,12 +6,11 @@
 
 ##### 1. Random Forest
 
-install.packages("randomForest")
 library(randomForest)
 library(caret)
 library(ROCR)
 
-cb <- read.delim("Hshopping.txt", stringsAsFactors=FALSE)
+cb <- read.delim("data/Hshopping.txt", stringsAsFactors=FALSE)
 cb$반품여부 <- factor(cb$반품여부)
 
 set.seed(1)

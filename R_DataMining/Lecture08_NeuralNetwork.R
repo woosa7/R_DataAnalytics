@@ -9,7 +9,7 @@
 install.packages("nnet")
 library(nnet); library(caret); library(ROCR)
 
-cb <- read.delim("Hshopping.txt", stringsAsFactors=FALSE)
+cb <- read.delim("data/Hshopping.txt", stringsAsFactors=FALSE)
 cb$반품여부 <- factor(cb$반품여부)	# 명목형 값 예측일 경우
 
 set.seed(1)
@@ -61,7 +61,7 @@ plot(nn_model.perf1, colorize=TRUE); plot(nn_model.perf2, colorize=TRUE)
 install.packages("neuralnet")
 library(neuralnet)
 
-cb <- read.delim("Hshopping.txt", stringsAsFactors=FALSE)
+cb <- read.delim("data/Hshopping.txt", stringsAsFactors=FALSE)
 # neuralnet 패키지는 목표변수가 numeric이어야 함.
 
 set.seed(1)
@@ -140,7 +140,7 @@ normalize <- function (x) {
   return(normalized)
 }
 
-cb <- read.delim("Hshopping.txt", stringsAsFactors=FALSE)
+cb <- read.delim("data/Hshopping.txt", stringsAsFactors=FALSE)
 
 cb$나이 <- normalize(cb$나이)
 cb$구매금액 <- normalize(cb$구매금액)

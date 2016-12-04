@@ -1,3 +1,9 @@
+#####################################################################
+#
+# Data Mining 11 & 12 - ARM (Association Rule Mining) 연관규칙탐사
+#
+#####################################################################
+
 library(arules)
 library(dplyr)
 library(reshape)
@@ -5,7 +11,7 @@ library(reshape)
 #---------------------------------------------------------
 # Import data
 
-data = read.csv("lottoData.csv", header = T)
+data = read.csv("data/lottoData.csv", header = T)
 data = data[-8]   # bonus 번호 제외
 head(data)
 tail(data)
