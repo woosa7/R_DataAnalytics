@@ -4,7 +4,7 @@
 #
 ###############################################################
 
-insu = read.csv("insurance.csv", header = T)
+insu = read.csv("data/insurance.csv", header = T)
 insu
 
 summary(insu)
@@ -52,7 +52,7 @@ model.matrix(time ~ size+type, insu, contrasts = list(type=contr.sum))
 # 두 개 이상의 level을 가진 범주형 변수
 #-------------------------------------------------------------
 
-cdata = read.csv("CDI.csv", header = T)
+cdata = read.csv("data/CDI.csv", header = T)
 head(cdata)
 summary(cdata)
 
