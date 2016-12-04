@@ -235,7 +235,7 @@ predict(out2, newspeed2)^2
 
 # 중고차. Odometer (주행거리 / 100 mile)에 따른 Price (가격 / $1000)
 
-ucar <- read.csv("sonata.csv")
+ucar <- read.csv("data/sonata.csv")
 head(ucar)
 summary(ucar)
 

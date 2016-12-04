@@ -39,7 +39,7 @@
 #---------------------------------------------------------------
 # 영화 등급이 총관객수에 영향을 미치는가?
 
-movie <- read.csv("movie_utf8.csv", header = T)
+movie <- read.csv("data/movie.csv", header = T)
 summary(movie$rating)
 
 # 독립변수 = factor
@@ -92,7 +92,6 @@ par(mfcol=c(1,1))
 # Tukey Method : 가능한 모든 범주 쌍의 평균 차이 검정
 #---------------------------------------------------------------
 
-install.packages("multcomp")
 library(multcomp)
 
 out <- lm(log(total_seen) ~ rating, movie)
@@ -156,7 +155,7 @@ summary(out2)
 # 공분산분석 : 치료 전 몸무게가 무거울수록 치료 후 몸무게 변화가 크지 않을까? 
 #              이것이 치료방법 간 차이를 보는데 방해가 될 수 있는지 검증
 
-df <- read.csv("anorexia.csv")
+df <- read.csv("data/anorexia.csv")
 str(df)
 summary(df)
 
@@ -217,7 +216,7 @@ abline(45.674 + 8.660, - 0.565, col = 3)
 
 # y = b0 + b1*x + b2*z + b3*x*z + e : x = age, z = sex (1 female, 0 male)
 
-sbp <- read.csv("SBP.csv")
+sbp <- read.csv("data/SBP.csv")
 head(sbp)
 summary(sbp)
 
@@ -289,7 +288,7 @@ plot(model)
 # practice 6
 #---------------------------------------------------------------
 
-df <- read.csv("Forbes500.csv")
+df <- read.csv("data/Forbes500.csv")
 str(df)
 summary(df)
 summary(df$sector)

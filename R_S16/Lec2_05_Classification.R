@@ -63,7 +63,7 @@ anova(model1, model2, test = "Chisq")
 # 1   1   20 (1이 20번 반복 측정됨)
 # 1   2   5
 
-coupon = read.csv("coupon.csv")
+coupon = read.csv("data/coupon.csv")
 coupon
 
 # Yes , No 갯수

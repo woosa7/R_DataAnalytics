@@ -37,7 +37,7 @@ var(x1) = L11**2 + L12^2 + var(U1)
 # ----------------------------------------------------------------------
 # Example
 
-app <- read.table("Applicant.TXT", header = T)
+app <- read.table("data/Applicant.TXT", header = T)
 app
 app <- app[,-1]   # ID 제거
 
@@ -124,7 +124,7 @@ fa.diagram(fa3)
 
 # https://prezi.com/cuefyeoq15le/09/
 
-stock <- read.csv("stock_price.csv", header = T)
+stock <- read.csv("data/stock_price.csv", header = T)
 stock <- stock[, -1]
 stock
 

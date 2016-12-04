@@ -12,7 +12,7 @@
 
 # programmer 20명
 # salary가 experience(경력년수), score (직무적성검사성적)과 연관성을 갖는지 검증.
-df <- read.csv("salary.csv")
+df <- read.csv("data/salary.csv")
 head(df)
 summary(df)
 
@@ -184,7 +184,7 @@ plot(leap, scale = "adjr2") # adjusted r-squred 기준
 
 # hotel margin prediction
 
-data <- read.csv("laquinta.csv")
+data <- read.csv("data/laquinta.csv")
 summary(data)
 str(data)
 

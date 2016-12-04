@@ -222,7 +222,7 @@ plot(mc4)
 
 # A. FFD와 CAR를 제외한 변수를 표준화 한 후 계층적 군집화를 시행하고 덴드로그램을 그리시오.
 
-jet = read.csv("jet.csv", header = T)
+jet = read.csv("data/jet.csv", header = T)
 
 rownames(jet) = jet$X
 jet = jet[, -c(1,2,7)]   # FFD, CAR 제외.

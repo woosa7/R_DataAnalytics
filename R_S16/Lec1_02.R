@@ -187,7 +187,7 @@ ggplot(data.frame(x = randT)) +
 # --- 두 집단 모두 정규분포를 따른다.
 # --- 정규분포를 따르지 않아도 관측치가 충분히 많다면(n1 + n2 > 30) 독립표본 T-검정 사용 가능.
 
-dental <- read.csv("dental.csv")
+dental <- read.csv("data/dental.csv")
 dental
 
 library(psych)
@@ -251,7 +251,7 @@ t.test(resp ~ treatment, data = dental)
 # 귀무가설 : postwt - prewt = 0
 # 대립가설 : postwt - prewt > 0
 
-ft <- read.csv("FT.csv")
+ft <- read.csv("data/FT.csv")
 ft
 
 changed <- ft$Postwt - ft$Prewt
@@ -277,7 +277,7 @@ t.test(ft$Postwt, ft$Prewt, alternative = "greater", paired = TRUE)
 #---------------------------------------------------------------
 
 # 2012 - 2013 년 국내 개봉 영화
-kmovie <- read.csv("movie_utf8.csv")
+kmovie <- read.csv("data/movie.csv")
 View(kmovie)
 str(kmovie)
 
@@ -331,7 +331,7 @@ t.test(log(total_seen) ~ rating, df2, var.equal=T, alternative = "less") # 12세
 # 대기업의 2002년 주당이익 자료.
 # 2002년 이전에 애널리스트들이 이들 대기업에 대한 주당이익을 예측
 
-earning <- read.csv("earnings.csv")
+earning <- read.csv("data/earnings.csv")
 earning
 
 attach(earning)
@@ -374,7 +374,7 @@ t.test(Actual - Predicted)   # p-value = 0.5602 : 귀무가설 기각할 수 없
 # 다시 부호를 붙이고 양과 음의 순위합을 구하여 중위수(median)가 0 인지 검정한다.
 # http://dermabae.tistory.com/159
 
-df <- read.csv("anorexia.csv")
+df <- read.csv("data/anorexia.csv")
 df <- df[df$Treat == "CBT", ]
 head(df)
 str(df)
@@ -401,7 +401,7 @@ wilcox.test(changed, exact = F)   # p-value = 0.06447 > 0.05 : 귀무가설 기�
 
 # Two sample T-test에 해당하는 비모수적 방법
 
-dental <- read.csv("dental.csv")
+dental <- read.csv("data/dental.csv")
 dental
 
 # control, test 각 그룹의 자료가 5개 밖에 없으므로 정규분포를 따른다고 하기 힘들다.
@@ -409,4 +409,5 @@ dental
 
 wilcox.test(resp ~ treatment, data = dental)   
     # p-value = 0.05556 > 0.05 : 귀무가설 기각할 수 없다. 유의한 차이가 없다.
+
 

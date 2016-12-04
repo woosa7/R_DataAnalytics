@@ -153,7 +153,7 @@ chisq.test(tab) # 가로(치료방법)와 세로(치료결과)가 독립적인�
 # Q2. Lobbyists : 로비스트에 대한 추가 제한 필요
 # Q3. TermLimits : 의회 의원 임기 제한 필요
 
-df_NY <- read.csv("NYReform.csv")
+df_NY <- read.csv("data/NYReform.csv")
 head(df_NY)
 summary(df_NY)
 

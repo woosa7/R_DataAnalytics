@@ -5,7 +5,7 @@
 ############################################################
 library(dplyr)
 
-oData = read.csv("SpeedDatingData.csv", header = T, stringsAsFactors = F)
+oData = read.csv("data/SpeedDatingData.csv", header = T, stringsAsFactors = F)
 head(oData)
 
 # Attractive, Sincere, Intelligent, Fun, Ambitious, Has shared interests/hobbies
@@ -28,7 +28,7 @@ summary(mainData)
 
 
 
-write.csv(mainData, "SpeedDatingMainData.csv", row.names = F)
+write.csv(mainData, "data/SpeedDatingMainData.csv", row.names = F)
 
 
 #-----------------------------------------------------------

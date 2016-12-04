@@ -9,7 +9,7 @@
 library(MVA)
 demo("Ch-PCA")
 
-df <- read.csv("open_closed.csv")
+df <- read.csv("data/open_closed.csv")
 head(df)
 
 library(psych)
@@ -112,7 +112,7 @@ qqline(pca$x[,1])
 # SalePr와 Breed 변수를 제외한 7개의 변수를 사용해 주성분분석을 시행하여 아래의 질문에 답하시오. 
 # 공분산 행렬과 상관계수 행렬을 사용하여 각각 분석하고 비교하시오.
 
-bulls <- read.csv("bulls.csv", header = T)
+bulls <- read.csv("data/bulls.csv", header = T)
 head(bulls)
 
 bullsV7 <- bulls[, -c(1,2)]   # Breed, SalePr 변수 제거

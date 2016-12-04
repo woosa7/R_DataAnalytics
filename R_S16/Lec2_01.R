@@ -206,7 +206,7 @@ contour(density2)
 # 2005년 미국의 범죄율 데이터
 # 인구 100,000명 중의 발생 비율
 
-data <- read.csv("crime.csv", header = T)
+data <- read.csv("data/crime.csv", header = T)
 head(data, 10)
 
 crime <- data[-1, ]                     # United States (미국 전체) 제거
