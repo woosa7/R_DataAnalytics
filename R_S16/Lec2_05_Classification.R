@@ -121,3 +121,11 @@ err = performance(pred, "err")
 err@x.values[[1]][err@y.values[[1]]==min(err@y.values[[1]])]
 
 
+
+
+#--------------------------------------------------------------
+# 분류 데이터가 희귀한 경우. rara event : 희귀병 등 yes인 경우가 30개 미만인 경우
+
+# model = glm(......, family = binomial(link = "cloglog")) # complementary log-log link
+
+
