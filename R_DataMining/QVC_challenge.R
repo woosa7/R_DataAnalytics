@@ -19,77 +19,20 @@ dim(order)
 customer = read.csv("QVC/customer.csv", header = T, stringsAsFactors = F)
 head(customer)
 
-airtime = read.csv("QVC/airtime.csv", header = T, stringsAsFactors = F)
-head(airtime)
-
-
-a = select(product, PRODUCT_ID, MERCH_DIV_DESC) %>% filter(nchar(MERCH_DIV_DESC) < 30)
-a
-
-nrow(a)
-
-#--------------------------------------------------------------------
-# ARM
-#--------------------------------------------------------------------
-
-library(arules)
-library(arulesViz)
-library(dplyr)
-
-trans <- read.transactions("QVC/order.csv", format = "single", sep=",", cols = c(3,4), skip=1)
-
-inspect(trans[1:10])   # transactionID = custid
-
-head(itemFrequency(trans)[order(itemFrequency(trans), decreasing = TRUE)], 20)
-
-itemFrequencyPlot(trans, topN = 20, main = "support top 20 items")
-
-rules <- apriori(trans, parameter=list(support=0.002, confidence=0.8))
-summary(rules)
-
-inspect(sort(rules, by = "lift"))
-
-rules_1 = sort(rules[size(rules) == 3], by = "lift")
-inspect(rules_1)
-str(rules_1)
-
-rules_1@rhs@data@i
-
-
-
-
-plot(rules_1)
-plot(sort(rules_1, by = "lift"), method = "grouped")
-plot(rules_1, method = "graph", control = list(type="items"))
-
 
 #--------------------------------------------------------------------
 # Sequence rule analysis
 #--------------------------------------------------------------------
 
-install.packages("arulesSequences")
 library(arulesSequences)
 library(dplyr)
 
-order = read.csv("QVC/order.csv", header = T, stringsAsFactors = F)
 head(order)
 dim(order)
 
-# 주문내역에 카테고리 추가
-product = read.csv("QVC/product.csv", header = T, stringsAsFactors = F)
-head(product)
-
-product2 = product %>% distinct(PRODUCT_ID, MERCH_DIV_DESC) %>% 
-    mutate(CATE = MERCH_DIV_DESC) %>% 
-    select(PRODUCT_ID, CATE)
-head(product2)
-
-order = order %>% left_join(product2, by = "PRODUCT_ID")
-
-
-# "sequenceID" : CUSTOMER_NBR를 기준으로 한 일련번호
-# "eventID" : ORDER_NBR
-# "SIZE", PRODUCT_ID = items
+# sequenceID : CUSTOMER_NBR를 기준으로 한 일련번호
+# eventID : ORDER_NBR
+# SIZE, items : PRODUCT_ID
 makeSeqData <- function(x) {
     seqData = NULL
     sequenceID = 1
@@ -117,16 +60,15 @@ makeSeqData <- function(x) {
     return(seqData)
 }
 
-head(order)
-temp = order %>% distinct(CUSTOMER_NBR, ORDER_NBR) %>% 
-    arrange(CUSTOMER_NBR, ORDER_NBR)
-head(temp)
-dim(temp)
+custOrdList = order %>% distinct(CUSTOMER_NBR, ORDER_NBR) %>% arrange(CUSTOMER_NBR, ORDER_NBR)
+head(custOrdList)
+NROW(custOrdList)
 
-seqData = makeSeqData(temp)
+seqData = makeSeqData(custOrdList)
 seqData
 dim(seqData)
 head(seqData, 30)
+tail(seqData, 30)
 
 write.table(seqData,"QVC/seqData.txt", sep="\t", row.names=FALSE)
 
@@ -134,17 +76,18 @@ write.table(seqData,"QVC/seqData.txt", sep="\t", row.names=FALSE)
 
 #--------------------------------------------------------------------
 
-x <- read_baskets(con  = "QVC/seqData4.txt", sep = "\t", 
-                  info = c("sequenceID","eventID","SIZE"))
+x = read_baskets(con  = "QVC/seqData.txt", sep = "\t", info = c("sequenceID","eventID","SIZE"))
 head(as(x, "data.frame"), 30)
 
-seq_rule_1 <- cspade(x, parameter = list(support = 0.001), 
-                     control= list(verbose = TRUE))
+seq_rule_1 <- cspade(x, parameter = list(support = 0.001), control= list(verbose = TRUE))
 summary(seq_rule_1)
 
 
-data = sort(seq_rule_1[size(seq_rule_1) == 2], by = "support")
+data = sort(seq_rule_1[size(seq_rule_1) == 2], by = "support")[1:10]
 as(data, "data.frame")
+inspect(data)
+
+rulesL2 = apriori(data, parameter=list(support=0.003, target="frequent itemsets"))
 
 
 #----------------------------------------
@@ -158,27 +101,18 @@ rules.target2 <- subset(seq_rule_1, size(seq_rule_1,"itemsets")==2)
 inspect(sort(rules.target2, by="support"))
 
 # 카테고리
-freq_prod = c("33687", "32565", "10452")
-a = product2 %>% filter(PRODUCT_ID %in% freq_prod) %>% 
-    distinct(CATE)
-a
-
-head(product2)
-
+seq_product = c("33649","33687")
+seq_product = c("61109","32565")
+seq_product = c("10126","10452")
+seq_product = c("32612","61109")
+seq_product = c("9887","61109")
+product %>% filter(PRODUCT_ID %in% seq_product)
 
 #----------------------------------------
 install.packages("arulesViz") 
 library(arulesViz)
 
-plot(rules.target2)
-plot(sort(rules, by = "lift")[1:20], method = "grouped")
-plot(rules, method = "graph", control = list(type="items"))
-
-
-install.packages("installr")
-library(installr)
-updateR()
-
+plot(data, method = "graph", control = list(type="items"))
 
 #----------------------------------------
 # product_id / cate 집계
@@ -188,11 +122,12 @@ order = read.csv("QVC/order.csv", header = T, stringsAsFactors = F)
 # 주문내역에 카테고리 추가
 product = read.csv("QVC/product.csv", header = T, stringsAsFactors = F)
 
-product2 = product %>% distinct(PRODUCT_ID, MERCH_DIV_DESC) %>% 
+category = product %>% distinct(PRODUCT_ID, MERCH_DIV_DESC) %>% 
     mutate(CATE = MERCH_DIV_DESC) %>% 
     select(PRODUCT_ID, CATE)
 
-order = order %>% left_join(product2, by = "PRODUCT_ID")
+orderC = order %>% left_join(category, by = "PRODUCT_ID")
+head(orderC)
 
 # 주문내역에 고객 정보 추가
 customer = read.csv("QVC/customer.csv", header = T, stringsAsFactors = F)
@@ -308,7 +243,9 @@ head(product)
 #--------------------------------------------------------------------
 
 
-
+#--------------------------------------------------------------------
+# 
+#--------------------------------------------------------------------
 
 
 

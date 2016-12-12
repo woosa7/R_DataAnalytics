@@ -16,15 +16,15 @@ data = data[-8]   # bonus 번호 제외
 head(data)
 tail(data)
 
-# tr = read.transactions("lottoData.csv", sep = ",", format = "basket", skip = 1, cols = 1)
-
 #---------------------------------------------------------
 # arules의 transactions format으로 변환
-mdata = melt(data, id = "round")
-head(mdata)
+# mdata = melt(data, id = "round")
+# head(mdata)
+# 
+# transLotto = as(split(mdata$value, mdata$round), "transactions")
+# transLotto
 
-transLotto = as(split(mdata$value, mdata$round), "transactions")
-transLotto
+transLotto = read.transactions("data/lottoData.csv", sep = ",", format = "basket", skip = 1, cols = 1)
 
 inspect(transLotto[1:10])   # transactionID = round
 
