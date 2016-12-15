@@ -19,6 +19,11 @@ dim(order)
 customer = read.csv("QVC/customer.csv", header = T, stringsAsFactors = F)
 head(customer)
 
+airtimes = read.csv("QVC/airtime.csv", header = T, stringsAsFactors = F)
+head(airtimes)
+
+airtimes %>% group_by(PRODUCT_ID) %>% summarise(airtime_sum = sum(PRODUCT_AIRTIME_MINS))
+
 
 #--------------------------------------------------------------------
 # Sequence rule analysis
@@ -127,12 +132,18 @@ category = product %>% distinct(PRODUCT_ID, MERCH_DIV_DESC) %>%
     select(PRODUCT_ID, CATE)
 
 orderC = order %>% left_join(category, by = "PRODUCT_ID")
+
+brands = product %>% distinct(PRODUCT_ID, BRAND_NAME) %>% 
+    select(PRODUCT_ID, BRAND_NAME)
+
+orderC = orderC %>% left_join(brands, by = "PRODUCT_ID")
+
 head(orderC)
 
 # 주문내역에 고객 정보 추가
 customer = read.csv("QVC/customer.csv", header = T, stringsAsFactors = F)
 
-orderC = order %>% left_join(customer, by = "CUSTOMER_NBR")
+orderC = orderC %>% left_join(customer, by = "CUSTOMER_NBR")
 
 split <- strsplit(orderC$ORDER_TIME, split = ":")
 orderC$TIME = sapply(split, function(x) { x[1] })
@@ -143,6 +154,15 @@ library(lubridate)
 orderC$WDAY = wday(orderC$ORDER_DATE, label = T)
 
 head(orderC)
+
+# 고객별 브랜드 선호도
+
+brandaff = orderC %>% group_by(CUSTOMER_NBR, BRAND_NAME) %>% summarise(N = n()) %>% 
+    filter(N > 10, N == max(N)) %>% 
+    arrange(desc(N))
+
+brandaff %>% group_by(BRAND_NAME) %>% summarise(customerCnt = n(), buyCnt = sum(N)) %>% 
+    arrange(desc(buyCnt), desc(customerCnt))
 
 
 # STATE 별
