@@ -262,10 +262,80 @@ head(product)
 # 
 #--------------------------------------------------------------------
 
+head(customer)
+head(orderC)
+
+summary(customer)
+
+customer = read.csv("QVC/customer.csv", header = T, stringsAsFactors = F)
+
+# 구매횟수, 주문횟수, 주문당 구매수
+buyCount = orderC %>% group_by(CUSTOMER_NBR) %>% summarise(buyCnt = n())
+ordCount = orderC %>% distinct(CUSTOMER_NBR, ORDER_NBR) %>% group_by(CUSTOMER_NBR) %>% summarise(ordCnt = n())
+brandCount = orderC %>% distinct(CUSTOMER_NBR, BRAND_NAME) %>% group_by(CUSTOMER_NBR) %>% summarise(brdCnt = n())
+
+# 평균구매주기(API)
+start_date = ymd(ymd_hm(min(orderC$ORDER_DATE)))
+end_date = ymd(ymd_hm(max(orderC$ORDER_DATE)))
+cusApi = orderC %>% distinct(CUSTOMER_NBR, ORDER_DATE) %>% 
+    group_by(CUSTOMER_NBR) %>% summarize(visits = n()) %>% 
+    mutate(API = as.integer((end_date - start_date)/visits)) %>% 
+    select(CUSTOMER_NBR, API)
+
+# 주중/주말 -- no patter : 0 / weekday : 1 / weekend : 2
+weekPattern = orderC %>%
+    mutate(weekDay = ifelse(wday(ORDER_DATE) %in% 2:6, 1, 0),
+           weekEnd = ifelse(wday(ORDER_DATE) %in% c(1,7), 1, 0)) %>%
+    group_by(CUSTOMER_NBR) %>% summarize_each(funs(sum), weekDay, weekEnd) %>%
+    mutate(weekPattern = ifelse(weekDay >= weekEnd * 1.5, 1,
+                                ifelse(weekEnd >= weekDay * 1.5, 2, 0))) %>% 
+    select(CUSTOMER_NBR, weekPattern)
+
+# Top Category 구매
+topCate = orderC %>% group_by(CATE) %>% summarise(total = n()) %>% 
+    arrange(desc(total)) %>% 
+    head()
+
+topCategory = topCate$CATE
+topCategory
+
+buyTopCate = orderC %>% filter(CATE %in% topCategory) %>% 
+    group_by(CUSTOMER_NBR) %>% summarize(buyTopCate = n())
+
+customerC = customer %>% 
+    left_join(buyCount, by = "CUSTOMER_NBR") %>% 
+    left_join(ordCount, by = "CUSTOMER_NBR") %>%
+    left_join(brandCount, by = "CUSTOMER_NBR") %>% 
+    left_join(cusApi, by = "CUSTOMER_NBR") %>%
+    left_join(weekPattern, by = "CUSTOMER_NBR") %>%
+    left_join(buyTopCate, by = "CUSTOMER_NBR") %>% 
+    mutate(buyCnt = ifelse(is.na(buyCnt), 0, buyCnt), 
+           ordCnt = ifelse(is.na(ordCnt), 0, ordCnt),
+           buyPerOrd = ifelse(ordCnt == 0, 0, round(buyCnt / ordCnt, 2)),
+           brdCnt = ifelse(is.na(brdCnt), 0, brdCnt),
+           buyTopCate = ifelse(is.na(buyTopCate), 0, buyTopCate),
+           API = ifelse(is.na(API), 999, API),
+           weekPattern = ifelse(is.na(weekPattern), 0, weekPattern))
+
+summary(customerC)
+
 
 #--------------------------------------------------------------------
-# 
-#--------------------------------------------------------------------
+
+custSig = customerC %>% select(CUSTOMER_NBR, buyCnt, ordCnt, buyPerOrd, brdCnt, API, weekPattern, buyTopCate)
+head(custSig)
+
+km <- kmeans(custSig[,2:8], centers=5)
+km
+
+custSig$cluster <- as.factor(km$cluster)
+head(custSig)
+
+library(ggplot2)
+qplot(buyCnt, brdCnt, colour=cluster, data=custSig)
+qplot(buyCnt, API, colour=cluster, data=custSig)
+qplot(buyCnt, buyTopCate, colour=cluster, data=custSig)
+
 
 
 
