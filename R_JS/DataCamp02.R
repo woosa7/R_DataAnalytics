@@ -181,3 +181,71 @@ clean_names = vapply(titanic$Name, FUN = convert_name, FUN.VALUE = character(1),
 head(clean_names)
 
 head(titanic$Name)
+
+
+
+#----------------------------------------------
+# Behavioral Risk Factor Surveillance System (BRFSS)
+#----------------------------------------------
+
+load(url("http://assets.datacamp.com/course/dasi/cdc.Rdata"))
+
+str(cdc)
+summary(cdc)
+
+# relative frequency
+table(cdc$genhlth) / nrow(cdc)
+
+gender_smokers = table(cdc$gender, cdc$smoke100)
+mosaicplot(gender_smokers)
+
+mosaicplot(table(cdc$genhlth, cdc$smoke100))
+
+bmi = cdc$weight / (cdc$height ^ 2) * 703
+boxplot(bmi~cdc$genhlth)
+
+hist(bmi, breaks=50)
+
+plot(cdc$weight, cdc$wtdesire)
+
+
+
+#----------------------------------------------
+# Hot Hand Phenomenon
+# 이전에 던진 2~3개의 슛이 성공한 경우 다음 슛 역시 성공할 것이라고 믿는 현상.
+#----------------------------------------------
+
+load(url("http://assets.datacamp.com/course/dasi/kobe.RData"))
+
+head(kobe)
+
+# 슈팅 성공 연속 횟수
+kobe_streak <- calc_streak(kobe$basket)
+kobe_streak
+
+table(kobe_streak)
+
+# 이전 슛 성공여부는 다음 슛 성공여부와 상관없다 : 독립적
+# 이전 슛 성공은 다음 슛 성공 확률을 높인다 : 비독립적
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
