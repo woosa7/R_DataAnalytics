@@ -339,3 +339,64 @@ qplot(buyCnt, buyTopCate, colour=cluster, data=custSig)
 
 
 
+
+
+
+# --------------------------------------------------------------------
+
+plot(subset(custSig,select=c(buyCnt,brdCnt,API,buyTopCate)), col=km$cluster)
+
+install.packages("gridExtra"); 
+library(gridExtra)
+install.packages("scales"); 
+library(scales)
+library(ggplot2)
+
+p1 <- ggplot(custSig, aes(buyCnt)) + 
+    geom_density(fill='deeppink3', adjust=1) + 
+    facet_grid(. ~ cluster) + 
+    scale_x_continuous(breaks=NULL) + 
+    scale_y_continuous("", breaks=NULL)
+p2 <- ggplot(custSig, aes(brdCnt)) + 
+    geom_density(fill='deeppink3', adjust=1) + 
+    facet_grid(. ~ cluster) + 
+    scale_x_continuous(breaks=NULL) + 
+    scale_y_continuous("", breaks=NULL) + 
+    theme(strip.text.x=element_blank())
+p3 <- ggplot(custSig, aes(API)) + 
+    geom_density(fill='deeppink3', adjust=1) + 
+    facet_grid(. ~ cluster) + 
+    scale_x_continuous(breaks=NULL) + 
+    scale_y_continuous("", breaks=NULL) + 
+    theme(strip.text.x=element_blank())
+p4 <- ggplot(custSig, aes(buyTopCate)) + 
+    geom_density(fill='deeppink3', adjust=1) + 
+    facet_grid(. ~ cluster) + 
+    scale_x_continuous(breaks=NULL) + 
+    scale_y_continuous("", breaks=NULL) + 
+    theme(strip.text.x=element_blank())
+grid.arrange(p1, p2, p3, p4, ncol=1, nrow=4)
+
+## arules
+library(dplyr)
+library(arules)
+
+order_arules <- orderC %>% left_join(custSig %>% select(CUSTOMER_NBR,cluster))
+head(order_arules)
+tr1 <- order_arules %>% filter(cluster==1)
+head(tr1)
+trans1 <- as(split(tr1$PRODUCT_ID, tr1$CUSTOMER_NBR),"transactions")
+trans1
+inspect(trans1[1:2])
+transactionInfo(trans1[size(trans1) > 5])
+
+itemFrequencyPlot(trans1, topN = 10, main = "support top 10 items")
+
+rules <- apriori(trans1, parameter=list(support=0.006, confidence=0.8))
+summary(rules)
+
+
+inspect(rules)
+inspect(sort(rules, by = "lift"))
+
+
