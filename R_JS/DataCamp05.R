@@ -74,6 +74,7 @@ head(ames)
 dim(ames)
 names(ames)
 
+
 area <- ames$Gr.Liv.Area   # ground living area
 
 summary(area)
@@ -107,5 +108,32 @@ hist(sample_means100, breaks = 20, xlim = xlimits)
 # confidence intervals
 #----------------------------------------------
 
+samp_mean <- rep(NA, 50)
+samp_sd <- rep(NA, 50)
+n <- 60
+
+for (i in 1:50) {
+    samp <- sample(area, n) 
+    samp_mean[i] <- mean(samp)
+    samp_sd[i] <- sd(samp)
+}
+
+# 95% confidence intervals
+se <- samp_sd/sqrt(n)
+lower <- samp_mean - 1.96 * se
+upper <- samp_mean + 1.96 * se
+
+library(ggplot2)
+
+confint.dat = data.frame(samp_mean, lower, upper, i = 1:length(samp_mean))
+confint.dat$excl0 = ifelse(confint.dat$upper < mean(area) | 
+                               mean(area) < confint.dat$lower, 1, 0)
+confint.dat$excl0 = factor(confint.dat$excl0)
+
+ggplot(data = confint.dat, aes(x = i, y = samp_mean, ymin = lower, ymax = upper, colour = excl0)) + 
+    geom_pointrange() + 
+    scale_x_continuous(breaks = NULL) + geom_hline(yintercept = mean(area)) + 
+    scale_colour_manual(values = c("black", "red")) + guides(colour = FALSE) + 
+    ylab("Sample mean") + xlab("") + coord_flip()
 
 
