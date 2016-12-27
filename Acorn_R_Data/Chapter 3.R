@@ -44,7 +44,8 @@ list1
 #####################  3.3 Link List    ##############
 ######################################################
 # Example list with array, data.frame, matrix, and character 
-elist <- list(vec=1:4,df=data.frame(a=1:3, b=4:6),mat=matrix(1:4, nrow=2), name="pks")
+elist <- list(vec=1:4, df=data.frame(a=1:3, b=4:6), mat=matrix(1:4, nrow=2), name="pks")
+elist
 elist[["vec"]]
 
 ## 3.3.1 Linear Link List
@@ -66,6 +67,7 @@ linkListNode <- function(val, node=NULL) {
 }
 
 LList <-linkListNode(5,linkListNode(2,create_emptyenv()))
+LList
 
 setNextNode<-function(llist){
   llist$nextnode
@@ -133,6 +135,16 @@ findItem<-function(llist, item, pos=0, itemFound=FALSE){
     findItem(llist$nextnode, item, size, itemFound)
   }
 }
+
+addElement(9, LList)
+LList$element[[1]]
+LList$nextnode
+
+findItem(LList, 7, pos=0)
+isEmpty(LList)
+sizeLinkList(LList)
+
+
 
 ## 3.3.2 Doubly Link List
 dlinkListNode <- function(val, prevnode=NULL, node=NULL) {
