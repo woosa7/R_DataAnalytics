@@ -1,4 +1,5 @@
 #--------------------------------------------------------------
+# <-  : option + -
 # %>% : cmd + shift + m
 # comment : cmd + shift + c
 # run all : cmd + shift + enter
