@@ -328,35 +328,33 @@ recursive_fact<-function(n) {
 ######################################################
 #######  3.2.1 Array based Queues     ################  
 ######################################################
-aqueue<-setRefClass(Class = "aqueue",
-                    fields = list(
-                        Alist="array",
-                        queuesize="integer",
-                        maxSize="integer",
-                        rear = "integer",
-                        top = "integer"
-                    ), 
-                    methods = list(
-                        initialize=function(qSize, ...){
-                            queuesize<<-0L
-                            rear<<-1L
-                            top<<-0L
-                            maxSize<<-as.integer(qSize)
-                            Alist<<-array(dim = maxSize)
-                        }
-                        # Queue is empty
-                        isEmpty = function() {},
-                        # Add element to the queue
-                        enqueue = function(val){},
-                        
-                        # remove element from queue
-                        dequeue = function() {},
-                        
-                        # size of queue
-                        size = function() {}
-                    ))
+aqueue <- setRefClass(Class = "aqueue",
+                      fields = list(
+                          Alist="array",
+                          queuesize="integer",
+                          maxSize="integer",
+                          rear = "integer",
+                          top = "integer"
+                      ), 
+                      methods = list(
+                          initialize = function(qSize=100, ...){
+                              queuesize <<- 0L
+                              rear <<- 1L
+                              top <<- 0L
+                              maxSize <<- as.integer(qSize)
+                              Alist <<- array(dim = maxSize)
+                          },
+                          # Queue is empty
+                          isEmpty = function() {},
+                          # Add element to the queue
+                          enqueue = function(val){},
+                          # remove element from queue
+                          dequeue = function() {},
+                          # size of queue
+                          size = function() {}
+                      ))
 
-q<-aqueue$new()
+q <- aqueue$new()
 q
 
 isEmpty = function() {
@@ -365,145 +363,157 @@ isEmpty = function() {
 
 enqueue = function(val){
     if(queuesize<maxSize){
-        if(top==maxSize) top<<-0L
-        top<<-top + 1L
-        Alist[top]<<-val
-        queuesize<<-queuesize+1L
-    } else
-    {
+        if(top==maxSize)   top <<- 0L
+        top <<- top + 1L
+        Alist[top] <<- val
+        queuesize <<- queuesize+1L
+    } else {
         cat("Queue Full!")
     }
-},
+}
 
 dequeue = function() {
     if(queuesize>0L){
-        Alist[rear]<<-NA
-        ifelse(rear==maxSize, rear<<-1L, rear<<-rear+1L)
-        queuesize<<-queuesize-1L
-    } else
-    {
+        Alist[rear] <<- NA
+        ifelse(rear==maxSize, rear <<- 1L, rear <<- rear+1L)
+        queuesize <<- queuesize-1L
+    } else {
         cat("Empty Queue!") 
     }
-    
-    
-    ListQueue <- setRefClass(Class = "ListQueue",
-                             fields = list(
-                                 Lsize="integer",
-                                 front="environment", 
-                                 rear = "environment",
-                                 Lqueue="environment"),
+}
+
+
+#########################################################
+#######  3.2.2 Linked list based Queues  ################  
+#########################################################
+
+ListQueue <- setRefClass(Class = "ListQueue",
+                         fields = list(
+                             Lsize="integer",
+                             front="environment", 
+                             rear = "environment",
+                             Lqueue="environment"
+                             ),
+                         methods = list(
+                             initialize = function(...) {
+                                 Lsize <<- 0L
+                             },
                              
-                             methods = list(
-                                 initialize=function(...) {
-                                     Lsize<<-0L
-                                 },
-                                 
-                                 # Check if list is empty
-                                 isEmpty=function(){}, 
-                                 
-                                 # create empty environment
-                                 create_emptyenv = function() {},
-                                 
-                                 # Create node 
-                                 Node = function(val, node=NULL) {},
-                                 
-                                 # Function to add value to link list
-                                 enqueue=function(val){},
-                                 
-                                 # Function to remove node from link list
-                                 dequeue=function(){}
-                                 
-                                 # Function to get link list size
-                                 size=function(){} 
-                             ))
+                             # Check if list is empty
+                             isEmpty = function(){}, 
+                             
+                             # create empty environment
+                             create_emptyenv = function() {},
+                             
+                             # Create node 
+                             Node = function(val, node=NULL) {},
+                             
+                             # Function to add value to link list
+                             enqueue = function(val){},
+                             
+                             # Function to remove node from link list
+                             dequeue = function(){}
+                             
+                             # Function to get link list size
+                             size = function(){} 
+                         ))
     
-    isEmpty=function(){
-        if(Lsize==0) {
-            cat("Empty Stack!")
-            return(TRUE)
-        } else
-        {
-            return(FALSE)
-        }
+isEmpty = function(){
+    if(Lsize==0) {
+        cat("Empty Queue!")
+        return(TRUE)
+    } else {
+        return(FALSE)
     }
-    
-    create_emptyenv = function() {
-        emptyenv()
-    } 
-    
-    Node = function(val, node=NULL) {
-        llist <-new.env(parent=create_emptyenv())
-        llist$element <- val
-        llist$nextnode <- node
-        llist
-    }
-    
-    enqueue=function(val){
-        ListIsEmpty<-isEmpty()
-        if(ListIsEmpty){
-            Lqueue<<-Node(val)
-            Lsize<<-Lsize+1L
-            rear<<-Lqueue
-        } else
-        {
-            newNode<-Node(val)
-            assign("nextnode", newNode, envir = rear)
-            rear<<-newNode
-            Lsize<<-Lsize+1L
-        }
-    }
-    
-    dequeue=function(){
-        stackIsEmpty<-isEmpty()
-        if(stackIsEmpty){
-            cat("Empty Queue")
-        } else
-        {
-            Lqueue<<-Lqueue$nextnode
-            Lsize<<-Lsize-1L
-        }
-    } 
-    
-    #####################################################
-    ######       3.3 Dictionaries        ################  
-    #####################################################  
-    Adict<-setRefClass(fields = list(
-        Alist="list",
-        listsize="integer",
-        key="integer"
-    ),
-    methods = list(
-        # Re-initialize dictionary
-        initialize=function(...){
-            listsize<<-0L
-            Alist<<-list()
-        },
-        
-        # Check length of value
-        size = function(){}, 
-        
-        # Add following key value pair in Array
-        addElement = function(key, val){},
-        
-        # remove value with defined 
-        removeElement = function(key){},
-        
-        # remove value with following
-        findElement = function(key){},  
+}
+
+create_emptyenv = function() {
+    emptyenv()
 } 
+
+Node = function(val, node=NULL) {
+    llist <-new.env(parent=create_emptyenv())
+    llist$element <- val
+    llist$nextnode <- node
+    llist
+}
+
+enqueue = function(val){
+    ListIsEmpty <- isEmpty()
+    if(ListIsEmpty){
+        Lqueue <<- Node(val)
+        Lsize <<- Lsize+1L
+        rear <<- Lqueue
+    } else {
+        newNode <- Node(val)
+        assign("nextnode", newNode, envir = rear)
+        rear <<- newNode
+        Lsize <<- Lsize+1L
+    }
+}
+
+dequeue = function(){
+    stackIsEmpty <- isEmpty()
+    if(stackIsEmpty){
+        cat("Empty Queue")
+    } else {
+        Lqueue<<-Lqueue$nextnode
+        Lsize<<-Lsize-1L
+    }
+} 
+
+
+#####################################################
+######       3.3 Dictionaries        ################  
+#####################################################  
+Adict <- setRefClass(Class = "Dictionary",
+                     fields = list(
+                         Alist="list",
+                         listsize="integer",
+                         key="integer"
+                     ),
+                     methods = list(
+                         # Re-initialize dictionary
+                         initialize=function(...){
+                             listsize<<-0L
+                             Alist<<-list()
+                         },
+                         
+                         # Check length of value
+                         size = function(){
+                             return(listsize) 
+                         }, 
+                         
+                         # Add following key value pair in Array
+                         addElement = function(key, val){
+                             Alist[[key]] <<- val
+                             listsize <<- listsize+1L
+                         },
+                         
+                         # remove value with defined 
+                         removeElement = function(key){
+                             Alist[[key]] <<- NULL
+                             listsize <<- listsize-1L
+                         },
+                         
+                         # remove value with following
+                         findElement = function(key){
+                             return(key%in%names(Alist))
+                         } 
+                     ))
 
 size = function(){
     return(listsize) 
 }
 
 addElement = function(key, val){
-    Alist[[key]]<<-val
-    listsize<<-listsize+1L
-}, 
+    Alist[[key]] <<- val
+    listsize <<- listsize+1L
+}
 
 removeElement = function(key){
-    Alist[[key]]<<-NULL
-    listsize<<-listsize-1L
+    Alist[[key]] <<- NULL
+    listsize <<- listsize-1L
 }
 
 findElement = function(key){
@@ -511,11 +521,11 @@ findElement = function(key){
 }
 
 
-dictvar<-Adict$new()
+dictvar <- Adict$new()
 dictvar$addElement("key1", 1)
 dictvar$addElement("key2", 1)
 dictvar
-dictvar$Size()
+dictvar$size()
 dictvar$findElement("key1")
 dictvar$removeElement("key1")
 
