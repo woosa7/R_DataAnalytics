@@ -474,9 +474,9 @@ Adict <- setRefClass(Class = "Dictionary",
                      ),
                      methods = list(
                          # Re-initialize dictionary
-                         initialize=function(...){
-                             listsize<<-0L
-                             Alist<<-list()
+                         initialize = function(...){
+                             listsize <<- 0L
+                             Alist <<- list()
                          },
                          
                          # Check length of value
