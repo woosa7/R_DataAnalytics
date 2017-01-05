@@ -84,9 +84,10 @@ Shell_Sort <- function(V,n) {
             V[j] <- temp
         }
         if(increment==2) {
-            increment <- 1} else{
-                increment <- round(increment/2.2)
-            }
+            increment <- 1
+        } else{
+            increment <- round(increment/2.2)
+        }
     }
     return(V)
 }
