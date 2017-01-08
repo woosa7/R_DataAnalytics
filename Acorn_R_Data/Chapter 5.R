@@ -66,6 +66,7 @@ Selection_Sort_loop <- function(V,n) {
 
 Selection_Sort_loop(c(20,12,65,8,10,16,43,35), n=8)
 
+
 ######################################################
 ##########        5.3 Shellsort       ################  
 ######################################################
@@ -143,9 +144,9 @@ Merge_Sort(c(20,12,65,8,10,16,43,35,23,88,2,56,41,27,67,56))
 
 Quick_Sort <- function(V,n) {  
     if (n <= 1) return(V)
-    left <- 0 ##start from left prior first element
+    left <- 0   ##start from left prior first element
     right <- n  ##start from rightmost element
-    v <- V[n] ## initialize last element as pivot element
+    v <- V[n]   ## initialize last element as pivot element
     
     ## Partition implementation
     repeat {
@@ -164,7 +165,7 @@ Quick_Sort <- function(V,n) {
     return( c(Quick_Sort(V[1:left],n=left), V[n], Quick_Sort(V[(left+1):(n-1)],n=(n-left-1))))
 }
 
-Quick_Sort(V= c(20,12,65,8,10,16,43,35,23,88,2,56,41,27,67,55),n=16)
+Quick_Sort(V= c(20,12,65,8,10,16,43,35,23,88,2,56,41,27,67,55), n=16)
 
 
 ######################################################
