@@ -265,12 +265,23 @@ hash_int <- function(K)
     return (K %% 18)
 }
 
-hash_string <- function(K,n)
+hash_int(18)
+
+
+hash_string <- function(K)
 {
+    n <- nchar(K)
     hashValue <- 0
-    for(i in 1:n){
-        hashValue <- hashValue+as.numeric(charToRaw(substr(K,i,i)))
+    for (i in 1:n) {
+        hashValue <- hashValue + as.numeric(charToRaw(substr(K, i, i)))
     }
     return(hashValue)
 }
+
+hash_string("s")
+hash_string("stx")
+
+
+
+
 
