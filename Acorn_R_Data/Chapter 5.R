@@ -297,29 +297,29 @@ Bin_Sort(V=V, n=n, maxValue=maxValue)
 ######################################################
 
 # add item to bin
-addItem=function(V,bin,digLength,n){
+addItem = function(V,bin,digLength,n){
     for(i in 1:n){
-        val<-V[i]
+        val <- V[i]
         ## Extract the required digit from the number
-        ix<-floor((val/digLength) %% 10)+1
+        ix <- floor((val/digLength) %% 10)+1
         ## Assign element to each bin
-        bin[["binValues"]][[ix]][bin[["nElement"]][ix]+1]<-val
+        bin[["binValues"]][[ix]][bin[["nElement"]][ix]+1] <- val
         ## Track count of elements in each bin
-        bin[["nElement"]][ix]<-bin[["nElement"]][ix] + 1
+        bin[["nElement"]][ix] <- bin[["nElement"]][ix] + 1
     }
     return(bin)
 }
 
 # bind the list into a sorted vector
-bindSorted_vec=function(bin){
+bindSorted_vec = function(bin){
     output <- c()
-    currentIx<-1
+    currentIx <- 1
     for(i in 1:10){
         if(!is.na(bin[["binValues"]][[i]][1])){
-            nElement<-bin[["nElement"]][i]
+            nElement <- bin[["nElement"]][i]
             for(m in 1:nElement){
-                output[currentIx]<-bin[["binValues"]][[i]][m]
-                currentIx<-currentIx+1
+                output[currentIx] <- bin[["binValues"]][[i]][m]
+                currentIx <- currentIx+1
             }
         }
     }
@@ -327,14 +327,14 @@ bindSorted_vec=function(bin){
 }
 
 # radixsort Algorithm
-radix_Sort=function(V,n,maxValue,digLength){
+radix_Sort = function(V,n,maxValue,digLength){
     for(digLength in c(10^(0:digLength)))
     {
-        bin <-list("binValues"=list(), "nElement"=NA)
+        bin <- list("binValues"=list(), "nElement"=NA)
         # create empty bins
         for(i in 1:10){
-            bin[["binValues"]][[i]]<-NA
-            bin[["nElement"]][i]<-0
+            bin[["binValues"]][[i]] <- NA
+            bin[["nElement"]][i] <- 0
         }
         bin <- addItem(V=V,bin=bin,digLength=digLength,n=n)
         V <- bindSorted_vec(bin=bin)
@@ -344,9 +344,9 @@ radix_Sort=function(V,n,maxValue,digLength){
 
 
 ## Example of radix sorting
-V<-c(67,54,10,988,15,5,16,43,35,23,88,2,103,83)
-n<-14
-maxValue<-988
+V <- c(67,54,10,988,15,5,16,43,35,23,88,2,103,83)
+n <- 14
+maxValue <- 988
 digLength <- 2
 radix_Sort(V=V,n=n,maxValue=maxValue,digLength=digLength)
 
