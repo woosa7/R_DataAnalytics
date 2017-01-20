@@ -142,6 +142,12 @@ Bin_search_iterative(V, S, n)
 ##########   6.2.5 Interpolation Search        #######
 ######################################################
 
+V <- c(12, 15, 8, 4, 56, 32, 0, 3, 20, 28, 32, 25, 36, 18)
+S = 32
+n = length(V)
+
+V <- sort(V)
+
 Interpolation_search <- function(V, S, n)
 {
     i = 1; j = n; l = V[1]; h = V[j]
@@ -149,6 +155,7 @@ Interpolation_search <- function(V, S, n)
     while (i < j)
     {
         k = floor(i + ((j - i) * (S - l)) / (h - l))
+        print(k)
         split = V[k]
         if (S > split) {
             i = k + 1
@@ -273,6 +280,7 @@ hash_string <- function(K)
     n <- nchar(K)
     hashValue <- 0
     for (i in 1:n) {
+        print(substr(K, i, i))
         hashValue <- hashValue + as.numeric(charToRaw(substr(K, i, i)))
     }
     return(hashValue)
