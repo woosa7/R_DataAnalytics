@@ -6,7 +6,7 @@
 
 bstnode <- function(key, value) {
     node <- new.env(hash = FALSE, parent = emptyenv())
-    node$key <- key  	# Node key
+    node$key <- key  	    # Node key
     node$value <- value		# Node Value
     node$left <- NULL		# left children key
     node$right <- NULL		# Right children key
@@ -14,27 +14,27 @@ bstnode <- function(key, value) {
     return(node)
 }
 
+
 #### 2-3 Tree   ####
-tttnode <-
-    function(lkey = NULL,
-             lvalue = NULL,
-             rkey = NULL,
-             rvalue = NULL) {
+
+tttnode <- function(lkey = NULL, lvalue = NULL, rkey = NULL, rvalue = NULL) {
         node <- new.env(hash = FALSE, parent = emptyenv())
-        node$lkey <- lkey  	# left Node key
-        node$lvalue <- lvalue		# Node Value
+        node$lkey <- lkey  	    # left Node key
+        node$lvalue <- lvalue	# Node Value
         node$rkey <- rkey		# right Node key
-        node$rvalue <- rvalue		# right Node Value
+        node$rvalue <- rvalue	# right Node Value
         node$left <- NULL		# left children key
         node$center <- NULL		# left children key
         node$right <- NULL		# Right children key
         class(node) <- "tttnode"
         return(node)
-    }
+}
 
 extttree <- tttnode(70, 70)
 
+
 #### INSTERTION  ####
+
 # Function to check if node is empty
 check_empty <- function(node) {
     ifelse((is.null(node$lkey) & is.null(node$rkey)), T, F)
@@ -48,20 +48,17 @@ leaf_insert <- function(node, key, val) {
         if (key > node$lkey) {
             node$rkey <- key
             node$rvalue <- val
-        } else
-        {
+        } else {
             node$rkey <- node$lkey
             node$rvalue <- node$lvalue
             node$lkey <- key
             node$lvalue <- val
         }
-    } else
-    {
+    } else {
         node$left <- tttnode(key, val)
     }
     return(node)
 }
-
 
 
 ttinsert <- function(node = NULL, key, val) {
@@ -72,32 +69,25 @@ ttinsert <- function(node = NULL, key, val) {
     ## Add element to internal nodes
     if (key < node$lkey) {
         subtree = ttinsert(node$left, key, val)
-        if (identical(subtree, node$left))
-        {
+        if (identical(subtree, node$left)) {
             return(node)
-            
-        } else
-        {
+        } else {
             assign("left", subtree, envir = node)
             return(node)
         }
-    } else if (ifelse(is.null(node$rkey), T,  key < node$rkey)) {
+    } else if (ifelse(is.null(node$rkey), T, key < node$rkey)) {
         subtree = ttinsert(node$center, key, val)
-        if (identical(subtree, node$center))
-        {
+        if (identical(subtree, node$center)) {
             return(node)
-        } else
-        {
+        } else {
             assign("center", subtree, envir = node)
             return(node)
         }
-    } else
-    {
+    } else {
         subtree = ttinsert(node$right, key, val)
         if (identical(subtree, node$right)) {
             return(node)
-        } else
-        {
+        } else {
             assign("right", subtree, envir = node)
             return(node)
         }
@@ -118,8 +108,7 @@ search_keys <- function(node, key) {
         sort_keys(node$center, key)
     } else if (key < node$rkey) {
         sort_keys(node$center, key)
-    } else
-    {
+    } else {
         sort_keys(node$right, key)
     }
 }
@@ -137,9 +126,7 @@ bplusnode <- function(node = NULL, key, val) {
     return(node)
 }
 
-dlinkchildNode <- function(val,
-                           prevnode = NULL,
-                           node = NULL) {
+dlinkchildNode <- function(val, prevnode = NULL, node = NULL) {
     llist <- new.env(parent = create_emptyenv())
     llist$prevnode <- prevnode
     llist$element <- val
@@ -150,14 +137,14 @@ dlinkchildNode <- function(val,
 
 
 #### Range Query ####
+
 querry_search <- function(node, key1, Key2) {
     ## Function to get values within leaf node using link list
     search_range <- function(child, key1, key2, val = NULL) {
         if (child$element > key1 & child$key2) {
             val <- c(val, child$element)
             search_range(child$nextnode, key1, key2, val)
-        } else
-        {
+        } else {
             return(val)
         }
     }
@@ -167,7 +154,7 @@ querry_search <- function(node, key1, Key2) {
         key2 <- key1
         key1 <- temp
     }
-    child <- search_lower_key(node, key1)   # search lower leaf
-    rangeVal <- search_range(child, key1, key2)   # Return Range
+    child <- search_lower_key(node, key1)           # search lower leaf
+    rangeVal <- search_range(child, key1, key2)     # Return Range
     return(rangeVal)
 }
