@@ -1,4 +1,4 @@
-
+Chapter 1 to 2.
 
 https://www.packtpub.com/books/content/support/26217
 
@@ -7,25 +7,88 @@ Chapter 1
 
 1. page 21 line 1
 
-   from 1 to 7	--> 	1 to 6
+   from 1 to 7  -->  1 to 6
 
 -----------------------------------------------------
 Chapter 2
 
 2. page 37 line 5 
 
-   dplyr, sqldf, dplyr	---> 	dplyr : duplicated
+   dplyr, sqldf, dplyr  --->  dplyr : duplicated
 
 3. page 38 line 9
 
-   each expression 100 times	--> 	1,000 times
+   each expression 100 times  -->  1,000 times
 
+4. page 48 line 5
 
+    faster than g(n)  -->  slower than
+
+5. Page 49 figure 2.10 / Loop / Rule definition
+
+   n*O(g1(n))  -->  n*O(g(n)) 
+
+-----------------------------------------------------
+-----------------------------------------------------
 -----------------------------------------------------
 Chapter 3
 
+** page 64 line 14
+
+   ## Categorical Matrix  -->  Character Matrix (see line 1)
+
+** page 74 line 4 from bottom
+
+   findItem(llist$nextnode, item, size, itemFound)  # runtime error
+   size  -->  pos
+
 -----------------------------------------------------
 Chapter 4
+
+** page 84 line 1 from bottom
+
+   Table 4.1 ...... for queue  -->  stack
+
+
+** page 90 line 9 from bottom
+
+   topVal = ...  -->  top = function()
+
+   (see page 89 line 7. you define this function in class : top = function(){})
+
+
+** page 91 line 12
+
+   a$topVal  -->  link_stack_ex$top  (see the previous issue)
+
+
+** page 96 line 7 from bottom
+
+   function(qSize, ...)  -->  function(qSize=100, ...)   # runtime error
+
+
+** page 99 line 12 from bottom
+
+   cat("Empty Stack!")  -->  cat("Empty Queue!")
+
+
+** page 102
+
+   (1)
+   Adict<-setRefClass(fields = list(           # runtime error
+
+   -->
+   Adict <- setRefClass(Class = "Dictionary",
+        fields = list(
+
+   (2)
+   # remove value with following : remove  -->  find (or search)
+
+
+** page 104 line 13 from bottom
+
+   > dictvar$Size()  -->  size()  : lowercase (see page 102) 
+
 
 -----------------------------------------------------
 Chapter 5
