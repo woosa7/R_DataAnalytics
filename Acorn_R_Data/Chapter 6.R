@@ -67,13 +67,11 @@ Jump_search <- function(V, S, n)
     {
         i = jump
         jump = jump + floor(sqrt(n))
-        cat("jump : ", jump, "\n")
+        cat("jump in : ", jump, "\n")
         
         if (jump >= n)
             stop("element S not found")
     }
-    
-    cat("i : ", i, "\n")
     
     while (V[i] < S & i <= jump) {
         i = i + 1
@@ -86,7 +84,7 @@ Jump_search <- function(V, S, n)
     return(present)
 }
 
-Jump_search(V, 7, length(V))
+Jump_search(V, 12, length(V))
 
 
 
