@@ -127,13 +127,15 @@ bplusnode <- function(node = NULL, key, val) {
 }
 
 dlinkchildNode <- function(val, prevnode = NULL, node = NULL) {
-    llist <- new.env(parent = create_emptyenv())
+    llist <- new.env(parent = emptyenv())
     llist$prevnode <- prevnode
     llist$element <- val
     llist$nextnode <- node
     class(llist) <- " dlinkchildNode"
     llist
 }
+
+dlinkchildNode(1)
 
 
 #### Range Query ####
