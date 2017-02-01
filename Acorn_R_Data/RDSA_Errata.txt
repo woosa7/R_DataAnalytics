@@ -1,3 +1,5 @@
+
+
 Chapter 1 to 2.
 
 https://www.packtpub.com/books/content/support/26217
@@ -164,8 +166,32 @@ Chapter 7
 
 
 
+-----------------------------------------------------
+7장
+-----------------------------------------------------
+search key			검색키
+issue				이슈
+-----------------------------------------------------
+indexing 			인덱싱
+linear indexing			선형 인덱싱
+
+index entry			인덱스 엔트리
+Primary key			기본키
+Secondary key			보조키
+Foreign key			외래키
+multi-level linear index	다단계 선형 인덱스
+fan-out				팬아웃
+blocking factor			블로킹 계수
+block anchor			블록 앵커
+
+system overflow			시스템 오버플로
+leaf node			리프 노드
 
 
+
+
+
+-----------------------------------------------------
 -----------------------------------------------------
 Chapter 8
 
