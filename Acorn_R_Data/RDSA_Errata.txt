@@ -1,4 +1,28 @@
-﻿-----------------------------------------------------
+﻿            ## n 개의 정점으로 그래프를 초기화한다.
+            Initialize = function(n) {},
+            
+            ## 정점과 간선의 수를 반환
+            num_vert = function() {},
+            num_edges = function() {},
+            
+            ## 정점 v1, v2 쌍에 대한 간선의 가중치 반환
+            weightEdge = function(v1, v2) {},
+            
+            ## 정점 v1, v2 쌍의 간선에 가중치(wt) 부여
+            assignEdge = function(v1, v2, wt) {},
+            
+            ## 정점 v1, v2 쌍의 간선의 가중치 삭제
+            deleteEdge = function(v1, v2) {},
+            
+            ## 정점 v에 연결된 첫 번째 정점 반환
+            firstVertex = function(v) {},
+            
+            ## 정점 v와 그 이웃 w에 대해 그 다음으로 연결된 정점 반환
+            nextVertex = function(v, w) {},
+            
+            ## 정점 v1, v2 쌍에 대한 간선의 존재 유무 확인
+
+-----------------------------------------------------
 Chapter 8
 
 traverse			순회
