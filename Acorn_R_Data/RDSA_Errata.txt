@@ -1,26 +1,12 @@
-﻿            ## n 개의 정점으로 그래프를 초기화한다.
-            Initialize = function(n) {},
-            
-            ## 정점과 간선의 수를 반환
-            num_vert = function() {},
-            num_edges = function() {},
-            
-            ## 정점 v1, v2 쌍에 대한 간선의 가중치 반환
-            weightEdge = function(v1, v2) {},
-            
-            ## 정점 v1, v2 쌍의 간선에 가중치(wt) 부여
-            assignEdge = function(v1, v2, wt) {},
-            
-            ## 정점 v1, v2 쌍의 간선의 가중치 삭제
-            deleteEdge = function(v1, v2) {},
-            
-            ## 정점 v에 연결된 첫 번째 정점 반환
-            firstVertex = function(v) {},
-            
-            ## 정점 v와 그 이웃 w에 대해 그 다음으로 연결된 정점 반환
-            nextVertex = function(v, w) {},
-            
-            ## 정점 v1, v2 쌍에 대한 간선의 존재 유무 확인
+﻿-----------------------------------------------------
+전위 순회(Preorder traversal) : VLR
+	루트 => 왼쪽 자손 => 오른쪽 자손
+
+중위 순회(Inorder traversal) : LVR
+	왼쪽 자손 => 루트 => 오른쪽 자손
+
+후위 순회(Postorder traversal) : LRV
+	왼쪽 자손 => 오른쪽 자손 => 루트
 
 -----------------------------------------------------
 Chapter 8
@@ -39,12 +25,10 @@ directed acyclic graph		방향성 비사이클 그래프, DAG
 free tree			자유 트리
 adjacency matrix		인접 행렬
 adjacency list			인접 리스트
+inward edge			진입 간선
 
 
 -----------------------------------------------------
-
-incoming edge		진입 간선
-outgoing edge		진출 간선
 
 spannig tree		신장 트리
 Prim's algorithm	프림 알고리즘
