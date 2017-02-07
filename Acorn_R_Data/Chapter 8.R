@@ -417,24 +417,21 @@ DijkstraShortestPath <- function(Graph_ADT, sourceVertex, vertices, n) {
     ## values are the corresponding distances from the source node
     ## Dimension of hashmap is n, where n is total number of vertices in graph G
     ## Initialize all vertices with distance as 0 which will later be updated
-    distanceMap <- hashmap(keys = vertices,
-                           values = rep(0, n))
+    distanceMap <- hashmap(keys = vertices, values = rep(0, n))
     
     ## Initiate another hashmap to store the parent vertex to keep a track of shortest
     ## path from source vertex to every vertex
     ## key represents the child (to) vertex
     ## value represents the parent (from) vertex
     ## initialize key with source vertex and value with NULL
-    parentMap <- hashmap(keys = sourceVertex,
-                         values = "NULL")
+    parentMap <- hashmap(keys = sourceVertex, values = "NULL")
     
     ## initialize priority queue with value of all vertices to infinity
     for (i in vertices)
         priorityQueue$push(vertices[i], Inf)
     
     ## Set the distance of sourceVertex as zero
-    priorityQueue$values[which(priorityQueue$keys == sourceVertex)] <-
-        0
+    priorityQueue$values[which(priorityQueue$keys == sourceVertex)] <- 0
     
     ## Begin iteration till the all the vertices from priorityQueue becomes empty
     while (length(priorityQueue$keys) != 0) {
@@ -469,8 +466,7 @@ DijkstraShortestPath <- function(Graph_ADT, sourceVertex, vertices, n) {
             ## to the updated distance and also update the parent map of the adjacent vertex
             ## current vertex
             if (priorityQueue$values[which(priorityQueue$keys == conVert)] > updDistance) {
-                priorityQueue$values[which(priorityQueue$keys == conVert)] <-
-                    updDistance
+                priorityQueue$values[which(priorityQueue$keys == conVert)] <- updDistance
                 parentmap[[conVert]]  <- currentVertex
             }
         }
