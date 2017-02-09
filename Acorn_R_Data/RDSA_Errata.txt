@@ -2,15 +2,14 @@
 Chapter 9
 
 random algorithm		무작위 알고리즘
+deterministic algorithm		결정론적 알고리즘
 skip list			스킵 리스트
 randomization			무작위 추출
 dynamic programming		동적 계획법
-deterministic algorithm		결정론적 알고리즘
 knapsack problem		배낭 문제
 all-pairs shortest paths	모든 쌍 최단 경로
 
 subproblem			하위 문제
-
 Floyd-Warshall algorithm	플로이드 워셜 알고리즘
 approximation algorithm		근사 알고리즘
 
@@ -20,7 +19,7 @@ approximation algorithm		근사 알고리즘
 Chapter 10
 
 -----------------------------------------------------
-
+접근 방법  -->  접근법
 
 <그림시작>
 <그림끝>
