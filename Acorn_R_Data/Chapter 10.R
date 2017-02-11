@@ -1,5 +1,11 @@
 ## Chapter 10: Functional Data Structures ##
 
+arg_function <- function(g) g(seq(1, 100, by=1))
+
+arg_function(mean)
+arg_function(sd)
+
+
 library(rstackdeque)
 ## Fully Persistent stacks ##
 a <- as.rstack(c("p", "q", "r","s","t"))
