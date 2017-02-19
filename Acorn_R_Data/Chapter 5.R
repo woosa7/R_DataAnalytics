@@ -66,6 +66,7 @@ Selection_Sort_loop <- function(V,n) {
 
 Selection_Sort_loop(c(20,12,65,8,10,16,43,35), n=8)
 
+
 ######################################################
 ##########        5.3 Shellsort       ################  
 ######################################################
@@ -143,9 +144,9 @@ Merge_Sort(c(20,12,65,8,10,16,43,35,23,88,2,56,41,27,67,56))
 
 Quick_Sort <- function(V,n) {  
     if (n <= 1) return(V)
-    left <- 0 ##start from left prior first element
+    left <- 0   ##start from left prior first element
     right <- n  ##start from rightmost element
-    v <- V[n] ## initialize last element as pivot element
+    v <- V[n]   ## initialize last element as pivot element
     
     ## Partition implementation
     repeat {
@@ -164,7 +165,7 @@ Quick_Sort <- function(V,n) {
     return( c(Quick_Sort(V[1:left],n=left), V[n], Quick_Sort(V[(left+1):(n-1)],n=(n-left-1))))
 }
 
-Quick_Sort(V= c(20,12,65,8,10,16,43,35,23,88,2,56,41,27,67,55),n=16)
+Quick_Sort(V= c(20,12,65,8,10,16,43,35,23,88,2,56,41,27,67,55), n=16)
 
 
 ######################################################
@@ -193,9 +194,10 @@ max_heap <- function(V, i, heapsize) {
     left <- 2*i
     right <- 2*i+1
     if (left<=heapsize && V[left]>V[i]){
-        largest <- left}else{
-            largest <- i
-        }
+        largest <- left
+    } else {
+        largest <- i
+    }
     
     if (right<=heapsize && V[right]>V[largest])
         largest <- right
@@ -217,52 +219,50 @@ Heap_Sort(c(20,12,65,8,10,16,43,35,23,88,2))
 ######################################################
 
 # add item to bin
-addItem=function(V,bin,maxValue,n){
+addItem = function(V,bin,maxValue,n){
     for(i in 1:n){
-        val<-V[i]
-        ix<-ceiling((val*n)/maxValue)
+        val <- V[i]
+        ix <- ceiling((val*n)/maxValue)
         if(is.na(bin[["binValues"]][[ix]][1])){
-            bin[["binValues"]][[ix]][1]<-val
-            bin[["nElement"]][ix]<-1
-        } else
-        {
-            bin <- insertItem(val=val, ix=ix,bin=bin)
+            bin[["binValues"]][[ix]][1] <- val
+            bin[["nElement"]][ix] <- 1
+        } else {
+            bin <- insertItem(val=val, ix=ix, bin=bin)
         }
     }
     return(bin)
 }
 
 # insert a item into a bin ensuring sorting
-insertItem=function(val, ix,bin){
-    nElement<-bin[["nElement"]][ix]
-    pos<-NULL
+insertItem = function(val, ix,bin){
+    nElement <- bin[["nElement"]][ix]
+    pos <- NULL
     for(i in 1:nElement){
         if(val<bin[["binValues"]][[ix]][i]){
-            pos<-i
+            pos <- i
         }
     }
     if(is.null(pos)){
-        bin[["binValues"]][[ix]][nElement+1]<-val
+        bin[["binValues"]][[ix]][nElement+1] <- val
     } else if(pos==1) {
-        bin[["binValues"]][[ix]]<-c(val, bin[["binValues"]][[ix]][1])
-    } else
-    {
-        bin[["binValues"]][[ix]]<-c(bin[["binValues"]][[ix]][1:(pos-1)], val, bin[["binValues"]][[ix]][pos:nElement])
+        bin[["binValues"]][[ix]] <- c(val, bin[["binValues"]][[ix]][1])
+    } else {
+        bin[["binValues"]][[ix]] <- c(bin[["binValues"]][[ix]][1:(pos-1)], val, bin[["binValues"]][[ix]][pos:nElement])
     }
-    bin[["nElement"]][ix]<-nElement+1
+    bin[["nElement"]][ix] <- nElement+1
     return(bin)
 }
 
 # bind the list into a sorted vector
-bindSorted_vec=function(bin,n){
+bindSorted_vec = function(bin,n){
     output <- c()
-    currentIx<-1
+    currentIx <- 1
     for(i in 1:n){
         if(!is.na(bin[["binValues"]][[i]][1])){
-            nElement<-bin[["nElement"]][i]
+            nElement <- bin[["nElement"]][i]
             for(m in 1:nElement){
-                output[currentIx]<-bin[["binValues"]][[i]][m]
-                currentIx<-currentIx+1
+                output[currentIx] <- bin[["binValues"]][[i]][m]
+                currentIx <- currentIx+1
             }
         }
     }
@@ -270,55 +270,56 @@ bindSorted_vec=function(bin,n){
 }
 
 # binsort Algorithm
-Bin_Sort=function(V,n,maxValue){
-    bin <-list("binValues"=list(), "nElement"=NA)
+Bin_Sort = function(V,n,maxValue){
+    bin <- list("binValues"=list(), "nElement"=NA)
     # create empty bins
     for(i in 1:n){
-        bin[["binValues"]][[i]]<-NA
-        bin[["nElement"]][i]<-0
+        bin[["binValues"]][[i]] <- NA
+        bin[["nElement"]][i] <- 0
     }
     ## Add elements into suitable bins
-    bin <- addItem(V=V,bin=bin,maxValue=maxValue,n=n)
+    bin <- addItem(V=V, bin=bin, maxValue=maxValue, n=n)
     ## Bind all bins inot a single sorted vector
-    output <- bindSorted_vec(bin=bin,n=n)
+    output <- bindSorted_vec(bin=bin, n=n)
     return(output)
 }
 
 
 ## Example of bin sorting
-V<-c(20,12,65,8,10,16,43,35,23,88,2,56,41,27,67,55)
-n<-16
-maxValue<-88
-Bin_Sort(V=V,n=n,maxValue=maxValue)
+V <- c(20,12,65,8,10,16,43,35,23,88,2,56,41,27,67,55)
+n <- 16
+maxValue <- 88
+Bin_Sort(V=V, n=n, maxValue=maxValue)
+
 
 ######################################################
 ##########        5.7.2 Radixsort       ##############
 ######################################################
 
 # add item to bin
-addItem=function(V,bin,digLength,n){
+addItem = function(V,bin,digLength,n){
     for(i in 1:n){
-        val<-V[i]
+        val <- V[i]
         ## Extract the required digit from the number
-        ix<-floor((val/digLength) %% 10)+1
+        ix <- floor((val/digLength) %% 10)+1
         ## Assign element to each bin
-        bin[["binValues"]][[ix]][bin[["nElement"]][ix]+1]<-val
+        bin[["binValues"]][[ix]][bin[["nElement"]][ix]+1] <- val
         ## Track count of elements in each bin
-        bin[["nElement"]][ix]<-bin[["nElement"]][ix] + 1
+        bin[["nElement"]][ix] <- bin[["nElement"]][ix] + 1
     }
     return(bin)
 }
 
 # bind the list into a sorted vector
-bindSorted_vec=function(bin){
+bindSorted_vec = function(bin){
     output <- c()
-    currentIx<-1
+    currentIx <- 1
     for(i in 1:10){
         if(!is.na(bin[["binValues"]][[i]][1])){
-            nElement<-bin[["nElement"]][i]
+            nElement <- bin[["nElement"]][i]
             for(m in 1:nElement){
-                output[currentIx]<-bin[["binValues"]][[i]][m]
-                currentIx<-currentIx+1
+                output[currentIx] <- bin[["binValues"]][[i]][m]
+                currentIx <- currentIx+1
             }
         }
     }
@@ -326,14 +327,14 @@ bindSorted_vec=function(bin){
 }
 
 # radixsort Algorithm
-radix_Sort=function(V,n,maxValue,digLength){
+radix_Sort = function(V,n,maxValue,digLength){
     for(digLength in c(10^(0:digLength)))
     {
-        bin <-list("binValues"=list(), "nElement"=NA)
+        bin <- list("binValues"=list(), "nElement"=NA)
         # create empty bins
         for(i in 1:10){
-            bin[["binValues"]][[i]]<-NA
-            bin[["nElement"]][i]<-0
+            bin[["binValues"]][[i]] <- NA
+            bin[["nElement"]][i] <- 0
         }
         bin <- addItem(V=V,bin=bin,digLength=digLength,n=n)
         V <- bindSorted_vec(bin=bin)
@@ -343,9 +344,9 @@ radix_Sort=function(V,n,maxValue,digLength){
 
 
 ## Example of radix sorting
-V<-c(67,54,10,988,15,5,16,43,35,23,88,2,103,83)
-n<-14
-maxValue<-988
+V <- c(67,54,10,988,15,5,16,43,35,23,88,2,103,83)
+n <- 14
+maxValue <- 988
 digLength <- 2
 radix_Sort(V=V,n=n,maxValue=maxValue,digLength=digLength)
 

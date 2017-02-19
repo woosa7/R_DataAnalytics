@@ -17,6 +17,7 @@ str(fact2)
 mat1 <- matrix(1:10, nrow=5)
 mat1
 mode(mat1)
+
 ## Categorical Matrix
 mat2 <- matrix(c("ID","Total",1,10,2,45,3,26,4,8), ncol=2, byrow=T)
 mat2
@@ -71,6 +72,7 @@ LList <-linkListNode(5,linkListNode(2,create_emptyenv()))
 setNextNode <- function(llist){
     llist$nextnode
 }
+
 setNextElement <- function(llist){
     llist$element
 }
@@ -140,6 +142,7 @@ dlinkListNode <- function(val, prevnode=NULL, node=NULL) {
     llist
 }
 
+
 ## 3.3.3 Circular Link List
 cicularLinkList <- function(llist, val){
     if(isEmpty(llist)) {
@@ -172,41 +175,38 @@ ALinkList <- setRefClass(Class = "ALinkList",
                              }
                          ))
 
-listlen = function()
-{
+listlen = function() {
     return(listsize)
 }
 
-updateArrayList = function(){
-    Alist <<- c(Alist, array(dim=arraySize))
-    maxSize <<- maxSize+arraySize
+updateArrayList = function() {
+    Alist <<- c(Alist, array(dim = arraySize))
+    maxSize <<- maxSize + arraySize
 }
 
-addItem = function(item){
-    if(maxSize<=listsize){
+addItem = function(item) {
+    if (maxSize <= listsize) {
         updateArrayList()
-    } 
-    listsize <<- listsize+1L
+    }
+    listsize <<- listsize + 1L
     Alist[listsize] <- item
     return(listsize)
 }
 
 
-removeItem = function(i)
-{
+removeItem = function(i) {
     Alist[i] <<- NULL
     listsize <<- listsize - 1L
 }
 
-searchItem = function(val){
+searchItem = function(val) {
     pointer <- 1L
-    while(pointer!=listsize){
-        if(Alist[pointer]==val){
+    while (pointer != listsize) {
+        if (Alist[pointer] == val) {
             break
-        } 
-        pointer <- pointer+1L
+        }
+        pointer <- pointer + 1L
     }
     return(pointer)
 }
-
 
