@@ -15,10 +15,8 @@ head(tempratureData)
 # aes(x축, y축)
 
 ggplot(tempratureData, aes(factor(Month), MeanTemp)) + geom_boxplot()
-savePlot("20_temperature_boxplot.png", type="png")
 
 ggplot(tempratureData, aes(factor(Month), MeanTemp)) + geom_point()
-savePlot("20_temperature_ggplot_point.png", type="png")
 
 
 
@@ -32,15 +30,12 @@ head(sales)
 
 # 1. box만
 ggplot(sales,aes(factor(name),score)) + geom_boxplot()
-savePlot("21_boxplot.png", type="png")
 
 # 2. 분포위치
 ggplot(sales,aes(factor(name),score)) + geom_boxplot() + geom_jitter()
-savePlot("21_boxplot_point.png", type="png")
 
 # 3. 색상넣기
 ggplot(sales,aes(factor(name),score)) + geom_boxplot(aes(fill=(name))) + geom_jitter()
-savePlot("21_boxplot_color.png", type="png")
 
 
 
@@ -115,7 +110,6 @@ for (i in 1:nrow(sales)) {
     dash_t(sales[i,5], 60, 30, empNames[i])
     text(0,0.5, paste(sales[i,5]*100,"%"), cex=1.5)
 }
-savePlot("22_dashboard.png", type="png")
 
 
 
@@ -140,5 +134,4 @@ bp <- barplot(x, names=empNames, col=c("blue","red"), main="achievement rate (Ja
 abline(h=seq(0.05,0.95,0.05), col="white", lwd=2) # 0.5 단위 구분선
 text(x=bp, y=a$ratio*0.95, labels =paste(a$ratio*100,"%"), col = "yellow", cex = 1.2)
 
-savePlot("23_bar_achievement.png", type="png")
 

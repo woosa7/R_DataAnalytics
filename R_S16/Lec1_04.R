@@ -182,9 +182,8 @@ par(mfcol=c(1,1))
 shapiro.test(out2$residuals)    # 잔차가 정규분포를 따른다 (p-value > 0.05)
 
 # 최종 모형으로 추정된 회귀식
-sqrt(dist) =  0.397 * speed
-
-dist = (0.397 * speed)^2
+# sqrt(dist) =  0.397 * speed
+# dist = (0.397 * speed)^2
 
 
 

@@ -15,7 +15,6 @@ kor <- get_map("seoul", zoom=11, maptype = "roadmap")
 kor.map <- ggmap(kor) + geom_point(data=locData, aes(x=LON, y=LAT), size=7, alpha=0.7)
 kor.map + geom_text(data=locData, aes(x = LON, y = LAT+0.01, label=libCode), size=3)
 
-ggsave("24_ggmap_library.png", dpi=1000)
 
 
 #---------------------------------------------------------------------------
@@ -32,14 +31,12 @@ map1 <- ggmap( get_map("Jeonju", zoom=7, maptype='roadmap') )
 map1
 map1 + geom_point(aes(x=popData$LON, y=popData$LAT, colour=population, size=population), data=df)
 
-ggsave("24_ggmap_population.png", scale=1, width=7, height=4, dpi=1000)
 
 
 # 버블 모양 변경
 map2 <- ggmap( get_map("Jeonju", zoom=7, maptype='roadmap') )
 map2 + stat_bin2d(aes(x=popData$LON, y=popData$LAT, colour=population, fill=factor(population), size=population), data=df)
 
-ggsave("24_ggmap_population_bubble.png", scale=2, width=7, height=4, dpi=700)
 
 
 #---------------------------------------------------------------------------
@@ -53,7 +50,6 @@ kor.map <- ggmap(kor) + geom_point(data=location, aes(x=LON, y=LAT), size=3, alp
 kor.map + geom_path(data=location, aes(x=LON, y=LAT), size=1, linetype=2, col="green") +
     geom_text(data=location, aes(x=LON, y=LAT+0.005, label=point), size=2)
 
-ggsave("24_ggmap_jeju_tour_path.png", dpi=700)
 
 
 
