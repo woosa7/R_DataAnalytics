@@ -2,8 +2,6 @@
 # wordcloud test
 #------------------------------------------------------------
 
-setwd("/Volumes/MacHDD/workspace/R_Study/R_JS")
-
 library(KoNLP)  # 설치된 패키지를 Loading 합니다.
 library(wordcloud)
 
