@@ -193,9 +193,9 @@ df
 
 # save to xml
 
-library("XML")
-library("kulife")
-write.xml(df, file="fruits.xml")
+# library("XML")
+# library("kulife")
+# write.xml(df, file="fruits.xml")
 
 
 #-----------------------------------------------------------
@@ -339,7 +339,7 @@ select_el <- function(x, index) {
     x[index]
 }
 
-years <- lapply(split_low, select_el, index = 2)
+years <- lapply(split, select_el, index = 2)
 years
 
 
