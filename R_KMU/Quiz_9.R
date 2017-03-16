@@ -1,3 +1,4 @@
+# 각 문서마다 20개의 토픽이 들어있는 비율. Term-Document matrix
 load("data/smpl_lda_df.RData")
 df <- smpl_lda_df
 head(df)
@@ -18,11 +19,12 @@ fTopicNames <- function(x) {
 }
 
 
-df$Ntopic <- apply(df[,1:20], 1, fCountTopic) # 토픽 갯수 일괄 적용
-df$Tname <- apply(df[,1:20], 1, fTopicNames)  # 토픽명 일괄 적용
+# 각 문서별 토픽의 갯수와 해당 토픽명 표시.
+df$Ntopic <- apply(df[,1:20], 1, fCountTopic)
+df$Tname <- apply(df[,1:20], 1, fTopicNames)
 answer <- df[21:22]
 head(answer)
 
-write.csv(answer, file = "Quiz09.csv", row.names = T)
+# write.csv(answer, file = "Quiz09.csv", row.names = T)
 
 

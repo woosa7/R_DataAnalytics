@@ -1,3 +1,6 @@
+# 한국 방문 해외 관광객의 로밍통화 분석
+
+#----------------------------------------------------------------
 # 우리나라를 방문한 해외 관광객의 로밍통화 log 데이터(Call Data Records, Call Detail Records)
 # 데이터의 한행은 통화나 SMS가 한 통화 수신 혹은 발신되었음을 의미.
 
@@ -10,7 +13,7 @@ head(cdrData)
 
 require(dplyr)
 require(reshape2)
-
+library(ggplot2)
 
 #----------------------------------------------------------------
 # 1. 우리나라를 가장 많이 방문한 나라의 이름은? 1등과 2등 국가의 방문객수 차이는?
@@ -27,6 +30,8 @@ sumByNation <- cdrData %>%
 sumByNation                                     # 1위 China, 2위 Japan
 sumByNation$Total[1] - sumByNation$Total[2]     # 1,2위 방문객수 차이 = 9,312
 
+ggplot(sumByNation, aes(nation, Total)) + geom_bar(aes(fill = nation), width = 0.5, stat = "identity")
+
 
 #----------------------------------------------------------------
 # 2.해외여행객들의 통화건수가 가장 많은 요일은?
@@ -35,16 +40,22 @@ sumByNation$Total[1] - sumByNation$Total[2]     # 1,2위 방문객수 차이 = 9
 cdrData$weekDay <- weekdays.Date(strptime(cdrData$dateChar, format = "%Y/%m%d"))
 head(cdrData)
 
-cdrData %>%
+sumByWeek = cdrData %>%
     group_by(weekDay) %>%
     summarize(Total=n())  %>%
     arrange(desc(Total))
 
 # Answer : 금요일 32,217건
 
+f_ratio <- round(sumByWeek$Total/sum(sumByWeek$Total)*100, 1)
+f_days <- sumByWeek$weekDay
+f_labels <- paste(f_days, "\n", f_ratio, "%")
+pie(sumByWeek$Total, main="Call number by weekday", init.angle = 90, 
+    col=rainbow(7), radius = 1, cex=1.0, labels=f_labels)
+
 
 # ***** 방법 2 *****
-data_Q2 <- df_cdr
+data_Q2 <- cdrData
 head(data_Q2)
 
 # dateChar를 date 형식으로 변경. date 형식은 dplyr 적용 안됨!!!
@@ -63,12 +74,16 @@ sort(table(data_Q2$wday), decreasing = T)
 # 3.해외여행객들의 통화건수가 가장 많은 시간대는? 
 
 # ***** 방법 1 *****
-cdrData %>%
+sumByTime = cdrData %>%
     group_by(Time=substr(timeChar,1,2)) %>%
     summarize(Total=n())  %>%
-    arrange(desc(Total))
+    arrange(Time)
+
+sumByTime
 
 # Answer : 17시 18,248건
+
+ggplot(sumByTime, aes(Time, Total)) + geom_line() + geom_point()
 
 
 # ***** 방법 2 *****
@@ -100,6 +115,9 @@ summary2
 # Answer : 비중을 기준으로 정렬
 df_AreaNation <- summary2[order(-summary2$Total),]
 df_AreaNation
+
+library(treemap)
+treemap(df_AreaNation, vSize="Ratio", index="city")
 
 
 #----------------------------------------------------------------
@@ -145,5 +163,5 @@ head(touristsData)
 nrow(touristsData)
 
 # Answer
-write.csv(touristsData, "touristsData_callSummary.csv")
+# write.csv(touristsData, "touristsData_callSummary.csv")
 
