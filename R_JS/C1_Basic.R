@@ -422,11 +422,10 @@ regexpr("ORACLE", c)
 # [:xdigit:]	16진수
 
 grep("ORACLE", d)                # vector에서 특정 패턴을 찾아 index 출력
-grep("ORACLE", d, value = T)     # 값 출력
+grep("ORACLE_instance", d, value = T)     # 값 출력
 
 grep("^Setting", d)              # ^ : 첫글자
 grep("ing$", d)                  # $ : 마지막 글자
-grep("[7-9]", d)
 
 
 emails <- c("john.doe@ivyleague.edu", "education@world.gov", "dalai.lama@peace.org", 
