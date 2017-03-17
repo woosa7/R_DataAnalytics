@@ -69,7 +69,7 @@ detach(tips)
 # barplot()
 # pie()
 
-tips
+head(tips)
 summary(tips$day)
 barplot(table(tips$day))
 
