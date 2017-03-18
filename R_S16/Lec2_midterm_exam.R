@@ -6,7 +6,7 @@
 #-----------------------------------------------------------------------------
 # 데이터 탐색
 
-cereal = read.csv("cereal.csv", header = T)
+cereal = read.csv("data/cereal.csv", header = T)
 head(cereal)
 summary(cereal)
 

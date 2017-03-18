@@ -708,33 +708,33 @@ df$imputedR_age <- with(df, impute(age, "random"))
 df
 
 
-# Amelia
+# Amelia : Multiple Imputation of Incomplete Multivariate Data
 library(Amelia)
-?amelia
 
-trade <- freetrade
-head(trade)     # tariff 관세 - NA's :58
-summary(trade)
+data(freetrade)   # Trade Policy and Democracy in 9 Asian States
+head(freetrade)
+summary(freetrade)   # tariff (관세) : NA 58개.
 
-missmap(trade)  # 결측치 분포 시각화
+missmap(freetrade)  # 결측치 분포 시각화
 
 # 결측치 대치값 생성. 시작값 = min(tariff)
-am_data <- amelia(trade, m = 5, ts = "year", cs = "country", startvals =  7.10)
+am_data <- amelia(freetrade, ts = "year", cs = "country")
         # m	: the number of imputed datasets to create.
         # ts : time series column
         # cs : cross section variable
 
-am_data
+summary(am_data)
+
 summary(am_data$imputations[[1]]$tariff)
 summary(am_data$imputations[[2]]$tariff)
 summary(am_data$imputations[[3]]$tariff)
 
-# 최소값이 0보다 큰 첫번째 데이터 적용
+# 첫번째 am_data 값 적용
 impute1 <- am_data$imputations[[1]]$tariff
 hist(impute1, col = "grey", border = "black")
 
-trade$tariff <- impute1     # 결측치 대치
-missmap(trade)
+freetrade$tariff <- impute1     # 결측치 대치
+missmap(freetrade)
 
 plot(am_data)
 par(mfrow=c(1,1))

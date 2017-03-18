@@ -21,8 +21,8 @@
 # 가정 : u 들간의 상호독립성, u와 f의 독립성
 
 # 1 factor
-X1 = L1*f1 + U1
-var(X1) = L1**2 + var(U1) = 1
+# X1 = L1*f1 + U1
+# var(X1) = L1**2 + var(U1) = 1
 
 # l : 인자적재값 (facor loading) - X와 f의 상관계수. 각 변수가 공통인자를 얼마나 반영하는지에 대한 계수.
 # li**2 : 공통인자에 의해 발생하는 분산의 비율 = Communality.
@@ -30,15 +30,15 @@ var(X1) = L1**2 + var(U1) = 1
 # var(ui) 공통인자에 의해 설명되지 않는 부분. 특정인자의 분산.
 
 # 2 factor
-X1 = L11*f1 + L12*f2 + U1
-var(x1) = L11**2 + L12^2 + var(U1)
+# X1 = L11*f1 + L12*f2 + U1
+# var(x1) = L11**2 + L12^2 + var(U1)
 
 
 # ----------------------------------------------------------------------
 # Example
 
 app <- read.table("data/Applicant.TXT", header = T)
-app
+head(app)
 app <- app[,-1]   # ID 제거
 
 library(psych)
@@ -98,7 +98,6 @@ text(load, labels = colnames(app_s), cex = 0.7)
 # oblimin : 인자들 사이의 상관성 정도를 제어
 # promax : 회전에 의해 적재값을 어떤 승수로 올리는 방법. 인자들 사이에 낮은 상관성을 갖도록 함.
 
-?factanal
 
 fa1 = factanal(app, 4)   # default : varimax
 fa2 = factanal(app, 4, rotation = "none")
@@ -126,14 +125,16 @@ fa.diagram(fa3)
 
 stock <- read.csv("data/stock_price.csv", header = T)
 stock <- stock[, -1]
-stock
+head(stock)
+
 
 # 1. 적절한 공통인자의 수를 구하시오
 
 fa01 <- factanal(stock, 2)
 print(fa01, digits = 2, sort = T)
 
-fa02 <- factanal(stock, 3)  # 3 factors are too many for 5 variables
+
+# fa02 <- factanal(stock, 3)  # 3 factors are too many for 5 variables
 
     # common factor 갯수 = 2
 

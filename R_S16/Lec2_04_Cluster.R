@@ -8,8 +8,11 @@
 # 계층적 군집분석
 #--------------------------------------------------------------
 
+# USArrests data
+# Arrests per 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973.
+# percent of the population living in urban areas.
+
 df = USArrests
-distUS = dist(scale(df))
 
 dist(df, method = "manhattan") # "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski"
 
@@ -41,6 +44,9 @@ plot(hc4)
 
 # ------------------------------------------
 # USArrests
+
+distUS = dist(scale(df))
+
 par(mfcol=c(2,2))
 
 hc = hclust(distUS, method = "single")

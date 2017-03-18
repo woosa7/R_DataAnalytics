@@ -7,7 +7,7 @@
 # http://blog.naver.com/woosa7/220810261277
 
 library(MVA)
-demo("Ch-PCA")
+#demo("Ch-PCA")
 
 df <- read.csv("data/open_closed.csv")
 head(df)
@@ -49,7 +49,9 @@ df_s <- scale(df)
 summary(df_s)
 
 rot1 <- pca_r$rotation[, 1]
-plot(df_s%*%a1, pca_r$x[, 1])  # 완벽한 상관관계를 보인다.
+rot1
+
+plot(df_s%*%rot1, pca_r$x[, 1])  # 완벽한 상관관계를 보인다.
 
 screeplot(pca_r, type = "l")   # 떨어지는 각도가 완만해지는 2까지 주성분으로 선택.
 
@@ -183,13 +185,15 @@ cor(bulls_x, pca$x[, 1])   # cor = 1
 
 # 7개의 각 변수값에 rotation 값을 행렬곱한 결과가 주성분의 값이다.
 # 즉, 주성분의 rotation값은 각 변수에 대해 다음과 같은 설명력을 갖는다.
-# PC1 = (-0.4499313 * YrHgt) + (-0.4123256 * FtFrBody) + (-0.3555618 * PrctFFB) +
-#       (-0.4339569 * Frame) + (0.1867048 * BkFat) + (-0.4528538 * SaleHt) + (-0.2699470 * SaleWt) 
+# PC1 = (-0.45 * YrHgt) + (-0.41 * FtFrBody) + (-0.36 * PrctFFB) +
+#       (-0.43 * Frame) + (0.19 * BkFat) + (-0.45 * SaleHt) + (-0.27 * SaleWt) 
 
-a2 <- pca$rotation[,2]
-a2
-bulls_x2 <- scale(bullsV7) %*% a2
-plot(bulls_x2, pca$x[, 2], ylab = "PC2", xlab = "scale(bulls) %*% rotation[,2]")
+par(mfrow=c(1,2))
+barplot(pca$rotation[,1], col = rainbow(8), ylim = c(-0.6,0.4), las = 2, main = "PC1")
+abline(h = -0.3, col="blue")
+barplot(pca$rotation[,2], col = rainbow(8), ylim = c(-0.4,0.8), las = 2, main = "PC2")
+abline(h = 0.3, col="blue")
+par(mfrow=c(1,1))
 
 
 #------------------------------------------------------------

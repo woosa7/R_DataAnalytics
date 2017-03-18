@@ -44,7 +44,7 @@ scale_measure
 summary(scale_measure)
 pairs.panels(scale_measure)
 
-round(dist(scale_measure), 2)
+round(dist(scale_measure), 2)   # 거리 행렬 만들기
 
 
 #--------------------------------------------------------------
@@ -62,10 +62,11 @@ outlier.score
 plot(density(outlier.score), main = "outlier score")
 
 sort(outlier.score, decreasing = T)[1:10]
-outliers <- order(outlier.score, decreasing = T)[1:3]  # score > 2.2 
+outliers <- order(outlier.score, decreasing = T)[1:3]  # score > 2.2 이면 outlier로 설정.
 outliers
 df[outliers, ]
 
+# outlier 제거한 데이터의 상관계수
 pairs.panels(df[-outliers, ])
 
 
@@ -107,7 +108,7 @@ cor(df$manu[-outlier], df$popul[-outlier])  # 0.769 : 상관계수가 오히려 
 
 # 2. boxplot
 
-chickwts
+chickwts   # 닭의 성장률에 대한 다양한 사료 보충제의 효과를 측정
 summary(chickwts)
 
 boxplot(weight ~ feed, chickwts)
@@ -118,6 +119,7 @@ boxplot(weight ~ feed, chickwts)
 
 # 3. Bubble chart - 변수 3개 표현
 
+# USairpollution - SO2를 원의 크기로 표현
 symbols(temp, wind, circles = SO2, inches = 0.5)
 legend(70, 13, "circle : SO2")
 
@@ -134,7 +136,7 @@ symbols(temp, wind, circles = SO2, inches = 0.5, add = T)
 
 # 4. mosaic plot
 
-UCBAdmissions
+UCBAdmissions   # 1973년 버클리 대학원 지원자에 대한 집계 데이터.
 
 adm <- UCBAdmissions
 adm[,,1]
@@ -219,8 +221,8 @@ head(crime, 10)
 # 상관계수도 함께 살피시오.
 
 library(psych)
-pairs.panels(cdata)     # cor = 0.28
-cor.test(cdata$murder, cdata$burglary)
+pairs.panels(crime)     # cor = 0.28
+cor.test(crime$murder, crime$burglary)
 
 #--------------------------------------------------------------
 # B. 위를 통해 이상점 존재여부를 판단하고 존재한다면 해당 주를 확인하고 제거하시오. 
