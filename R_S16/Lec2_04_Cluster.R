@@ -8,6 +8,56 @@
 # 계층적 군집분석
 #--------------------------------------------------------------
 
+# 1.  개요
+# 
+# 각 객체의 유사성을 측정하여 유사성이 높은 대상 집단을 분류하고, 군집 간의 상이성을 규명하는 분석 방법.
+# 특성에 따라 관측치들을 여러 개의 배타적인 집단으로 나눔.
+# 범주(그룹)에 대한 사전 정보가 없다.
+# * 그룹의 갯수나 특성에 대한 사전 정보가 있는 경우 분류분석(Classification) 사용
+# * 요인분석은 유사한 “변수”를 함께 묶어 주고, 군집분석은 “데이터”를 묶어 주는 차이점
+# 군집의 갯수나 구조에 대한 가정 없이 각 데이터 간의 거리를 기준으로 군집화 유도
+# 
+# 
+# 2.  유사성 측도
+# 
+# 1)  연속형 변수
+# 
+# *   유클리드 거리 (Euclidean distance) : 주로 표준화된 자료에 사용
+# *   맨하탄 거리 (Manhattan)
+# *   민코우스키 거리 (Minkowski)
+# *   마할라노비스 거리 (Mahalanobis) : 공분산 행렬을 고려
+# 
+# 2)  범주형 변수
+# 
+# *   자카드 거리(Jaccard)
+# 
+# 
+# 3.  계층적 군집분석 (Hierachical, Agglomerative Clustering)
+# 
+# 데이터 간의 유사성을 계산해 가장 가까운 객체들부터 차례로 군집화
+# 한 번 군집에 속하면 이동 불가능
+# dendrogram을 사용해 군집 형성 과정 파악 가능
+# 군집 간의 거리 차이에 큰 변화를 보이는 경우를 고려해 군집 갯수 결정
+# 
+# 1)  최단 연결법 (Single linkage)
+# distance matrix 에서 가장 작은 값을 취하여 군집화
+# 군집과 군집/데이터 간의 거리 중 최단거리(min) 값을 거리로 산정
+# 길게 늘어진 형태의 군집이 형성될 수 있음
+# 
+# 2)  최장 연결법 (Complete linkage)
+# 군집과 군집/데이터 간의 거리 중 최장거리(max) 값을 거리로 산정
+# 둥그런 형태의 군집 형성
+# 단점 : 이상치에 민감
+# 
+# 3)  평균 연결법 (Average linkage)
+# 군집과 군집/데이터 간의 거리의 평균거리(mean) 값을 거리로 산정
+# 
+# 4)  Ward 연결법 (Ward’s method)
+# 군집 간 정보의 손실을 최소화하는 군집화
+# 군집 내 편차들의 제곱합을 고려하여 군집 내 거리(within cluster distance, ESS)를 최소화.
+# 비슷한 크기의 군집을 생성하는 경향
+
+#--------------------------------------------------------------
 # USArrests data
 # Arrests per 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973.
 # percent of the population living in urban areas.
@@ -21,33 +71,27 @@ mahalanobis(df, colMeans(df), cov(df))   # mahalanobis(x, center : 각 변수의
 # ------------------------------------------
 # linkage methods
 
-# single linkage (최단연결법)
 x = data.frame(c(1,3,6,12,20))
 rownames(x) = c("a","b","c","d","e")
 d = dist(x)
-hc = hclust(d, method = "single")
+
+par(mfcol=c(2,2))
+hc = hclust(d, method = "single")   # single linkage (최단연결법)
 plot(hc)
-hc$height
-
-# complete linkage (최장연결법)
-hc2 = hclust(d, method = "complete")
+hc2 = hclust(d, method = "complete")    # complete linkage (최장연결법)
 plot(hc2)
-
-# average linkage (평균연결법)
-hc3 = hclust(d, method = "average")
+hc3 = hclust(d, method = "average")  # average linkage (평균연결법)
 plot(hc3)
-
-# ward method
-hc4 = hclust(d, method = "ward.D")
+hc4 = hclust(d, method = "ward.D")  # ward method
 plot(hc4)
+par(mfcol=c(1,1))
 
+hc$height
 
 # ------------------------------------------
 # USArrests
 
 distUS = dist(scale(df))
-
-par(mfcol=c(2,2))
 
 hc = hclust(distUS, method = "single")
 plot(hc)
@@ -61,7 +105,7 @@ plot(hc3)
 hc4 = hclust(distUS, method = "ward.D")
 plot(hc4)
 
-par(mfcol=c(1,1))
+
 
 
 
@@ -79,10 +123,6 @@ text(df$Murder, df$UrbanPop, labels = rownames(df), col=h3result, pos = 1)
 df$cluster = h3result
 
 par(mfcol=c(2,2))
-# boxplot(df$Murder ~ df$cluster, xlab = "cluster", ylab = "Murder")
-# boxplot(df$Rape ~ df$cluster, xlab = "cluster", ylab = "Rape")
-# boxplot(df$UrbanPop ~ df$cluster, xlab = "cluster", ylab = "UrbanPop")
-# boxplot(df$Assault ~ df$cluster, xlab = "cluster", ylab = "Assault")
 
 for (i in 1:4) {
     boxplot(df[,i] ~ h3result, main = names(df)[i])
@@ -98,6 +138,25 @@ describeBy(df, group = h3result)
 #--------------------------------------------------------------
 # 비계층적 군집분석 : K-means clustering
 #--------------------------------------------------------------
+
+# n개의 객체를 g개의 군집으로 나눌 수 있는 모든 가능한 방법을 점검해 최적화된 군집을 형성
+# 
+# K-means clustering
+# 원하는 군집의 갯수와 초기값 seed를 정해 seed 중심으로 군집을 형성한다.
+# 각 객체는 거리가 가장 가까운 seed가 있는 군집으로 분류된다.
+# 각 군집의 seed 값을 다시 계산한다.
+# 모든 객체를 갱신된 seed와 비교하여 필요시 적절한 군집으로 이동시킨다.
+# 더이상 객체의 이동이 없을 때까지 위 과정을 반복한다.
+# 
+# 1)   장점
+# 주어진 데이터의 내부 구조에 대한 사전정보 없이 의미있는 자료 구조를 찾을 수 있다.
+# 다양한 형태의 데이터에 적용 가능
+# 분석 방법 적용도 쉽다.
+# 
+# 2)   단점
+# 가중치와 거리에 대한 정의가 어렵다.
+# 초기 군집수 결정이 어렵다.
+# 사전에 주어진 목적이 없기 때문에 결과 해석이 어려울 수 있다.
 
 kdata = iris
 kdata$Species = NULL
@@ -144,6 +203,12 @@ points(wss)
 #--------------------------------------------------------------
 # 모형 기반 군집분석 (Model-based clustering)
 #--------------------------------------------------------------
+
+# 확률분포에 대한 정보가 있을 경우 이를 활용하여 군집분석
+# k번째 군집에 속한 관측치 x 가 다변량 정규분포인 확률밀도함수 f 를 가진다고 가정
+# 각 객체각 각 군집에 속할 사후 확률을 계산하여 가장 확률이 높은 군집으로 할당
+# 모형선택방법 중 BIC (Bayesian information criterion)를 사용하여 이 값이 최대가 되는 모형을 선택
+
 
 # lamda * I : I = identical matrix. 각 dimension의 분산이 같고 각 변수가 서로 독립적이다.
 # 모든 모형에 대해 계산을 한 후 BIC를 기준으로 모형을 선택한다.
