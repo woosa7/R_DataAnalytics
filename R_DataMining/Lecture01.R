@@ -152,7 +152,3 @@ funcResultValue <- function(x) {
 
 test$result <- funcResultValue(test[ , 12:18])
 confusionMatrix(test$result, test$pep)
-
-
-
-

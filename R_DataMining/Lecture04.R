@@ -13,7 +13,7 @@ library(lubridate)
 library(ggplot2)
 
 cs <- read.delim("data/HDS_Customers.tab", stringsAsFactors = F)
-tr <- read.delim("data/HDS_Transactions_MG.tab", stringsAsFactors = F)
+tr <- read.delim("data/HDS_Transactions.tab", stringsAsFactors = F)
 card <- read.delim("data/HDS_Cards.tab", stringsAsFactors = F)
 job <- read.delim("data/HDS_Jobs.tab", stringsAsFactors = F)
 
@@ -51,8 +51,8 @@ cs.v1 <- left_join(cs.v1, refund) %>%
     mutate(rf_amt = ifelse(is.na(rf_amt), 0, rf_amt),
            rf_cnt = ifelse(is.na(rf_cnt), 0, rf_cnt))
 
-cs.v1[order(cs.v1$rf_amt), ]
-cs.v1[order(cs.v1$rf_cnt, decreasing = T), ]
+cs.v1[order(cs.v1$rf_amt), ] %>% head(10)
+cs.v1[order(cs.v1$rf_cnt, decreasing = T), ] %>% head(10)
 
 
 #-------------------------------------------------------------------
@@ -88,7 +88,7 @@ cs.v4 <- inner_join(cs.v3, tmp) %>%
     mutate(NPPV = round(PCount / visits, 2)) %>%
     select(custid, NPPV)
 
-cs.v4
+cs.v4 %>% head(10)
 
 
 #-------------------------------------------------------------------
@@ -102,7 +102,7 @@ cs.v5 <- tr %>%
     mutate(wk_pat = ifelse(wk_amt >= we_amt * 1.5, "주중형",
                     ifelse(we_amt >= wk_amt * 1.5, "주말형", "유형없음")))
 
-cs.v5
+cs.v5 %>% head(10)
 
 ggplot(cs.v5, aes(wk_pat)) + geom_bar(aes(fill = wk_pat))
 
@@ -149,5 +149,19 @@ cs.v7 <- left_join(cs.v7.12, cs.v7.6) %>% left_join(cs.v7.3) %>%
            amt3 = ifelse(is.na(amt3), 0, amt3),
            nop3 = ifelse(is.na(nop3), 0, nop3))
 
-cs.v7
+cs.v7 %>% head(10)
+
+#-------------------------------------------------------------------
+# Customer Signature
+
+custsig<-cs%>%
+    left_join(cs.v1) %>%
+    left_join(cs.v2) %>%
+    left_join(cs.v3) %>%
+    left_join(cs.v4) %>%
+    left_join(cs.v5) %>%
+    left_join(cs.v6) %>%
+    left_join(cs.v7)
+
+
 

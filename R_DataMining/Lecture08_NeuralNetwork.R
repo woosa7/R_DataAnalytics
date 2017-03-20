@@ -6,7 +6,6 @@
 
 ##### 1. Neural Network Analysis using nnet package
 
-install.packages("nnet")
 library(nnet); library(caret); library(ROCR)
 
 cb <- read.delim("data/Hshopping.txt", stringsAsFactors=FALSE)
@@ -21,7 +20,6 @@ set.seed(123)
 # size: # of hidden nodes
 # maxit : 반복횟수
 nn_model <- nnet(반품여부 ~ 성별+나이+구매금액+출연자, data=cb.train, size=3, maxit=1000)	
-?nnet
 nn_model$value
 
 nn_model2 <- nnet(반품여부 ~ 성별+나이+구매금액+출연자, data=cb.train, size=5, maxit=1000, 
@@ -30,7 +28,6 @@ nn_model2 <- nnet(반품여부 ~ 성별+나이+구매금액+출연자, data=cb.t
 summary(nn_model)
 summary(nn_model2)
 
-install.packages("devtools")
 library(devtools)
 
 source_url('https://gist.githubusercontent.com/Peque/41a9e20d6687f2f3108d/raw/85e14f3a292e126f1454864427e3a189c2fe33f3/nnet_plot_update.r') 
@@ -38,7 +35,6 @@ plot.nnet(nn_model)
 plot.nnet(nn_model2)
 
 #-------------------------------------------
-install.packages("NeuralNetTools")
 library(NeuralNetTools)
 
 garson(nn_model)
