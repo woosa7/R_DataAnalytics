@@ -2,18 +2,22 @@ library(dplyr)
 library(reshape2)
 
 # ----------------------------------------------------------------------
-# cdata = read.csv("seoul_police.csv", stringsAsFactors = F)
-# cdata$year = as.character(cdata$year)
-# head(cdata)
-# summary(cdata)
-# 
-# crime = cdata %>% 
-#     group_by(gu, year) %>% 
-#     summarise_each(funs(sum), m_occur, m_arrest, rob_occur, rob_arrest, rap_occur, rap_arrest, 
-#                    thf_occur, thf_arrest, v_occur, v_arrest)
-#     
-# write.csv(crime, "crime.csv", row.names = FALSE)
+# 2010 - 2015년 공공데이터 합친 파일
+
+cdata = read.csv("seoul_police.csv", stringsAsFactors = F)
+cdata$year = as.character(cdata$year)
+head(cdata)
+summary(cdata)
+
+crime = cdata %>%
+    group_by(gu, year) %>%
+    summarise_each(funs(sum), m_occur, m_arrest, rob_occur, rob_arrest, rap_occur, rap_arrest,
+                   thf_occur, thf_arrest, v_occur, v_arrest)
+
+write.csv(crime, "crime_origin.csv", row.names = FALSE)
+
 # ----------------------------------------------------------------------
+# 구별 년도별로 sum 처리된 파일
 
 cdata = read.csv("crime_origin.csv", stringsAsFactors = F)
 cdata$year = as.character(cdata$year)
