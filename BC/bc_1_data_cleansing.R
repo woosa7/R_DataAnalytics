@@ -84,6 +84,8 @@ cust_v5 <- cust %>%
 summary(cust_v5)
 str(cust_v5)
 
+
+
 # join data
 
 custsig <- cust %>%
@@ -95,6 +97,11 @@ custsig <- cust %>%
 
 head(custsig)
 
-write.csv(custsig, file="cust_data.csv")
+write.csv(custsig, file="cust_data.csv", row.names=FALSE)
+
+
+
+
+
 
 
